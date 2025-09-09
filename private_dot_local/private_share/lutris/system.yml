@@ -1,0 +1,4 @@
+system:
+  disable_runtime: true
+  mangohud: true
+  prefix_command: game-performance

@@ -1,0 +1,11 @@
+{
+  "bar": {
+    "persistent": false,
+    "showOnHover": true,
+    "dragThreshold": 20
+  },
+  "services": {
+    "weatherLocation": "Tehran",
+    "useFahrenheit": false
+  }
+}

@@ -1,0 +1,19 @@
+system:
+  disable_runtime: true
+  env:
+    PROTON_ENABLE_WAYLAND: '1'
+    PROTON_USE_NTSYNC: '1'
+    PROTON_VERB: waitforexitandrun
+    UMU_RUNTIME_UPDATE: '0'
+    WINE_NO_WM_DECORATION: '1'
+  gamescope_fps_limiter: '165'
+  gamescope_game_res: 2560x1440
+  gamescope_window_mode: -f
+  mangohud: true
+wine:
+  battleye: false
+  eac: false
+  esync: false
+  fsr: false
+  fsync: false
+  version: proton-cachyos
