@@ -24,5 +24,6 @@
     "hyprland.snap.respect_gaps": true,
     "wallpaper": "/home/reza/Pictures/wallpapers/astronaut-planet.jpg",
     "themes.telegram": true,
-    "input.kb_variant": ",winkeys"
+    "input.kb_variant": ",winkeys",
+    "separated_workspaces": true
 }
