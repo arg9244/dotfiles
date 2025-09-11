@@ -13,7 +13,7 @@
     "idle.ac.dpms": 300,
     "idle.ac.lock": 600,
     "apps.browser": "zen-browser",
-    "apps.editor": "nvim",
+    "apps.editor": "micro",
     "apps.files": "nautilus",
     "apps.terminal": "kitty",
     "themes.kitty": false,
