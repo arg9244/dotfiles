@@ -10,8 +10,8 @@
     "input.numlock_by_default": true,
     "input.accel_profile": "",
     "input.natural_scroll": true,
-    "idle.ac.dpms": 300,
-    "idle.ac.lock": 600,
+    "idle.ac.dpms": 0,
+    "idle.ac.lock": 0,
     "apps.browser": "zen-browser",
     "apps.editor": "micro",
     "apps.files": "nautilus",
@@ -25,5 +25,8 @@
     "wallpaper": "/home/reza/Pictures/wallpapers/astronaut-planet.jpg",
     "themes.telegram": true,
     "input.kb_variant": ",winkeys",
-    "separated_workspaces": true
+    "separated_workspaces": true,
+    "idle.battery.lock": 0,
+    "idle.battery.dpms": 0,
+    "idle.battery.sleep": 0
 }
