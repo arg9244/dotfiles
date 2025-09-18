@@ -1,0 +1,12 @@
+[Unit]
+Description=Aria2c download manager
+Documentation=man:aria2c(1)
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/aria2c --conf-path=%h/.config/aria2/aria2.conf
+Restart=on-failure
+
+[Install]
+WantedBy=default.target
