@@ -1,6 +1,6 @@
 filetype: tex
 
-detect: 
+detect:
     filename: "\\.tex$|\\.bib$|\\.cls$"
 
 rules:
@@ -23,7 +23,7 @@ rules:
     - statement: "\\\\%"
     # comments
     - comment:
-        start: "[^\\\\]%"
+        start: "[^\\\\]%|^%"
         end: "$"
         rules: []
     - comment:

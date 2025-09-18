@@ -1,7 +1,7 @@
 filetype: git-commit
 
 detect:
-    filename: "^(.*[\\/])?(COMMIT_EDITMSG|TAG_EDITMSG|MERGE_MSG|git-rebase-todo)$"
+    filename: "^(.*[\\/])?(COMMIT_EDITMSG|TAG_EDITMSG|MERGE_MSG)$"
 
 rules:
     # File changes
@@ -31,6 +31,5 @@ rules:
         # should never match valid diff output and extend highlighting to the
         # end of the file
         end: "^ENDOFFILE"
-        limit-group: "magenta"
         rules:
             - include: "patch"

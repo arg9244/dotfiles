@@ -1,8 +1,7 @@
 filetype: batch
 
 detect:
-  filename: "(\\.bat$)"
-  # header: ""
+  filename: "(\\.bat$|\\.cmd$)"
 
 rules:
   # Numbers
