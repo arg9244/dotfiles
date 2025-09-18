@@ -19,14 +19,25 @@
     "themes.kitty": false,
     "hyprland.gaps_out": 0,
     "hyprland.gaps_in": 0,
-    "hyprland.misc.vrr": 3,
+    "hyprland.misc.vrr": 2,
     "hyprland.snap.enabled": true,
     "hyprland.snap.respect_gaps": true,
     "wallpaper": "/home/reza/Pictures/wallpapers/astronaut-planet.jpg",
     "themes.telegram": true,
     "input.kb_variant": ",winkeys",
-    "separated_workspaces": true,
+    "separated_workspaces": false,
     "idle.battery.lock": 0,
     "idle.battery.dpms": 0,
-    "idle.battery.sleep": 0
+    "idle.battery.sleep": 0,
+    "hyprsunset.value": false,
+    "monitors": [
+        {
+            "output": "DP-1",
+            "bitdepth": "10",
+            "mode": "2560x1440@165.00Hz",
+            "cm": "srgb",
+            "vrr": ""
+        }
+    ],
+    "always_show_battery": false
 }
