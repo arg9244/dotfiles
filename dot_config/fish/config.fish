@@ -4,8 +4,5 @@ starship init fish | source
 # Add ~/bin to the PATH
 set -gx PATH $HOME/bin $PATH
 
-# overwrite greeting
-# potentially disabling fastfetch
-#function fish_greeting
-#    # smth smth
-#end
+#alias
+alias yt-opus="yt-dlp -f ba -x --audio-format opus"
