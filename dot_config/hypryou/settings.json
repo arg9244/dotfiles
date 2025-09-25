@@ -19,7 +19,7 @@
     "themes.kitty": false,
     "hyprland.gaps_out": 0,
     "hyprland.gaps_in": 0,
-    "hyprland.misc.vrr": 2,
+    "hyprland.misc.vrr": 0,
     "hyprland.snap.enabled": true,
     "hyprland.snap.respect_gaps": true,
     "wallpaper": "/home/reza/Pictures/wallpapers/astronaut-planet.jpg",
