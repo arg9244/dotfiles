@@ -1,0 +1,5 @@
+// ────────────── Startup Applications ──────────────
+// https://github.com/YaLTeR/niri/wiki/Configuration:-Miscellaneous#spawn-sh-at-startup
+
+    spawn-sh-at-startup "noctalia"
+    spawn-sh-at-startup "/usr/lib/policykit-1-pantheon/io.elementary.desktop.agent-polkit"

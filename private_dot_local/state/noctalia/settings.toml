@@ -1,0 +1,159 @@
+[bar.default]
+center = [ "clock", "date", "weather", "media", "cpu", "ram", "network_rx", "temp", "sysmon" ]
+end = [ "tray", "screenshot", "notifications", "clipboard", "keyboard_layout", "control-center", "session" ]
+margin_edge = 0
+margin_ends = 0
+radius = 10
+shadow = false
+start = [ "launcher", "workspaces", "taskbar", "active_window" ]
+
+[brightness]
+sync_all_monitors = true
+
+[calendar]
+enabled = true
+refresh_minutes = 240
+
+    [calendar.account.personal_google]
+    type = "google"
+
+[desktop_widgets]
+enabled = false
+
+[idle]
+behavior_order = [ "lock", "screen-off", "lock-and-suspend" ]
+
+    [idle.behavior.lock]
+    action = "lock"
+    enabled = true
+    timeout = 600.0
+
+    [idle.behavior.lock-and-suspend]
+    action = "lock_and_suspend"
+    enabled = false
+    timeout = 900.0
+
+    [idle.behavior.screen-off]
+    action = "screen_off"
+    enabled = true
+    timeout = 660.0
+
+[location]
+auto_locate = true
+
+[lockscreen_widgets]
+enabled = false
+schema_version = 2
+widget_order = [ "lockscreen-login-box@HDMI-A-1", "lockscreen-login-box@DP-2" ]
+
+    [lockscreen_widgets.grid]
+    cell_size = 16
+    major_interval = 4
+    visible = true
+
+    [lockscreen_widgets.widget."lockscreen-login-box@DP-2"]
+    box_height = 70.0
+    box_width = 400.0
+    cx = 1280.0
+    cy = 1321.0
+    output = "DP-2"
+    rotation = 0.0
+    type = "login_box"
+
+        [lockscreen_widgets.widget."lockscreen-login-box@DP-2".settings]
+        background_color = "surface_variant"
+        background_opacity = 0.88
+        background_radius = 12.0
+        input_opacity = 1.0
+        input_radius = 6.0
+        show_caps_lock = true
+        show_keyboard_layout = true
+        show_login_button = true
+        show_password_hint = true
+
+    [lockscreen_widgets.widget."lockscreen-login-box@HDMI-A-1"]
+    box_height = 70.0
+    box_width = 400.0
+    cx = 960.0
+    cy = 961.0
+    output = "HDMI-A-1"
+    rotation = 0.0
+    type = "login_box"
+
+        [lockscreen_widgets.widget."lockscreen-login-box@HDMI-A-1".settings]
+        background_color = "surface_variant"
+        background_opacity = 0.88
+        background_radius = 12.0
+        input_opacity = 1.0
+        input_radius = 6.0
+        show_caps_lock = true
+        show_keyboard_layout = true
+        show_login_button = true
+        show_password_hint = true
+
+[nightlight]
+enabled = true
+temperature_night = 4700
+
+[shell]
+screen_time_enabled = true
+
+    [shell.screen_corners]
+    enabled = true
+
+    [shell.screenshot]
+    confirm_region = true
+    directory = "~/Pictures/Screenshots"
+
+    [shell.shadow]
+    alpha = 0.0
+
+[theme]
+builtin = "Kanagawa"
+source = "wallpaper"
+
+    [theme.templates]
+    builtin_ids = [ "foot", "gtk3", "gtk4", "kcolorscheme", "niri", "qt" ]
+    community_ids = [ "zed", "discord", "telegram", "yazi" ]
+
+[wallpaper]
+transition_on_startup = true
+
+    [wallpaper.default]
+    path = "/home/reza/Pictures/Wallpapers/astronaut-planet.jpg"
+
+    [wallpaper.last]
+    path = "/home/reza/Pictures/Wallpapers/astronaut-planet.jpg"
+
+    [wallpaper.monitors.DP-2]
+    path = "/home/reza/Pictures/Wallpapers/astronaut-planet.jpg"
+
+    [wallpaper.monitors.HDMI-A-1]
+    path = "/home/reza/Pictures/Wallpapers/astronaut-planet.jpg"
+
+[weather]
+refresh_minutes = 240
+
+[widget.cpu]
+display = "text"
+
+[widget.date]
+format = "{:%d %b}"
+
+[widget.network_rx]
+display = "text"
+network_speed_compact = true
+
+[widget.ram]
+display = "text"
+
+[widget.sysmon]
+display = "text"
+stat = "gpu_vram"
+
+[widget.temp]
+display = "text"
+stat = "gpu_usage"
+
+[widget.weather]
+show_condition = false

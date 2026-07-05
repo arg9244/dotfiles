@@ -1,0 +1,18 @@
+# =============================================================================
+# Noctalia V5 Shell Configuration
+# =============================================================================
+
+[shell]
+# Enable type-to-launch in niri overview (requires niri restart)
+niri_overview_type_to_launch_enabled = true
+
+[niri.backdrop]
+# Enable the backdrop layer for blurred overview wallpaper
+enabled = true
+
+[greeter_sync]
+# Auto-sync wallpaper and palette to the greeter
+auto = true
+
+[system.monitor]
+gpu_poll_seconds = 5.0
