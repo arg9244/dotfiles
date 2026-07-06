@@ -1,11 +1,20 @@
 [bar.default]
 center = [ "clock", "date", "weather", "media", "cpu", "ram", "network_rx", "temp", "sysmon" ]
-end = [ "tray", "screenshot", "notifications", "clipboard", "keyboard_layout", "control-center", "session" ]
+end = [
+    "recorder_2",
+    "screenshot",
+    "notes_2",
+    "clipboard",
+    "notifications",
+    "keyboard_layout",
+    "control-center",
+    "session"
+]
 margin_edge = 0
 margin_ends = 0
 radius = 10
 shadow = false
-start = [ "launcher", "workspaces", "taskbar", "active_window" ]
+start = [ "launcher", "workspaces", "tray", "taskbar" ]
 
 [brightness]
 sync_all_monitors = true
@@ -95,8 +104,36 @@ widget_order = [ "lockscreen-login-box@HDMI-A-1", "lockscreen-login-box@DP-2" ]
 enabled = true
 temperature_night = 4700
 
+[plugin_settings."noctalia/mpvpaper"]
+video_directory = "/media/D/Picture/Wallpaper/Animted"
+
+[plugin_settings."noctalia/notes"]
+panel_placement = "floating"
+panel_position = "auto"
+
+[plugin_settings."noctalia/screen_recorder"]
+video_codec = "hevc"
+video_source = "focused"
+
+[plugins]
+enabled = [ "noctalia/notes", "noctalia/screen_recorder" ]
+
+    [[plugins.source]]
+    kind = "git"
+    location = "https://github.com/noctalia-dev/official-plugins"
+    name = "official"
+
+    [[plugins.source]]
+    kind = "git"
+    location = "https://github.com/noctalia-dev/community-plugins"
+    name = "community"
+
 [shell]
+avatar_path = "/home/reza/Pictures/Wallpapers/wallhaven-ly353y.jpg"
 screen_time_enabled = true
+
+    [shell.panel]
+    clipboard_placement = "attached"
 
     [shell.screen_corners]
     enabled = true
@@ -110,42 +147,67 @@ screen_time_enabled = true
 
 [theme]
 builtin = "Kanagawa"
-source = "wallpaper"
+community_palette = "Oxocarbon"
+mode = "dark"
+wallpaper_scheme = "m3-content"
 
     [theme.templates]
     builtin_ids = [ "foot", "gtk3", "gtk4", "kcolorscheme", "niri", "qt" ]
     community_ids = [ "zed", "discord", "telegram", "yazi" ]
 
 [wallpaper]
+directory = "~/Pictures/Wallpapers"
 transition_on_startup = true
 
     [wallpaper.default]
-    path = "/home/reza/Pictures/Wallpapers/astronaut-planet.jpg"
+    path = "/home/reza/Pictures/Wallpapers/wallhaven-ly353y.jpg"
 
     [wallpaper.last]
-    path = "/home/reza/Pictures/Wallpapers/astronaut-planet.jpg"
+    path = "/home/reza/Pictures/Wallpapers/wallhaven-ly353y.jpg"
 
     [wallpaper.monitors.DP-2]
-    path = "/home/reza/Pictures/Wallpapers/astronaut-planet.jpg"
+    path = "/home/reza/Pictures/Wallpapers/wallhaven-ly353y.jpg"
 
     [wallpaper.monitors.HDMI-A-1]
-    path = "/home/reza/Pictures/Wallpapers/astronaut-planet.jpg"
+    path = "/home/reza/Pictures/Wallpapers/wallhaven-ly353y.jpg"
 
 [weather]
 refresh_minutes = 240
 
+[widget.cat]
+type = "noctalia/bongocat:cat"
+
 [widget.cpu]
 display = "text"
 
-[widget.date]
-format = "{:%d %b}"
+[widget.media]
+hide_when_no_media = true
+title_scroll = "on_hover"
+
+[widget.mpvpaper]
+type = "noctalia/mpvpaper:mpvpaper"
 
 [widget.network_rx]
 display = "text"
 network_speed_compact = true
 
+[widget.notes]
+type = "noctalia/notes:notes"
+
+[widget.notes_2]
+type = "noctalia/notes:notes"
+
 [widget.ram]
 display = "text"
+
+[widget.recorder]
+type = "noctalia/screen_recorder:recorder"
+
+[widget.recorder_2]
+type = "noctalia/screen_recorder:recorder"
+
+[widget.spacer_2]
+type = "spacer"
 
 [widget.sysmon]
 display = "text"

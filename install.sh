@@ -39,7 +39,8 @@ PACMAN=(
     git ripgrep bottom yazi python nodejs yt-dlp telegram-desktop zed
     chezmoi profile-sync-daemon power-profiles-daemon bpftune
     dmemcg-booster vkd3d lutris pantheon-polkit-agent nicotine+
-    goverlay github-cli
+    goverlay github-cli mpv-mpris playerctl gpu-screen-recorder
+    xdg-desktop-portal xdg-desktop-portal-wlr ttf-jetbrains-mono-nerd
 )
 
 AUR=(

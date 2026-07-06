@@ -8,6 +8,16 @@
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
   "agent": {
+    "tool_permissions": {
+      "tools": {
+        "search_web": {
+          "default": "allow"
+        },
+        "fetch": {
+          "default": "allow"
+        }
+      }
+    },
     "default_model": {
       "provider": "opencode",
       "model": "free/big-pickle",
