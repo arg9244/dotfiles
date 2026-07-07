@@ -45,7 +45,7 @@ PACMAN=(
 )
 
 AUR=(
-    noctalia-git noctalia-greeter-git throne-bin
+    noctalia-git noctalia-greeter-git throne-bin mihomo-bin
 )
 
 # Dependencies to EXCLUDE when installing cachyos-gaming-meta

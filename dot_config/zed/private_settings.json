@@ -20,10 +20,9 @@
       }
     },
     "default_model": {
-      "effort": "high",
       "provider": "opencode",
-      "model": "free/nemotron-3-ultra-free",
-      "enable_thinking": true
+      "model": "free/big-pickle",
+      "enable_thinking": false
     },
     "favorite_models": [],
     "model_parameters": []

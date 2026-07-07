@@ -6,7 +6,7 @@ Wants=network-online.target
 [Service]
 Type=simple
 # Note: '~' does not work in systemd ExecStart. We use '%h' which resolves to the user's home directory.
-ExecStart=/usr/bin/xray run -c %h/.config/xray/MITM-DomainFronting.json
+ExecStart=/home/reza/.local/bin/xray run -c %h/.config/proxy/xray/MITM-DomainFronting.json
 
 # Restart the service if it crashes
 Restart=on-failure
