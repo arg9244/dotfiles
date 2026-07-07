@@ -8,6 +8,7 @@
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
   "agent": {
+    "default_profile": "write",
     "tool_permissions": {
       "tools": {
         "search_web": {
@@ -19,9 +20,10 @@
       }
     },
     "default_model": {
+      "effort": "high",
       "provider": "opencode",
-      "model": "free/big-pickle",
-      "enable_thinking": false
+      "model": "free/nemotron-3-ultra-free",
+      "enable_thinking": true
     },
     "favorite_models": [],
     "model_parameters": []
@@ -45,6 +47,6 @@
   "theme": {
     "mode": "system",
     "light": "Gruvbox Light",
-    "dark": "Noctalia Dark",
-  },
+    "dark": "Gruvbox Dark Hard"
+  }
 }

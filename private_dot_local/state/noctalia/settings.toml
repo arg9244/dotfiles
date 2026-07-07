@@ -113,7 +113,7 @@ panel_position = "auto"
 
 [plugin_settings."noctalia/screen_recorder"]
 video_codec = "hevc"
-video_source = "focused"
+video_source = "portal"
 
 [plugins]
 enabled = [ "noctalia/notes", "noctalia/screen_recorder" ]

@@ -1,0 +1,81 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+total_freed=0
+
+fmt_size() {
+    local bytes=$1
+    if (( bytes >= 1073741824 )); then
+        awk "BEGIN{printf \"%.2f GiB\", $bytes/1073741824}"
+    elif (( bytes >= 1048576 )); then
+        awk "BEGIN{printf \"%.2f MiB\", $bytes/1048576}"
+    elif (( bytes >= 1024 )); then
+        awk "BEGIN{printf \"%.2f KiB\", $bytes/1024}"
+    else
+        echo "${bytes} B"
+    fi
+}
+
+get_size() {
+    sudo du -sb "$1" 2>/dev/null | cut -f1 || echo 0
+}
+
+echo "🧹 Cleaning up system..."
+
+# --- Pacman cache: remove ALL cached packages ---
+if command -v paccache &>/dev/null; then
+    sudo paccache -rk0
+    sudo paccache -ruk0
+else
+    echo "  paccache not found -- install pacman-contrib"
+fi
+
+# --- Paru build & AUR cache ---
+if command -v paru &>/dev/null; then
+    paru -Scc --noconfirm
+fi
+
+# --- Orphaned / unneeded dependency packages ---
+orphans=$(pacman -Qtdq 2>/dev/null || true)
+if [[ -n "$orphans" ]]; then
+    sudo pacman -Rns --noconfirm $orphans
+else
+    echo "  No orphaned packages found."
+fi
+
+# --- /var/cache - everything here is regeneratable ---
+shopt -s nullglob
+for d in /var/cache/*/; do
+    # Skip pacman - already handled above with paccache
+    [[ "$d" == */pacman/* ]] && continue
+    if [[ -d "$d" ]]; then
+        before=$(get_size "$d")
+        sudo rm -rf "$d"/*
+        after=$(get_size "$d")
+        freed=$(( before - after ))
+        total_freed=$(( total_freed + freed ))
+        echo "  Cleaned $d ($(fmt_size $freed))"
+    fi
+done
+
+# --- /var/lib/systemd/coredump - old crash dumps ---
+if [[ -d /var/lib/systemd/coredump ]]; then
+    before=$(get_size /var/lib/systemd/coredump)
+    if command -v coredumpctl &>/dev/null; then
+        sudo coredumpctl delete --all 2>/dev/null || true
+    else
+        sudo rm -rf /var/lib/systemd/coredump/*
+    fi
+    after=$(get_size /var/lib/systemd/coredump)
+    freed=$(( before - after ))
+    total_freed=$(( total_freed + freed ))
+    echo "  Cleaned /var/lib/systemd/coredump/ ($(fmt_size $freed))"
+fi
+
+# --- Systemd journal older than 3 days ---
+if command -v journalctl &>/dev/null; then
+    sudo journalctl --vacuum-time=3d
+fi
+
+echo "  Total freed: $(fmt_size $total_freed)"
+echo "✅ Cleanup complete!"

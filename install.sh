@@ -38,13 +38,14 @@ PACMAN=(
     chromium foot ntfs-3g nautilus file-roller mpv loupe
     git ripgrep bottom yazi python nodejs yt-dlp telegram-desktop zed
     chezmoi profile-sync-daemon power-profiles-daemon bpftune
-    dmemcg-booster vkd3d lutris pantheon-polkit-agent nicotine+
+    dmemcg-booster vkd3d lutris lxsession nicotine+
     goverlay github-cli mpv-mpris playerctl gpu-screen-recorder
-    xdg-desktop-portal xdg-desktop-portal-wlr ttf-jetbrains-mono-nerd
+    xdg-desktop-portal xdg-desktop-portal-gnome ttf-jetbrains-mono-nerd
+    gnome-keyring nm-connection-editor
 )
 
 AUR=(
-    noctalia-git noctalia-greeter-git clash-verge-rev-bin
+    noctalia-git noctalia-greeter-git throne-bin
 )
 
 # Dependencies to EXCLUDE when installing cachyos-gaming-meta
@@ -179,7 +180,12 @@ command -v psd &>/dev/null &&
     ! systemctl --user is-enabled psd &>/dev/null 2>&1 &&
     run "psd (profile-sync-daemon)" systemctl --user enable psd
 
-# ══════════════════════════════════════════════════════════════════════════════
+# Portal backends for niri (Wayland compositor)
+# xdg-desktop-portal-wlr is incompatible with niri (not wlroots-based).
+# Mask it so D-Bus never auto-activates it, and restart the portal to pick up gnome.
+run "Mask incompatible portal backend (wlr)" systemctl --user mask xdg-desktop-portal-wlr 2>/dev/null || true
+run "Restart portal to load gnome backend" systemctl --user restart xdg-desktop-portal 2>/dev/null || true
+
 echo; echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 if [[ "$errs" -eq 0 ]]; then
     ok "All steps completed"
