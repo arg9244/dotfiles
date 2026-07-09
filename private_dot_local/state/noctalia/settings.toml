@@ -26,6 +26,9 @@ refresh_minutes = 240
     [calendar.account.personal_google]
     type = "google"
 
+[control_center.calendar]
+show_events_card = false
+
 [desktop_widgets]
 enabled = false
 
@@ -152,7 +155,7 @@ mode = "dark"
 wallpaper_scheme = "m3-content"
 
     [theme.templates]
-    builtin_ids = [ "foot", "gtk3", "gtk4", "kcolorscheme", "niri", "qt" ]
+    builtin_ids = [ "foot", "gtk3", "gtk4", "ghostty", "kcolorscheme", "kitty", "niri", "qt", "starship" ]
     community_ids = [ "zed", "discord", "telegram", "yazi" ]
 
 [wallpaper]
@@ -181,6 +184,7 @@ type = "noctalia/bongocat:cat"
 display = "text"
 
 [widget.media]
+album_art_only = true
 hide_when_no_media = true
 title_scroll = "on_hover"
 
