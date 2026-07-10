@@ -105,7 +105,6 @@ widget_order = [ "lockscreen-login-box@HDMI-A-1", "lockscreen-login-box@DP-2" ]
 
 [nightlight]
 enabled = true
-temperature_night = 4700
 
 [plugin_settings."noctalia/mpvpaper"]
 video_directory = "/media/D/Picture/Wallpaper/Animted"
@@ -155,8 +154,8 @@ mode = "dark"
 wallpaper_scheme = "m3-content"
 
     [theme.templates]
-    builtin_ids = [ "foot", "gtk3", "gtk4", "ghostty", "kcolorscheme", "kitty", "niri", "qt", "starship" ]
-    community_ids = [ "zed", "discord", "telegram", "yazi" ]
+    builtin_ids = [ "btop", "gtk3", "gtk4", "kcolorscheme", "kitty", "niri", "qt", "starship" ]
+    community_ids = [ "pi-agent", "zed", "yazi" ]
 
 [wallpaper]
 directory = "~/Pictures/Wallpapers"

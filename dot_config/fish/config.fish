@@ -7,7 +7,9 @@ starship init fish | source
 #    # smth smth
 #end
 alias purge="sudo paru -Rnscu"
-alias clean="sudo crunchycleaner -a"
+
+alias stop-docker 'docker stop (docker ps -q) 2>/dev/null; sudo systemctl stop docker docker.socket containerd'
+alias start-docker 'sudo systemctl start docker docker.socket containerd'
 
 # chezmoi: re-add changes to already-tracked files from their original locations
 # (e.g. changes made directly to ~/.config/somefile get synced to the chezmoi source dir)
