@@ -1,0 +1,21 @@
+game:
+  exe: /media/C/Games/Punishing Gray Raven/Punishing Gray Raven/PGR.exe
+  prefix: /home/reza/.wine
+system:
+  env:
+    DXVK_HDR: '1'
+    ENABLE_LAYER_MESA_ANTI_LAG: '1'
+    PROTON_ENABLE_WAYLAND: '1'
+    PROTON_LOCAL_SHADER_CACHE: '1'
+    PROTON_NO_STEAMINPUT: '1'
+    PROTON_NO_WM_DECORATION: '1'
+    PROTON_PREFER_SDL: '1'
+    PROTON_VERB: waitforexitandrun
+    all_proxy: socks5://127.0.0.1:7890
+  gamescope: true
+  gamescope_fps_limiter: '165'
+  gamescope_game_res: 2560x1440
+  gamescope_hdr: true
+  gamescope_output_res: 2560x1440
+wine:
+  version: DW-Proton Latest

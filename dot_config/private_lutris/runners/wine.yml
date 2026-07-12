@@ -1,0 +1,10 @@
+system:
+  disable_runtime: true
+  mangohud: true
+wine:
+  battleye: false
+  eac: false
+  esync: false
+  fsr: false
+  fsync: false
+  version: proton-cachyos-native

@@ -1,0 +1,5 @@
+game:
+  exe: /media/C/Games/Neverness To Everness/NTEGlobalLauncher.exe
+  prefix: /home/reza/.wine
+wine:
+  version: DW-Proton Latest

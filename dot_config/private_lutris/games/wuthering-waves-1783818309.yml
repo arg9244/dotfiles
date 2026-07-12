@@ -1,0 +1,5 @@
+game:
+  exe: /media/C/Games/Wuthering Waves/Wuthering Waves/Wuthering Waves.exe
+  prefix: /home/reza/.wine
+wine:
+  version: DW-Proton Latest

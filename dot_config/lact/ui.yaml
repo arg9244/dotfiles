@@ -1,8 +1,8 @@
-selected_tab: info_page
+selected_tab: thermals_page
 selected_gpu: 1002:73BF-1EAE:6705-0000:0a:00.0
 stats_poll_interval_ms: 500
 gpus: {}
 theme: automatic
 window_size:
-  width: 1280
-  height: 1406
+  width: 960
+  height: 1046
