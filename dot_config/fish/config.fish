@@ -17,3 +17,10 @@ alias chezreadd="chezmoi re-add"
 # chezmoi: commit all changes in the source dir and push to the configured remote (GitHub)
 alias chezpush="chezmoi git -- add -A . && chezmoi git -- commit -m 'Update dotfiles' && chezmoi git -- push"
 starship init fish | source
+
+# Headroom: compress every OpenCode Zen request via local proxy :8786
+if not ss -ltn 2>/dev/null | grep -q 8786
+  setsid env ANTHROPIC_TARGET_API_URL=https://opencode.ai/zen/v1 OPENAI_TARGET_API_URL=https://opencode.ai/zen/v1 /home/reza/.local/bin/headroom proxy --port 8786 --mode token >/tmp/headroom_zen.log 2>&1 < /dev/null
+end
+set -gx OPENCODE_ZEN_BASE_URL http://127.0.0.1:8786
+
