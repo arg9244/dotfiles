@@ -16,6 +16,3 @@ alias chezreadd="chezmoi re-add"
 
 # chezmoi: commit all changes in the source dir and push to the configured remote (GitHub)
 alias chezpush="chezmoi git -- add -A . && chezmoi git -- commit -m 'Update dotfiles' && chezmoi git -- push"
-
-# Headroom proxy (start manually with `headroom-start` before launching OpenCode)
-set -gx OPENCODE_ZEN_BASE_URL http://127.0.0.1:8786
