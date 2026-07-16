@@ -18,4 +18,4 @@ system:
   gamescope_hdr: true
   gamescope_output_res: 2560x1440
 wine:
-  version: DW-Proton Latest
+  version: proton-cachyos-native

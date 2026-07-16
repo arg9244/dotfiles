@@ -2,4 +2,4 @@ game:
   exe: /media/C/Games/Brown Dust 2/ProgramData/Neowiz/BrownDust2Starter/Browndust2Starter.exe
   prefix: /home/reza/.wine
 wine:
-  version: DW-Proton Latest
+  version: proton-cachyos-native
