@@ -42,7 +42,7 @@ PACMAN=(
     goverlay github-cli mpv-mpris playerctl gpu-screen-recorder
     xdg-desktop-portal xdg-desktop-portal-gnome
     gnome-keyring nm-connection-editor baobab amberol
-    starship ttf-nerd-fonts-symbols-common nautilus-open-any-terminal
+    ttf-nerd-fonts-symbols-common nautilus-open-any-terminal
 )
 
 AUR=(
