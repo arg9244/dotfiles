@@ -26,9 +26,6 @@ refresh_minutes = 240
     [calendar.account.personal_google]
     type = "google"
 
-[control_center.calendar]
-show_events_card = false
-
 [desktop_widgets]
 enabled = false
 
