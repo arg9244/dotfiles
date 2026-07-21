@@ -152,7 +152,7 @@ wallpaper_scheme = "m3-content"
 
     [theme.templates]
     builtin_ids = [ "btop", "gtk3", "gtk4", "kcolorscheme", "kitty", "niri", "qt", "starship" ]
-    community_ids = [ "pear-desktop", "zed", "pi-agent", "telegram", "yazi" ]
+    community_ids = [ "pear-desktop", "zen-browser", "zed", "pi-agent", "telegram", "yazi" ]
 
 [wallpaper]
 directory = "~/Pictures/Wallpapers"

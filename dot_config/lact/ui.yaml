@@ -5,4 +5,4 @@ gpus: {}
 theme: automatic
 window_size:
   width: 960
-  height: 1046
+  height: 1080
