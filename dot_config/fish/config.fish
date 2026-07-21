@@ -10,9 +10,14 @@ alias purge="sudo paru -Rnscu"
 alias stop-docker 'docker stop (docker ps -q) 2>/dev/null; sudo systemctl stop docker docker.socket containerd'
 alias start-docker 'sudo systemctl start docker docker.socket containerd'
 
-# chezmoi: re-add changes to already-tracked files from their original locations
-# (e.g. changes made directly to ~/.config/somefile get synced to the chezmoi source dir)
-alias chezreadd="chezmoi re-add"
+# chezmoi: sync live dotfiles → chezmoi source dir (add new, update changed, forget deleted)
+function chezsync
+    chezmoi re-add
+    for f in (chezmoi managed --include files)
+        test -e "$HOME/$f"; or chezmoi forget "$f"
+    end
+    echo "chezmoi synced (re-add + forget deletions)"
+end
 
 # chezmoi: commit all changes in the source dir and push to the configured remote (GitHub)
 alias chezpush="chezmoi git -- add -A . && chezmoi git -- commit -m 'Update dotfiles' && chezmoi git -- push"

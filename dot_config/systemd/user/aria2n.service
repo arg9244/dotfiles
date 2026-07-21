@@ -1,0 +1,14 @@
+[Unit]
+Description=aria2-next download manager
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/aria2n --conf-path=%h/.config/aria2/aria2.conf
+Restart=on-failure
+RestartSec=5
+LimitNOFILE=65536
+
+[Install]
+WantedBy=default.target
