@@ -6,12 +6,16 @@ system:
     DXVK_HDR: '1'
     ENABLE_LAYER_MESA_ANTI_LAG: '1'
     PROTON_ENABLE_WAYLAND: '1'
+    PROTON_FSR4_INDICATOR: '0'
+    PROTON_FSR4_UPGRADE: '0'
     PROTON_LOCAL_SHADER_CACHE: '1'
     PROTON_NO_STEAMINPUT: '1'
     PROTON_NO_WM_DECORATION: '1'
     PROTON_PREFER_SDL: '1'
+    PROTON_USE_OPTISCALER: '0'
+    PROTON_USE_PIPEWIRE: '1'
     PROTON_VERB: waitforexitandrun
-    all_proxy: socks5://127.0.0.1:7890
+    all_proxy: socks5://127.0.0.1:1819
   gamescope: true
   gamescope_fps_limiter: '165'
   gamescope_game_res: 2560x1440

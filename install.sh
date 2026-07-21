@@ -36,12 +36,9 @@ ORIGINAL_HOME="$(eval echo ~$ORIGINAL_USER)"
 
 PACMAN=(
     chromium kitty ntfs-3g nautilus file-roller mpv loupe
-    git btop yazi python nodejs yt-dlp ayugram-desktop zed
-    chezmoi power-profiles-daemon bpftune lact
-    dmemcg-booster vkd3d lutris lxsession nicotine+
-    goverlay github-cli mpv-mpris playerctl
-    xdg-desktop-portal-gnome baobab amberol
-    ttf-nerd-fonts-symbols-common nautilus-open-any-terminal
+    git btop yazi python nodejs yt-dlp zed amberol baobab
+    chezmoi playerctl vkd3d lutris lxsession lact goverlay
+    github-cli mpv-mpris xdg-desktop-portal-gnome
 )
 
 AUR=(
