@@ -9,7 +9,7 @@ system:
     PROTON_NO_WM_DECORATION: '1'
     PROTON_PREFER_SDL: '1'
     PROTON_VERB: waitforexitandrun
-  gamescope: true
+  gamescope: false
   gamescope_game_res: 2560x1440
   gamescope_hdr: true
   gamescope_output_res: 2560x1440

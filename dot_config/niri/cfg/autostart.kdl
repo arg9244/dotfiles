@@ -1,5 +1,6 @@
 // ────────────── Startup Applications ──────────────
 // https://github.com/YaLTeR/niri/wiki/Configuration:-Miscellaneous#spawn-sh-at-startup
-
-    spawn-sh-at-startup "noctalia"
+    spawn-at-startup "dbus-update-activation-environment" "--systemd" "WAYLAND_DISPLAY" "XDG_CURRENT_DESKTOP=niri"
+    spawn-sh-at-startup "gnome-keyring-daemon --start --components=secrets"
     spawn-sh-at-startup "/usr/bin/lxpolkit"
+    spawn-sh-at-startup "noctalia"
