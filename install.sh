@@ -36,13 +36,13 @@ ORIGINAL_HOME="$(eval echo ~$ORIGINAL_USER)"
 
 PACMAN=(
     chromium kitty ntfs-3g nautilus file-roller mpv loupe timeshift
-    git btop yazi python nodejs yt-dlp zed amberol ayugram-desktop
-    chezmoi playerctl vkd3d lutris lxsession lact goverlay baobab
-    github-cli mpv-mpris xdg-desktop-portal-gnome aria2-next-bin
+    git bottom yazi python nodejs yt-dlp zed amberol ayugram-desktop
+    chezmoi playerctl vkd3d lutris lxsession lact goverlay baobab opencode
+    github-cli mpv-mpris xdg-desktop-portal xdg-desktop-portal-gnome
 )
 
 AUR=(
-    noctalia-git noctalia-greeter-git throne-bin mihomo-bin omp-bin ludusavi-bin
+    noctalia-git noctalia-greeter-git throne-bin mihomo-bin omp-bin aria2-next-bin ludusavi-bin
 )
 
 # Dependencies to EXCLUDE when installing cachyos-gaming-meta

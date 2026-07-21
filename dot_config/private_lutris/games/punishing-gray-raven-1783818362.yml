@@ -15,7 +15,7 @@ system:
     PROTON_USE_OPTISCALER: '0'
     PROTON_USE_PIPEWIRE: '1'
     PROTON_VERB: waitforexitandrun
-    all_proxy: socks5://127.0.0.1:1819
+    all_proxy: socks5://127.0.0.1:7890
   gamescope: true
   gamescope_fps_limiter: '165'
   gamescope_game_res: 2560x1440

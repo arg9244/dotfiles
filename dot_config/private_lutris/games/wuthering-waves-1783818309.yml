@@ -15,5 +15,6 @@ system:
     PROTON_USE_OPTISCALER: '1'
     PROTON_USE_PIPEWIRE: '1'
     PROTON_VERB: waitforexitandrun
+    all_proxy: ''
 wine:
   version: proton-cachyos-native

@@ -1,7 +1,7 @@
 game:
   exe: /media/C/Games/Brown Dust 2/C/Browndust2/Browndust2/BrownDust2_10000002/BrownDust
     II.exe
-  prefix: /home/reza/.wine
+  prefix: /home/reza/Games/BrownDustII
 system:
   env:
     DXVK_HDR: '1'
@@ -16,6 +16,6 @@ system:
     PROTON_USE_OPTISCALER: '0'
     PROTON_USE_PIPEWIRE: '1'
     PROTON_VERB: waitforexitandrun
-    all_proxy: socks5://127.0.0.1:1819
+    all_proxy: socks5://127.0.0.1:7890
 wine:
   version: proton-cachyos-native
