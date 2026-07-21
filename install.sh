@@ -37,12 +37,13 @@ ORIGINAL_HOME="$(eval echo ~$ORIGINAL_USER)"
 PACMAN=(
     chromium kitty ntfs-3g nautilus file-roller mpv loupe timeshift
     git bottom yazi python nodejs yt-dlp zed amberol ayugram-desktop
-    chezmoi playerctl vkd3d lutris lxsession lact goverlay baobab opencode
+    chezmoi playerctl vkd3d lutris lxsession lact goverlay baobab
     github-cli mpv-mpris xdg-desktop-portal xdg-desktop-portal-gnome
 )
 
 AUR=(
-    noctalia-git noctalia-greeter-git throne-bin mihomo-bin omp-bin aria2-next-bin ludusavi-bin
+    noctalia-git noctalia-greeter-git throne-bin mihomo-bin omp-bin
+    aria2-next-bin crunchycleaner-bin ludusavi-bin
 )
 
 # Dependencies to EXCLUDE when installing cachyos-gaming-meta
@@ -161,28 +162,12 @@ fi
 sudo chezmoi --source-path "$CHEZMOI_SOURCE" apply 2>/dev/null ||
     warn "System files not applied. Try: sudo chezmoi --source-path ~/.local/share/chezmoi apply"
 
-# Enable greetd
+# ── Enable greetd ──
 run "Disable other DMs" bash -c '
     for dm in sddm gdm lightdm lxdm ly; do
         systemctl is-enabled "$dm" &>/dev/null && sudo systemctl disable "$dm"
     done
 ' 2>/dev/null || true
-require "Enable greetd" sudo systemctl enable greetd
-
-# Optional user services
-command -v powerprofilesctl &>/dev/null &&
-    ! systemctl is-enabled power-profiles-daemon &>/dev/null 2>&1 &&
-    run "power-profiles-daemon" sudo systemctl enable power-profiles-daemon
-command -v psd &>/dev/null &&
-    ! systemctl --user is-enabled psd &>/dev/null 2>&1 &&
-    run "psd (profile-sync-daemon)" systemctl --user enable psd
-
-# Portal backends for niri (Wayland compositor)
-# xdg-desktop-portal-wlr is incompatible with niri (not wlroots-based).
-# Mask it so D-Bus never auto-activates it, and restart the portal to pick up gnome.
-run "Mask incompatible portal backend (wlr)" systemctl --user mask xdg-desktop-portal-wlr 2>/dev/null || true
-run "Restart portal to load gnome backend" systemctl --user restart xdg-desktop-portal 2>/dev/null || true
-
 echo; echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 if [[ "$errs" -eq 0 ]]; then
     ok "All steps completed"
