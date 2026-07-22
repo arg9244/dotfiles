@@ -105,12 +105,12 @@ grep -qi "arch" /etc/os-release 2>/dev/null || warn "Not Arch/CachyOS?"
 ok "Ready"
 
 # ── 1. Pacman packages ──
-head "1/5 — Pacman packages"
+head "1/6 — Pacman packages"
 require "Update databases" sudo pacman -Sy --noconfirm
 require "Install packages" sudo pacman -S --noconfirm --needed "${PACMAN[@]}"
 
 # ── 2. AUR helper (paru) ──
-head "2/5 — AUR helper (paru)"
+head "2/6 — AUR helper (paru)"
 if check paru; then
     ok "paru already installed"
 else
@@ -134,7 +134,7 @@ else
 fi
 
 # ── 3. AUR packages ──
-head "3/5 — AUR packages"
+head "3/6 — AUR packages"
 if [[ ${#AUR[@]} -gt 0 ]]; then
     require "Install AUR packages" paru -S --noconfirm --needed "${AUR[@]}"
 else
@@ -142,13 +142,13 @@ else
 fi
 
 # ── 4. cachyos-gaming-meta ──
-head "4/5 — cachyos-gaming-meta"
+head "4/6 — cachyos-gaming-meta"
 args=()
 for dep in "${GAMING_EXCLUDE[@]}"; do args+=("--assume-installed=${dep}=99.0"); done
 require "Install meta-package" sudo pacman -S --noconfirm "${args[@]}" cachyos-gaming-meta
 
-# ── 5. chezmoi dotfiles + services ──
-head "5/5 — Dotfiles & services"
+# ── 5. chezmoi dotfiles ──
+head "5/6 — Dotfiles"
 
 # Init / apply user dotfiles (as the original user, even if running via sudo)
 CHEZMOI_SOURCE="$ORIGINAL_HOME/.local/share/chezmoi"
@@ -162,12 +162,19 @@ fi
 sudo chezmoi --source-path "$CHEZMOI_SOURCE" apply 2>/dev/null ||
     warn "System files not applied. Try: sudo chezmoi --source-path ~/.local/share/chezmoi apply"
 
-# ── Enable greetd ──
+# ── 6. Service management ──
+head "6/6 — Service management"
+
+# Enable user-level services (managed by chezmoi in dot_config/systemd/user/)
+run "Enable aria2n" as_user systemctl --user enable --now aria2n.service
+
+# Enable greetd (system-level display manager)
 run "Disable other DMs" bash -c '
     for dm in sddm gdm lightdm lxdm ly; do
         systemctl is-enabled "$dm" &>/dev/null && sudo systemctl disable "$dm"
     done
 ' 2>/dev/null || true
+run "Enable greetd" sudo systemctl enable greetd
 echo; echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 if [[ "$errs" -eq 0 ]]; then
     ok "All steps completed"
