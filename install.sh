@@ -35,15 +35,20 @@ ORIGINAL_HOME="$(eval echo ~$ORIGINAL_USER)"
 # ══════════════════════════════════════════════════════════════════════════════
 
 PACMAN=(
-    chromium kitty ntfs-3g nautilus file-roller mpv loupe timeshift
-    git bottom yazi python nodejs yt-dlp zed amberol ayugram-desktop
-    chezmoi playerctl vkd3d lutris lxsession lact goverlay baobab mpv-mpris
-    github-cli gnome-keyring xdg-desktop-portal xdg-desktop-portal-gnome
+    chromium kitty ntfs-3g nautilus file-roller mpv loupe baobab
+    git bottom yazi python bun yt-dlp zed amberol timeshift deno
+    chezmoi playerctl vkd3d lutris lxsession lact goverlay nodejs
+    gnome-keyring xdg-desktop-portal xdg-desktop-portal-gnome
+    gnome-disk-utility mpv-mpris github-cli ayugram-desktop npm
 )
 
 AUR=(
-    noctalia-git noctalia-greeter-git throne-bin mihomo-bin omp-bin
+    noctalia-git noctalia-greeter-git throne-bin mihomo-bin
     aria2-next-bin crunchycleaner-bin ludusavi-bin
+)
+
+NPM_GLOBAL=(
+    omniroute @oh-my-pi/pi-coding-agent
 )
 
 # Dependencies to EXCLUDE when installing cachyos-gaming-meta
@@ -105,12 +110,12 @@ grep -qi "arch" /etc/os-release 2>/dev/null || warn "Not Arch/CachyOS?"
 ok "Ready"
 
 # ── 1. Pacman packages ──
-head "1/6 — Pacman packages"
+head "1/7 — Pacman packages"
 require "Update databases" sudo pacman -Sy --noconfirm
 require "Install packages" sudo pacman -S --noconfirm --needed "${PACMAN[@]}"
 
 # ── 2. AUR helper (paru) ──
-head "2/6 — AUR helper (paru)"
+head "2/7 — AUR helper (paru)"
 if check paru; then
     ok "paru already installed"
 else
@@ -134,21 +139,29 @@ else
 fi
 
 # ── 3. AUR packages ──
-head "3/6 — AUR packages"
+head "3/7 — AUR packages"
 if [[ ${#AUR[@]} -gt 0 ]]; then
     require "Install AUR packages" paru -S --noconfirm --needed "${AUR[@]}"
 else
     ok "No AUR packages to install"
 fi
 
-# ── 4. cachyos-gaming-meta ──
-head "4/6 — cachyos-gaming-meta"
+# ── 4. Global npm packages (via bun) ──
+head "4/7 — Global packages"
+if [[ ${#NPM_GLOBAL[@]} -gt 0 ]]; then
+    run "Install global npm packages" as_user bun install -g "${NPM_GLOBAL[@]}"
+else
+    ok "No global npm packages to install"
+fi
+
+# ── 5. cachyos-gaming-meta ──
+head "5/7 — cachyos-gaming-meta"
 args=()
 for dep in "${GAMING_EXCLUDE[@]}"; do args+=("--assume-installed=${dep}=99.0"); done
 require "Install meta-package" sudo pacman -S --noconfirm "${args[@]}" cachyos-gaming-meta
 
-# ── 5. chezmoi dotfiles ──
-head "5/6 — Dotfiles"
+# ── 6. chezmoi dotfiles ──
+head "6/7 — Dotfiles"
 
 # Init / apply user dotfiles (as the original user, even if running via sudo)
 CHEZMOI_SOURCE="$ORIGINAL_HOME/.local/share/chezmoi"
@@ -162,8 +175,8 @@ fi
 sudo chezmoi --source-path "$CHEZMOI_SOURCE" apply 2>/dev/null ||
     warn "System files not applied. Try: sudo chezmoi --source-path ~/.local/share/chezmoi apply"
 
-# ── 6. Service management ──
-head "6/6 — Service management"
+# ── 7. Service management ──
+head "7/7 — Service management"
 
 # Enable user-level services (managed by chezmoi in dot_config/systemd/user/)
 run "Enable aria2n" as_user systemctl --user enable --now aria2n.service

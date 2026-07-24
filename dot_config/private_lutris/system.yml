@@ -10,7 +10,7 @@ system:
     PROTON_NO_STEAMINPUT: '1'
     PROTON_NO_WM_DECORATION: '1'
     PROTON_PREFER_SDL: '1'
-    PROTON_USE_OPTISCALER: '1'
+    PROTON_USE_OPTISCALER: '0'
     PROTON_USE_PIPEWIRE: '1'
     PROTON_VERB: waitforexitandrun
     all_proxy: socks5://127.0.0.1:1819
