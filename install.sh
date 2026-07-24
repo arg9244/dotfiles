@@ -35,11 +35,12 @@ ORIGINAL_HOME="$(eval echo ~$ORIGINAL_USER)"
 # ══════════════════════════════════════════════════════════════════════════════
 
 PACMAN=(
-    chromium kitty ntfs-3g nautilus file-roller mpv loupe baobab
-    git bottom yazi python bun yt-dlp zed amberol timeshift deno
-    chezmoi playerctl vkd3d lutris lxsession lact goverlay nodejs
     gnome-keyring xdg-desktop-portal xdg-desktop-portal-gnome
-    gnome-disk-utility mpv-mpris github-cli ayugram-desktop npm
+    gnome-calculator loupe baobab nautilus file-roller lxsession
+    gnome-disk-utility kitty git python nodejs bun deno zed mpv
+    github-cli chezmoi timeshift ntfs-3g yt-dlp playerctl amberol
+    mpv-mpris chromium bottom ayugram-desktop vkd3d lutris lact
+    goverlay
 )
 
 AUR=(
