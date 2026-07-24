@@ -44,7 +44,7 @@ PACMAN=(
 
 AUR=(
     noctalia-git noctalia-greeter-git throne-bin mihomo-bin
-    aria2-next-bin crunchycleaner-bin ludusavi-bin
+    aria2-next-bin crunchycleaner-bin ludusavi-bin goofcord-bin
 )
 
 NPM_GLOBAL=(
