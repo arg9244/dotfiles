@@ -36,11 +36,10 @@ ORIGINAL_HOME="$(eval echo ~$ORIGINAL_USER)"
 
 PACMAN=(
     gnome-keyring xdg-desktop-portal xdg-desktop-portal-gnome
-    gnome-calculator loupe baobab nautilus file-roller lxsession
-    gnome-disk-utility kitty git python nodejs bun deno zed mpv
-    github-cli chezmoi timeshift ntfs-3g yt-dlp playerctl amberol
-    mpv-mpris chromium bottom ayugram-desktop vkd3d lutris lact
-    goverlay
+    loupe baobab nautilus file-roller gnome-disk-utility lact
+    ntfs-3g bottom lxsession goverlay vkd3d lutris chromium
+    kitty git python nodejs bun deno zed github-cli chezmoi
+    mpv yt-dlp playerctl mpv-mpris amberol ayugram-desktop
 )
 
 AUR=(
@@ -189,6 +188,20 @@ run "Disable other DMs" bash -c '
     done
 ' 2>/dev/null || true
 run "Enable greetd" sudo systemctl enable greetd
+# Deploy system mount services (managed by chezmoi in etc/systemd/system/)
+for svc in mount-media-c.service mount-media-d.service; do
+    CHEZMOI_SVC="$CHEZMOI_SOURCE/etc/systemd/system/$svc"
+    if [[ -f "$CHEZMOI_SVC" ]]; then
+        run "Deploy $svc" sudo cp "$CHEZMOI_SVC" /etc/systemd/system/
+    else
+        warn "$svc not found in chezmoi source"
+    fi
+done
+run "Reload systemd" sudo systemctl daemon-reload
+run "Restart mount services" sudo systemctl restart mount-media-c.service mount-media-d.service
+
+# Apply HDD power management on SATA drive (WD Re 3TB /dev/sda)
+run "Set APM + spin-down" sudo hdparm -B 255 -S 60 /dev/sda
 echo; echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 if [[ "$errs" -eq 0 ]]; then
     ok "All steps completed"
