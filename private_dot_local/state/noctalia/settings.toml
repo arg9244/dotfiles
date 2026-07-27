@@ -12,6 +12,7 @@ end = [
 ]
 margin_edge = 0
 margin_ends = 0
+position = "bottom"
 radius = 10
 shadow = false
 start = [ "launcher", "workspaces", "tray", "taskbar" ]

@@ -5,7 +5,7 @@ system:
   gamescope: true
   gamescope_fps_limiter: '165'
   gamescope_game_res: 2560x1440
-  gamescope_hdr: true
+  gamescope_hdr: false
   gamescope_output_res: 2560x1440
 wine:
   version: proton-cachyos-native

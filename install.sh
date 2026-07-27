@@ -35,11 +35,11 @@ ORIGINAL_HOME="$(eval echo ~$ORIGINAL_USER)"
 # ══════════════════════════════════════════════════════════════════════════════
 
 PACMAN=(
-    gnome-keyring xdg-desktop-portal xdg-desktop-portal-gnome
-    loupe baobab nautilus file-roller gnome-disk-utility lact
-    ntfs-3g bottom lxsession goverlay vkd3d lutris chromium
-    kitty git python nodejs bun deno zed github-cli chezmoi
-    mpv yt-dlp playerctl mpv-mpris amberol ayugram-desktop
+    gnome-keyring xdg-desktop-portal-gnome komikku
+    loupe baobab file-roller gnome-disk-utility lact
+    ntfs-3g bottom lxsession goverlay vkd3d lutris
+    kitty bun zed github-cli chezmoi ayugram-desktop
+    mpv yt-dlp playerctl mpv-mpris amberol qbittorrent
 )
 
 AUR=(
@@ -48,7 +48,8 @@ AUR=(
 )
 
 NPM_GLOBAL=(
-    omniroute @oh-my-pi/pi-coding-agent
+    # omniroute
+    @oh-my-pi/pi-coding-agent
 )
 
 # Dependencies to EXCLUDE when installing cachyos-gaming-meta
