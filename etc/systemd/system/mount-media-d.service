@@ -6,8 +6,8 @@ After=local-fs.target
 Type=oneshot
 RemainAfterExit=yes
 ExecStart=/usr/bin/mount -t ntfs-3g -o uid=1000,gid=1000,rw,noatime,allow_other /dev/disk/by-id/ata-WDC_WD3000FYYZ-01UL1B0_WD-WMC130243749-part1 /media/D
-ExecStartPost=/usr/bin/hdparm -B 255 -S 60 /dev/disk/by-id/ata-WDC_WD3000FYYZ-01UL1B0_WD-WMC130243749
-ExecStop=/usr/bin/umount /media/D
+ExecStartPost=/usr/bin/hdparm -B 255 -S 0 -W 0 /dev/disk/by-id/ata-WDC_WD3000FYYZ-01UL1B0_WD-WMC130243749
+ExecStop=/bin/sh -c "sync && /usr/bin/umount /media/D"
 
 [Install]
 WantedBy=multi-user.target

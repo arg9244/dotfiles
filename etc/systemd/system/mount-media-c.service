@@ -6,7 +6,7 @@ After=local-fs.target
 Type=oneshot
 RemainAfterExit=yes
 Environment=LIBMOUNT_FORCE_MOUNT2=always
-ExecStart=/usr/bin/mount -t ntfs3 -o force,nofail,uid=1000,gid=1000,iocharset=utf8,windows_names,prealloc /dev/disk/by-id/nvme-Samsung_SSD_980_1TB_S649NL0W339435D-part3 /media/C
+ExecStart=/usr/bin/mount -t ntfs3 -o force,nofail,uid=1000,gid=1000,iocharset=utf8,windows_names,prealloc,discard /dev/disk/by-id/nvme-Samsung_SSD_980_1TB_S649NL0W339435D-part3 /media/C
 ExecStop=/usr/bin/umount /media/C
 
 [Install]

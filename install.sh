@@ -200,8 +200,17 @@ done
 run "Reload systemd" sudo systemctl daemon-reload
 run "Restart mount services" sudo systemctl restart mount-media-c.service mount-media-d.service
 
+# Deploy udev I/O scheduler rules
+UDEV_SRC="$CHEZMOI_SOURCE/etc/udev/rules.d/60-ioschedulers.rules"
+if [[ -f "$UDEV_SRC" ]]; then
+    run "Deploy I/O scheduler rules" sudo cp "$UDEV_SRC" /etc/udev/rules.d/
+    run "Reload udev rules" sudo udevadm control --reload-rules && sudo udevadm trigger
+else
+    warn "60-ioschedulers.rules not found in chezmoi source"
+fi
+
 # Apply HDD power management on SATA drive (WD Re 3TB /dev/sda)
-run "Set APM + spin-down" sudo hdparm -B 255 -S 60 /dev/sda
+run "Set APM + spin-down" sudo hdparm -B 255 -S 0 -W 0 /dev/sda
 echo; echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 if [[ "$errs" -eq 0 ]]; then
     ok "All steps completed"
