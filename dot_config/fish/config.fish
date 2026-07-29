@@ -1,4 +1,5 @@
 source /usr/share/cachyos-fish-config/cachyos-config.fish
+set -gx PATH $HOME/.local/bin $HOME/.bun/bin $PATH
 
 # overwrite greeting
 # potentially disabling fastfetch

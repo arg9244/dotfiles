@@ -22,22 +22,24 @@ EOF
 fi
 
 # Keep sudo alive when running as a regular user
+sudo_keepalive_pid=""
 if [[ $EUID -ne 0 ]]; then
     while true; do sudo -n true; sleep 60; kill -0 "$$" 2>/dev/null || exit; done &>/dev/null &
+    sudo_keepalive_pid=$!
 fi
 
 # When invoked via sudo, remember the real user for user-context commands (chezmoi)
 ORIGINAL_USER="${SUDO_USER:-$USER}"
-ORIGINAL_HOME="$(eval echo ~$ORIGINAL_USER)"
 
-# ══════════════════════════════════════════════════════════════════════════════
+ORIGINAL_HOME="$(getent passwd "$ORIGINAL_USER" | cut -d: -f6)"
+export PATH="$ORIGINAL_HOME/.local/bin:$ORIGINAL_HOME/.bun/bin:$PATH"
 # 📦 PACKAGES — Edit these arrays to add/remove what gets installed
 # ══════════════════════════════════════════════════════════════════════════════
 
 PACMAN=(
     gnome-keyring xdg-desktop-portal-gnome komikku
     loupe baobab file-roller gnome-disk-utility lact
-    ntfs-3g bottom lxsession goverlay vkd3d lutris
+    ntfs-3g bottom lxsession goverlay vkd3d lutris niri
     kitty bun zed github-cli chezmoi ayugram-desktop
     mpv yt-dlp playerctl mpv-mpris amberol qbittorrent
 )
@@ -70,9 +72,9 @@ head() { echo; echo "━━━ $* ━━━"; }
 
 ERR_LOG="$(mktemp)"
 errs=0
-cleanup() { [[ -n "${ERR_LOG:-}" ]] && rm -f "$ERR_LOG"; kill %1 2>/dev/null; }
-trap cleanup EXIT
 
+cleanup() { [[ -n "${ERR_LOG:-}" ]] && rm -f "$ERR_LOG"; [[ -n "${sudo_keepalive_pid:-}" ]] && kill "$sudo_keepalive_pid" 2>/dev/null; }
+trap cleanup EXIT
 run() {
     local desc="$1"; shift
     if "$@"; then ok "$desc"; else fail "$desc"; echo "$desc" >> "$ERR_LOG"; ((errs++)); fi
@@ -106,7 +108,7 @@ echo "━━━━━━━━━━━━━━━━━━━━━━━━�
 
 # ── Pre-flight ──
 head "Pre-flight"
-ping -c1 -W2 archlinux.org &>/dev/null || { fail "No internet"; exit 1; }
+ping -c1 -W2000 archlinux.org &>/dev/null || { fail "No internet"; exit 1; }
 grep -qi "arch" /etc/os-release 2>/dev/null || warn "Not Arch/CachyOS?"
 ok "Ready"
 
@@ -167,20 +169,31 @@ head "6/7 — Dotfiles"
 # Init / apply user dotfiles (as the original user, even if running via sudo)
 CHEZMOI_SOURCE="$ORIGINAL_HOME/.local/share/chezmoi"
 if [[ -d "$CHEZMOI_SOURCE" ]]; then
-    run "chezmoi re-apply" as_user bash -c "chezmoi reapply 2>/dev/null || chezmoi apply"
+    run "chezmoi re-apply" as_user bash -c "chezmoi reapply 2>&1 || chezmoi apply 2>&1"
 else
     require "chezmoi init" as_user chezmoi init --apply "$DOTFILES_REPO"
 fi
 
 # Apply root-owned files (e.g. /etc/greetd/config.toml)
-sudo chezmoi --source-path "$CHEZMOI_SOURCE" apply 2>/dev/null ||
+sudo chezmoi --source-path "$CHEZMOI_SOURCE" apply 2>&1 ||
     warn "System files not applied. Try: sudo chezmoi --source-path ~/.local/share/chezmoi apply"
+# Persist user local bin directories in .bashrc
+_bashrc="$ORIGINAL_HOME/.bashrc"
+_path_line='export PATH="$HOME/.local/bin:$HOME/.bun/bin:$PATH"'
+_marker="# path: user local bins"
+if [[ -f "$_bashrc" ]] && ! grep -qF "$_marker" "$_bashrc"; then
+    printf '\n%s\n%s\n' "$_marker" "$_path_line" >> "$_bashrc"
+fi
+
 
 # ── 7. Service management ──
 head "7/7 — Service management"
 
 # Enable user-level services (managed by chezmoi in dot_config/systemd/user/)
-run "Enable aria2n" as_user systemctl --user enable --now aria2n.service
+# Ensure aria2 session file and config directory exist before enabling the service
+run "Create aria2 config dir" as_user mkdir -p "$ORIGINAL_HOME/.config/aria2"
+run "Touch aria2 session file" as_user touch "$ORIGINAL_HOME/.config/aria2/aria2.session"
+run "Enable aria2" as_user systemctl --user enable --now aria2.service
 
 # Enable greetd (system-level display manager)
 run "Disable other DMs" bash -c '
@@ -189,6 +202,9 @@ run "Disable other DMs" bash -c '
     done
 ' 2>/dev/null || true
 run "Enable greetd" sudo systemctl enable greetd
+# Ensure mount point directories exist before deploying mount services
+run "Create mount point /media/C" sudo mkdir -p /media/C
+run "Create mount point /media/D" sudo mkdir -p /media/D
 # Deploy system mount services (managed by chezmoi in etc/systemd/system/)
 for svc in mount-media-c.service mount-media-d.service; do
     CHEZMOI_SVC="$CHEZMOI_SOURCE/etc/systemd/system/$svc"
@@ -210,8 +226,13 @@ else
     warn "60-ioschedulers.rules not found in chezmoi source"
 fi
 
-# Apply HDD power management on SATA drive (WD Re 3TB /dev/sda)
-run "Set APM + spin-down" sudo hdparm -B 255 -S 0 -W 0 /dev/sda
+# HDD device variable – adjust if your drive is not /dev/sda
+HDD_DEV="/dev/sda"
+if [[ -b "$HDD_DEV" ]]; then
+    run "Set APM + spin-down" sudo hdparm -B 255 -S 0 -W 0 "$HDD_DEV"
+else
+    warn "$HDD_DEV not present (skipping HDD power management)"
+fi
 echo; echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 if [[ "$errs" -eq 0 ]]; then
     ok "All steps completed"

@@ -1,3 +1,5 @@
+config_version = 8
+
 [bar.default]
 center = [ "clock", "date", "weather", "media", "cpu", "ram", "network_rx", "temp", "sysmon" ]
 end = [
@@ -79,7 +81,6 @@ widget_order = [ "lockscreen-login-box@DP-3", "lockscreen-login-box@HDMI-A-1", "
         show_caps_lock = true
         show_keyboard_layout = true
         show_login_button = true
-        show_password_hint = true
 
     [lockscreen_widgets.widget."lockscreen-login-box@DP-3"]
     box_height = 70.0
@@ -99,7 +100,6 @@ widget_order = [ "lockscreen-login-box@DP-3", "lockscreen-login-box@HDMI-A-1", "
         show_caps_lock = true
         show_keyboard_layout = true
         show_login_button = true
-        show_password_hint = true
 
     [lockscreen_widgets.widget."lockscreen-login-box@HDMI-A-1"]
     box_height = 70.0
@@ -119,7 +119,6 @@ widget_order = [ "lockscreen-login-box@DP-3", "lockscreen-login-box@HDMI-A-1", "
         show_caps_lock = true
         show_keyboard_layout = true
         show_login_button = true
-        show_password_hint = true
 
 [nightlight]
 enabled = true
