@@ -1,0 +1,7 @@
+{
+  "$schema": "https://raw.githubusercontent.com/goodroot/hyprwhspr/main/share/config.schema.json",
+  "use_hypr_bindings": true,
+  "model": "large-v3-turbo",
+  "transcription_backend": "vulkan",
+  "audio_ducking": true
+}

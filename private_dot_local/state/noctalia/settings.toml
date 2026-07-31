@@ -5,11 +5,15 @@ center = [ "clock", "date", "weather", "media", "cpu", "ram", "network_rx", "tem
 end = [
     "recorder_2",
     "screenshot",
+    "status",
+    "bar",
+    "todo",
     "notes_2",
     "clipboard",
     "notifications",
     "keyboard_layout",
     "control-center",
+    "topgrade-wrapper",
     "session"
 ]
 margin_edge = 0
@@ -135,7 +139,15 @@ video_codec = "hevc"
 video_source = "portal"
 
 [plugins]
-enabled = [ "noctalia/notes", "noctalia/screen_recorder" ]
+enabled = [
+    "noctalia/notes",
+    "noctalia/screen_recorder",
+    "apex077/eyecare",
+    "yuuto/calculator",
+    "goodroot/noctwhspr",
+    "nightwatch75/todo",
+    "nightwatch75/topgrade-wrapper"
+]
 
     [[plugins.source]]
     kind = "git"
@@ -166,13 +178,13 @@ screen_time_enabled = true
 
 [theme]
 builtin = "Kanagawa"
-community_palette = "Oxocarbon"
+community_palette = "Gruvbox Material"
 mode = "dark"
+source = "community"
 wallpaper_scheme = "m3-content"
 
     [theme.templates]
     builtin_ids = [ "gtk3", "gtk4", "kcolorscheme", "kitty", "niri", "qt" ]
-    community_ids = [ "discord" ]
 
 [wallpaper]
 directory = "~/Pictures/Wallpapers"
@@ -192,6 +204,9 @@ transition_on_startup = true
 
 [weather]
 refresh_minutes = 240
+
+[widget.bar]
+type = "yuuto/calculator:bar"
 
 [widget.cat]
 type = "noctalia/bongocat:cat"
@@ -229,6 +244,9 @@ type = "noctalia/screen_recorder:recorder"
 [widget.spacer_2]
 type = "spacer"
 
+[widget.status]
+type = "goodroot/noctwhspr:status"
+
 [widget.sysmon]
 display = "text"
 stat = "gpu_vram"
@@ -236,6 +254,12 @@ stat = "gpu_vram"
 [widget.temp]
 display = "text"
 stat = "gpu_usage"
+
+[widget.todo]
+type = "nightwatch75/todo:todo"
+
+[widget.topgrade-wrapper]
+type = "nightwatch75/topgrade-wrapper:topgrade-wrapper"
 
 [widget.weather]
 show_condition = false

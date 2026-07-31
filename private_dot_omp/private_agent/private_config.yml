@@ -1,0 +1,33 @@
+providers: 
+  webSearchOrder: 
+    []
+  memoryModel: llama3.2:3b
+modelRoles: 
+  default: opencode-zen/big-pickle
+symbolPreset: nerd
+theme: 
+  dark: titanium
+setupVersion: 1
+defaultThinkingLevel: auto
+statusLine: 
+  preset: full
+  transparent: true
+tui: 
+  textSizing: true
+display: 
+  showTokenUsage: true
+  cacheMissMarker: true
+task: 
+  showResolvedModelBadge: true
+images: 
+  blockImages: true
+steeringMode: one-at-a-time
+followUpMode: one-at-a-time
+interruptMode: immediate
+memory: 
+  backend: local
+autolearn: 
+  enabled: true
+github: 
+  enabled: true
+autoResume: true

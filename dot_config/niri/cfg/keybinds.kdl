@@ -21,6 +21,10 @@ binds {
     Mod+E                               hotkey-overlay-title="File Manager: Nautilus" { spawn "nautilus"; }
     Mod+G                               hotkey-overlay-title="Game Launcher: Lutris" { spawn "lutris"; }
 
+    // ─── Dictation (hyprwhspr) ───
+    Mod+Alt+D                           hotkey-overlay-title="Toggle Dictation" { spawn-sh "/usr/lib/hyprwhspr/config/hyprland/hyprwhspr-tray.sh record"; }
+    Alt+MouseForward                   hotkey-overlay-title="Toggle Dictation" { spawn-sh "/usr/lib/hyprwhspr/config/hyprland/hyprwhspr-tray.sh record"; }
+
     // ─── Media Controls ───
     XF86AudioRaiseVolume                allow-when-locked=true { spawn-sh "qs -c noctalia-shell ipc call volume increase"; }
     XF86AudioLowerVolume                allow-when-locked=true { spawn-sh "qs -c noctalia-shell ipc call volume decrease"; }

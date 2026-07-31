@@ -7,6 +7,8 @@ input {
             //If you want to overwrite your keyboard layout,
             // uncomment the line below and change the layout accordingly.
             layout "us,ir" // Use the American keyboard layout
+            variant ",pes"
+            options "grp:lalt_lshift_toggle"
         }
         numlock // Enable numlock on startup
     }
