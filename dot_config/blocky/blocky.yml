@@ -1,0 +1,56 @@
+# ── Upstream resolvers ────────────────────────────────────────────
+upstreams:
+  groups:
+    default:
+      - "https://sky.rethinkdns.com/dns-query"
+      - "https://freedom.mydns.network/dns-query"
+  strategy: parallel_best
+  timeout: 2s
+  userAgent: "CachyOS/blocky"
+
+# ── Bootstrap DNS (used to resolve DoH hostnames) ────────────────
+bootstrapDns:
+  - upstream: "1.1.1.1"
+  - upstream: "8.8.8.8"
+  - upstream: "9.9.9.9"
+
+# ── Listen addresses ─────────────────────────────────────────────
+ports:
+  dns:
+    - 127.0.0.1:53
+    - "[::1]:53"
+
+# ── Caching ──────────────────────────────────────────────────────
+caching:
+  minTime: 5m
+  maxTime: 30m
+  prefetching: true
+
+# ── Domain blocking ──────────────────────────────────────────────
+blocking:
+  denylists:
+    ads:
+      # Unified hosts + fakenews + gambling
+      - https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/fakenews-gambling/hosts
+
+  allowlists:
+    ads:
+      - |
+        # Add domains to whitelist, one per line:
+        # example.com
+        # *.example.org
+
+  clientGroupsBlock:
+    default:
+      - ads
+
+  blockType: zeroIp
+  blockTTL: 6h
+
+  loading:
+    strategy: blocking
+    refreshPeriod: 24h
+    downloads:
+      timeout: 60s
+      attempts: 5
+      cooldown: 10s

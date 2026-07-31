@@ -47,6 +47,6 @@
   "theme": {
     "mode": "dark",
     "light": "Gruvbox Light",
-    "dark": "Ayu Dark"
+    "dark": "Gruvbox Dark"
   }
 }

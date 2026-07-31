@@ -13,7 +13,6 @@ end = [
     "notifications",
     "keyboard_layout",
     "control-center",
-    "topgrade-wrapper",
     "session"
 ]
 margin_edge = 0
@@ -145,8 +144,7 @@ enabled = [
     "apex077/eyecare",
     "yuuto/calculator",
     "goodroot/noctwhspr",
-    "nightwatch75/todo",
-    "nightwatch75/topgrade-wrapper"
+    "nightwatch75/todo"
 ]
 
     [[plugins.source]]
@@ -257,9 +255,6 @@ stat = "gpu_usage"
 
 [widget.todo]
 type = "nightwatch75/todo:todo"
-
-[widget.topgrade-wrapper]
-type = "nightwatch75/topgrade-wrapper:topgrade-wrapper"
 
 [widget.weather]
 show_condition = false

@@ -2,15 +2,18 @@ providers:
   webSearchOrder: 
     []
   memoryModel: llama3.2:3b
+  tts: local
+  tinyModel: lfm2-350m
+  tinyModelDevice: auto
 modelRoles: 
-  default: opencode-zen/big-pickle
+  default: opencode-zen/ling-3.0-flash-free
 symbolPreset: nerd
 theme: 
   dark: titanium
 setupVersion: 1
 defaultThinkingLevel: auto
 statusLine: 
-  preset: full
+  preset: default
   transparent: true
 tui: 
   textSizing: true
@@ -31,3 +34,23 @@ autolearn:
 github: 
   enabled: true
 autoResume: true
+tts: 
+  localModel: kokoro
+  localVoice: bf_emma
+speech: 
+  enabled: false
+  mode: assistant
+  enhanced: true
+  voice: bf_emma
+secrets: 
+  enabled: true
+advisor: 
+  enabled: false
+  subagents: true
+  syncBacklog: "1"
+error: 
+  notify: "on"
+features: 
+  unexpectedStopDetection: true
+speechgen: 
+  enabled: true

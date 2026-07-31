@@ -165,6 +165,9 @@ fi
 # Apply root-owned files (e.g. /etc/greetd/config.toml)
 sudo chezmoi --source-path "$CHEZMOI_SOURCE" apply 2>&1 ||
     warn "System files not applied. Try: sudo chezmoi --source-path ~/.local/share/chezmoi apply"
+# Symlink blocky config into /etc/blocky/
+run "Create /etc/blocky directory" sudo mkdir -p /etc/blocky
+run "Symlink blocky.yml" sudo ln -sf "$ORIGINAL_HOME/.local/share/chezmoi/dot_config/blocky/blocky.yml" /etc/blocky/blocky.yml
 # Persist user local bin directories in .bashrc
 _bashrc="$ORIGINAL_HOME/.bashrc"
 _path_line='export PATH="$HOME/.local/bin:$PATH"'

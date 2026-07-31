@@ -1,5 +1,8 @@
 source /usr/share/cachyos-fish-config/cachyos-config.fish
 set -gx PATH $HOME/.local/bin $HOME/.bun/bin $PATH
+set -gx EDITOR micro
+set -gx VISUAL micro
+set -gx GIT_EDITOR micro
 
 # overwrite greeting
 # potentially disabling fastfetch
