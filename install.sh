@@ -39,7 +39,7 @@ export PATH="$ORIGINAL_HOME/.local/bin:$PATH"
 PACMAN=(
     gnome-keyring xdg-desktop-portal-gnome komikku
     loupe baobab file-roller gnome-disk-utility lact
-    ntfs-3g bottom lxsession goverlay vkd3d lutris
+    ntfs-3g bottom lxsession mangohud vkd3d lutris
     kitty zed github-cli chezmoi ayugram-desktop niri
     mpv yt-dlp playerctl mpv-mpris amberol qbittorrent
 )

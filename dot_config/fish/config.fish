@@ -14,6 +14,10 @@ alias purge="sudo paru -Rnscu"
 alias stop-docker 'docker stop (docker ps -q) 2>/dev/null; sudo systemctl stop docker docker.socket containerd'
 alias start-docker 'sudo systemctl start docker docker.socket containerd'
 
+# hyprwhspr: stt daemon, started/stopped manually (systemd service disabled)
+alias hyprwhspr-start 'systemctl --user start hyprwhspr.service'
+alias hyprwhspr-stop 'systemctl --user stop hyprwhspr.service'
+
 # chezmoi: sync live dotfiles → chezmoi source dir (add new, update changed, forget deleted)
 function chezsync
     chezmoi re-add

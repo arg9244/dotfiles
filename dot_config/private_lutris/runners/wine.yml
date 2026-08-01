@@ -4,3 +4,5 @@ wine:
   esync: false
   fsr: false
   fsync: false
+  version: proton-cachyos-native
+  visible_in_side_panel: true

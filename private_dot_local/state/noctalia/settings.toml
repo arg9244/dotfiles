@@ -54,7 +54,7 @@ behavior_order = [ "lock", "screen-off", "lock-and-suspend" ]
     timeout = 660.0
 
 [location]
-auto_locate = true
+address = "Malard"
 
 [lockscreen_widgets]
 enabled = false
