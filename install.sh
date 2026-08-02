@@ -168,6 +168,9 @@ sudo chezmoi --source-path "$CHEZMOI_SOURCE" apply 2>&1 ||
 # Symlink blocky config into /etc/blocky/
 run "Create /etc/blocky directory" sudo mkdir -p /etc/blocky
 run "Symlink blocky.yml" sudo ln -sf "$ORIGINAL_HOME/.local/share/chezmoi/dot_config/blocky/blocky.yml" /etc/blocky/blocky.yml
+# Symlink game performance sysctl config into /etc/sysctl.d/
+run "Create /etc/sysctl.d directory" sudo mkdir -p /etc/sysctl.d
+run "Symlink 99-game-performance.conf" sudo ln -sf "$ORIGINAL_HOME/.config/sysctl.d/99-game-performance.conf" /etc/sysctl.d/99-game-performance.conf
 # Persist user local bin directories in .bashrc
 _bashrc="$ORIGINAL_HOME/.bashrc"
 _path_line='export PATH="$HOME/.local/bin:$PATH"'

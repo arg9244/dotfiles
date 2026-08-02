@@ -3,9 +3,10 @@
 // You will have to remove "/-" and edit it before it takes effect.
 // https://github.com/YaLTeR/niri/wiki/Configuration:-Outputs
 
-output "DP-2" {
+output "Samsung Electric Company LS32CG51x H9JWA00258" {
     mode "2560x1440@164.999" // Set resolution and refresh rate
     scale 1 // No scaling (use 2 for HiDPI)
+    variable-refresh-rate on-demand=true // VRR (FreeSync) only for games/video
 }
 
 output "HDMI-A-1" {

@@ -30,7 +30,7 @@ system:
     PROTON_USE_PIPEWIRE: '1'
     PROTON_VERB: waitforexitandrun
     PROTON_XESS_UPGRADE: '1'
-    RADV_PERFTEST: sam,cswave32,dccmsaa,gewave32
+    RADV_PERFTEST: sam,cswave32,gewave32
     RADV_TEX_ANISO: '16'
     STAGING_SHARED_MEMORY: '1'
     UMU_RUNTIME_UPDATE: '0'
@@ -44,4 +44,4 @@ system:
     XDG_CURRENT_DESKTOP: steamcompmgr
     all_proxy: socks5://127.0.0.1:7890
   mangohud: true
-  prefix_command: game-performance
+  prefix_command: game-performance taskset -c 0-5
