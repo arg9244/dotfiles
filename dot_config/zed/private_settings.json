@@ -7,7 +7,7 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
-  "proxy": "",
+  "proxy": "socks5://127.0.0.1:7890",
   "agent": {
     "default_profile": "write",
     "tool_permissions": {

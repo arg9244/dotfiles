@@ -134,7 +134,9 @@ panel_placement = "floating"
 panel_position = "auto"
 
 [plugin_settings."noctalia/screen_recorder"]
+resolution = "1920x1080"
 video_codec = "hevc"
+video_qp = 30
 video_source = "portal"
 
 [plugins]
@@ -183,6 +185,7 @@ wallpaper_scheme = "m3-content"
 
     [theme.templates]
     builtin_ids = [ "gtk3", "gtk4", "kcolorscheme", "kitty", "niri", "qt" ]
+    community_ids = [ "opencode" ]
 
 [wallpaper]
 directory = "~/Pictures/Wallpapers"
@@ -201,7 +204,7 @@ transition_on_startup = true
     path = "/home/reza/Pictures/Wallpapers/wallhaven-ly353y.jpg"
 
 [weather]
-refresh_minutes = 240
+refresh_minutes = 60
 
 [widget.bar]
 type = "yuuto/calculator:bar"

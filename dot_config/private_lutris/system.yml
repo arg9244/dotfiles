@@ -33,7 +33,6 @@ system:
     RADV_PERFTEST: sam,cswave32,gewave32
     RADV_TEX_ANISO: '16'
     STAGING_SHARED_MEMORY: '1'
-    UMU_RUNTIME_UPDATE: '0'
     VKD3D_CONFIG: nodxr,no_upload_hvv,force_host_cached
     WINE_DISABLE_CSD: '1'
     WINE_DISABLE_FAST_ATTACH: '1'
@@ -44,4 +43,4 @@ system:
     XDG_CURRENT_DESKTOP: steamcompmgr
     all_proxy: socks5://127.0.0.1:7890
   mangohud: true
-  prefix_command: game-performance taskset -c 0-5
+  prefix_command: game-performance
