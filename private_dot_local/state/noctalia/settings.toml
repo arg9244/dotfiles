@@ -134,9 +134,6 @@ panel_placement = "floating"
 panel_position = "auto"
 
 [plugin_settings."noctalia/screen_recorder"]
-resolution = "1920x1080"
-video_codec = "hevc"
-video_qp = 30
 video_source = "portal"
 
 [plugins]

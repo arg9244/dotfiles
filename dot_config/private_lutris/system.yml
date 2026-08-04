@@ -30,7 +30,7 @@ system:
     PROTON_USE_PIPEWIRE: '1'
     PROTON_VERB: waitforexitandrun
     PROTON_XESS_UPGRADE: '1'
-    RADV_PERFTEST: sam,cswave32,gewave32
+    RADV_PERFTEST: sam
     RADV_TEX_ANISO: '16'
     STAGING_SHARED_MEMORY: '1'
     VKD3D_CONFIG: nodxr,no_upload_hvv,force_host_cached
