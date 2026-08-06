@@ -30,8 +30,8 @@
   "assetEtags": {
     "https://raw.githubusercontent.com/Milkshiift/GoofCord/refs/heads/main/assets/preVencord.js": "W/\"db401c4ba3b4277c8440de336ddc9276e9ebe430d7d062e411d6166ea8c11c10\"",
     "https://raw.githubusercontent.com/Milkshiift/GoofCord/refs/heads/main/assets/postVencord.js": "W/\"551df330a114e23679f66b9c318cd9d2b64c72b50817ded30c5986a815f40b6b\"",
-    "https://github.com/Vendicated/Vencord/releases/download/devbuild/browser.css": "\"0x8DEEDC55E6F1661\"",
-    "https://github.com/Vendicated/Vencord/releases/download/devbuild/browser.js": "\"0x8DEEDC55E7B16DA\""
+    "https://github.com/Vendicated/Vencord/releases/download/devbuild/browser.css": "\"0x8DEF35B8404F294\"",
+    "https://github.com/Vendicated/Vencord/releases/download/devbuild/browser.js": "\"0x8DEF35B84215B5C\""
   },
   "managedFiles": [
     "PreVencord.js",
