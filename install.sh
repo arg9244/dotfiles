@@ -38,16 +38,16 @@ export PATH="$ORIGINAL_HOME/.local/bin:$PATH"
 
 PACMAN=(
     gnome-keyring xdg-desktop-portal-gnome komikku
-    loupe baobab file-roller gnome-disk-utility lact
+    loupe baobab file-roller gnome-disk-utility
     ntfs-3g bottom lxsession mangohud vkd3d lutris
-    aria2 qt6ct qt5ct bun nodejs npm uv rclone
+    aria2 bun nodejs npm uv rclone lact adw-gtk-theme
     kitty zed github-cli chezmoi ayugram-desktop niri
     mpv yt-dlp playerctl mpv-mpris amberol qbittorrent
 )
 
 AUR=(
     noctalia-git noctalia-greeter-git throne-bin
-    mihomo-bin ludusavi-bin
+    mihomo-bin ludusavi-bin qt6ct-kde
 )
 
 # Dependencies to EXCLUDE when installing cachyos-gaming-meta
