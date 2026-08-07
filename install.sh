@@ -40,14 +40,14 @@ PACMAN=(
     gnome-keyring xdg-desktop-portal-gnome komikku
     loupe baobab file-roller gnome-disk-utility lact
     ntfs-3g bottom lxsession mangohud vkd3d lutris
+    aria2 qt6ct qt5ct bun nodejs npm uv rclone
     kitty zed github-cli chezmoi ayugram-desktop niri
     mpv yt-dlp playerctl mpv-mpris amberol qbittorrent
 )
 
 AUR=(
     noctalia-git noctalia-greeter-git throne-bin
-    mihomo-bin omp-bin ludusavi-bin goofcord-bin
-    aria2-next-bin crunchycleaner-bin
+    mihomo-bin ludusavi-bin
 )
 
 # Dependencies to EXCLUDE when installing cachyos-gaming-meta

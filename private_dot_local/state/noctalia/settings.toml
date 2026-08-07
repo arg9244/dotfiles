@@ -20,7 +20,7 @@ margin_ends = 0
 position = "bottom"
 radius = 10
 shadow = false
-start = [ "launcher", "workspaces", "tray", "taskbar" ]
+start = [ "launcher", "workspaces", "tray", "taskbar", "gamermode" ]
 
 [brightness]
 sync_all_monitors = true
@@ -142,8 +142,8 @@ enabled = [
     "noctalia/screen_recorder",
     "apex077/eyecare",
     "yuuto/calculator",
-    "goodroot/noctwhspr",
-    "nightwatch75/todo"
+    "nightwatch75/todo",
+    "nomadcxx/gamer-mode"
 ]
 
     [[plugins.source]]
@@ -182,7 +182,6 @@ wallpaper_scheme = "m3-content"
 
     [theme.templates]
     builtin_ids = [ "gtk3", "gtk4", "kcolorscheme", "kitty", "niri", "qt" ]
-    community_ids = [ "opencode" ]
 
 [wallpaper]
 directory = "~/Pictures/Wallpapers"
@@ -211,6 +210,9 @@ type = "noctalia/bongocat:cat"
 
 [widget.cpu]
 display = "text"
+
+[widget.gamermode]
+type = "nomadcxx/gamer-mode:gamermode"
 
 [widget.media]
 album_art_only = true

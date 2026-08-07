@@ -1,0 +1,85 @@
+---
+runtime:
+  threads: ~
+  networkSecurity: safe
+release:
+  check: true
+manifest:
+  enable: true
+language: en-US
+theme: dark
+roots:
+  - store: lutris
+    path: /home/reza/.config/lutris
+    database: /home/reza/.local/share/lutris/pga.db
+redirects: []
+backup:
+  path: /media/D/Backup/Game/ludusavi
+  ignoredGames: []
+  filter:
+    excludeStoreScreenshots: false
+    cloud:
+      exclude: true
+      epic: true
+      gog: true
+      origin: true
+      steam: true
+      uplay: true
+    ignoredPaths: []
+    ignoredRegistry: []
+  toggledPaths:
+    "Assassin's Creed: Black Flag Resynced":
+      "/home/reza/Games/ACBF/drive_c/users/steamuser/AppData/Local/Ubisoft/Assassin's Creed Black Flag Resynced/save": false
+    Persona 3 Reload:
+      /home/reza/Games/P3R/drive_c/users/steamuser/AppData/Local/P3R/Saved/Config/WindowsNoEditor: false
+  toggledRegistry: {}
+  sort:
+    key: status
+    reversed: false
+  retention:
+    full: 1
+    differential: 5
+  format:
+    chosen: zip
+    zip:
+      compression: zstd
+    compression:
+      deflate:
+        level: 6
+      bzip2:
+        level: 6
+      zstd:
+        level: 10
+  onlyConstructive: true
+restore:
+  path: /media/D/Backup/Game/ludusavi
+  ignoredGames:
+    - "Assassin's Creed: Black Flag Resynced"
+  toggledPaths: {}
+  toggledRegistry: {}
+  sort:
+    key: status
+    reversed: false
+  reverseRedirects: false
+scan:
+  showDeselectedGames: true
+  showUnchangedGames: true
+  showUnscannedGames: true
+cloud:
+  remote:
+    GoogleDrive:
+      id: ludusavi-1785846074
+  path: ludusavi-backup
+  synchronize: true
+apps:
+  rclone:
+    path: /usr/bin/rclone
+    arguments: "--fast-list --ignore-checksum"
+customGames:
+  - name: Komikku
+    integration: extend
+    files:
+      - /home/reza/.local/share/komikku/komikku.db
+    registry: []
+    installDir: []
+    winePrefix: []
