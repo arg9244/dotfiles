@@ -30,3 +30,19 @@ end
 
 # chezmoi: commit all changes in the source dir and push to the configured remote (GitHub)
 alias chezpush="chezmoi git -- add -A . && chezmoi git -- commit -m 'Update dotfiles' && chezmoi git -- push"
+
+# List packages by their INITIAL install date, pulled from the pacman log
+# ([ALPM] installed lines only — ignores upgrades/reinstalls).
+# Newest entries at the bottom (ascending date order).
+# Caveat: only sees installs recorded in /var/log/pacman.log; append
+# rotated logs (zcat ...1.gz ...2.gz) if history predates this archive.
+function pkgs
+    grep '\[ALPM\] installed ' /var/log/pacman.log |
+        sed -E 's/^\[([^]]+)\] \[ALPM\] installed ([^ ]+) \(.*\)$/\1 \2/' |
+        sort -k2,2 -k1,1 |
+        awk '!seen[$2]++' |
+        sort -k1,1 |
+        while read -l ts pkg
+            printf '%s  %s\n' (date -d "$ts" '+%Y-%m-%d %H:%M:%S') "$pkg"
+        end
+end

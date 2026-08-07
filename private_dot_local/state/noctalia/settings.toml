@@ -1,7 +1,7 @@
 config_version = 8
 
 [bar.default]
-center = [ "clock", "date", "weather", "media", "cpu", "ram", "network_rx", "temp", "sysmon" ]
+center = [ "clock", "date", "weather", "media", "gamermode" ]
 end = [
     "recorder_2",
     "screenshot",
@@ -20,7 +20,7 @@ margin_ends = 0
 position = "bottom"
 radius = 10
 shadow = false
-start = [ "launcher", "workspaces", "tray", "taskbar", "gamermode" ]
+start = [ "launcher", "workspaces", "tray", "taskbar" ]
 
 [brightness]
 sync_all_monitors = true
@@ -136,6 +136,9 @@ panel_position = "auto"
 [plugin_settings."noctalia/screen_recorder"]
 video_source = "portal"
 
+[plugin_settings."nomadcxx/gamer-mode"]
+main_open_near_click = true
+
 [plugins]
 enabled = [
     "noctalia/notes",
@@ -208,9 +211,6 @@ type = "yuuto/calculator:bar"
 [widget.cat]
 type = "noctalia/bongocat:cat"
 
-[widget.cpu]
-display = "text"
-
 [widget.gamermode]
 type = "nomadcxx/gamer-mode:gamermode"
 
@@ -222,18 +222,11 @@ title_scroll = "on_hover"
 [widget.mpvpaper]
 type = "noctalia/mpvpaper:mpvpaper"
 
-[widget.network_rx]
-display = "text"
-network_speed_compact = true
-
 [widget.notes]
 type = "noctalia/notes:notes"
 
 [widget.notes_2]
 type = "noctalia/notes:notes"
-
-[widget.ram]
-display = "text"
 
 [widget.recorder]
 type = "noctalia/screen_recorder:recorder"
@@ -250,10 +243,6 @@ type = "goodroot/noctwhspr:status"
 [widget.sysmon]
 display = "text"
 stat = "gpu_vram"
-
-[widget.temp]
-display = "text"
-stat = "gpu_usage"
 
 [widget.todo]
 type = "nightwatch75/todo:todo"
