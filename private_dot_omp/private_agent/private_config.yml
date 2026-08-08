@@ -6,7 +6,7 @@ providers:
   tinyModel: lfm2-350m
   tinyModelDevice: auto
 modelRoles: 
-  default: opencode-zen/laguna-s-2.1-free
+  default: kilo/kilo-auto/free
 symbolPreset: nerd
 theme: 
   dark: titanium

@@ -1,14 +1,14 @@
 --!nonstrict
 --
--- Bar widget: a glyph plus a live metrics row. It owns no state -- it renders
+-- Bar widget: a live metrics row in the bar. It owns no state -- it renders
 -- whatever the service publishes and sends commands back through `noctalia.state`.
 --
 -- Each metric segment is a separately coloured label inside a barWidget.render tree,
 -- so a single hot reading turns only that segment red rather than the entire bar.
+-- Temperatures use their own 80 °C threshold, independent of usage percentage.
 --
--- The glyph is included explicitly because render() replaces the built-in glyph/text
--- row; setGlyph/setText have no visible effect once a render tree is active.
-
+-- render() replaces the built-in glyph/text row with a ui.* tree; the widget shows
+-- metrics only, without a launcher glyph.
 local PANEL_ID = "nomadcxx/gamer-mode:main"
 local MIB_PER_GIB = 1024
 
@@ -150,17 +150,15 @@ end
 local function render()
     local showTemps = noctalia.getConfig("show_temps") ~= false
     local baseColor = gameMode.enabled and "primary" or "on_surface"
-    local glyph = noctalia.getConfig("glyph") or "device-gamepad-2"
 
     barWidget.setTooltip(M.formatTooltip(metrics, showTemps, gameMode))
 
-    -- barWidget.render rebuilds the glyph/text row from a ui.* tree. Each metric is a
-    -- separate ui.label so the colours are independent. The container matches the bar
-    -- orientation: a row on horizontal bars, a column on side bars.
+    -- barWidget.render replaces the built-in glyph/text row with a ui.* tree. Each metric
+    -- is a separate ui.label so colours are independent. The container matches the bar
+    -- orientation: a row on horizontal bars, a column on side bars. No glyph — this
+    -- widget lives in the bar for its metrics, not as a launcher icon.
     local container = barWidget.isVertical() and ui.column or ui.row
-    local children = {
-        ui.glyph({ name = glyph, color = baseColor }),
-    }
+    local children = {}
 
     if metrics.available then
         for _, seg in ipairs(M.formatBarSegments(metrics, showTemps, baseColor)) do

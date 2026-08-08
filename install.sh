@@ -187,6 +187,7 @@ head "6/6 — Service management"
 run "Create aria2 config dir" as_user mkdir -p "$ORIGINAL_HOME/.config/aria2"
 run "Touch aria2 session file" as_user touch "$ORIGINAL_HOME/.config/aria2/aria2.session"
 run "Enable aria2" as_user systemctl --user enable --now aria2.service
+run "Enable route-proxy" as_user systemctl --user enable --now proxy.service
 
 # Enable greetd (system-level display manager)
 run "Disable other DMs" bash -c '
