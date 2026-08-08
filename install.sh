@@ -195,22 +195,6 @@ run "Disable other DMs" bash -c '
     done
 ' 2>/dev/null || true
 run "Enable greetd" sudo systemctl enable greetd
-# Ensure mount point directories exist before deploying mount services
-run "Create mount point /media/C" sudo mkdir -p /media/C
-run "Create mount point /media/D" sudo mkdir -p /media/D
-# Deploy system mount services (managed by chezmoi in etc/systemd/system/)
-for svc in mount-media-c.service mount-media-d.service; do
-    CHEZMOI_SVC="$CHEZMOI_SOURCE/etc/systemd/system/$svc"
-    if [[ -f "$CHEZMOI_SVC" ]]; then
-        run "Deploy $svc" sudo cp "$CHEZMOI_SVC" /etc/systemd/system/
-    else
-        warn "$svc not found in chezmoi source"
-    fi
-done
-run "Reload systemd" sudo systemctl daemon-reload
-run "Enable mount-media-c" sudo systemctl enable mount-media-c.service
-run "Enable mount-media-d" sudo systemctl enable mount-media-d.service
-run "Restart mount services" sudo systemctl restart mount-media-c.service mount-media-d.service
 
 # Deploy udev I/O scheduler rules
 UDEV_SRC="$CHEZMOI_SOURCE/etc/udev/rules.d/60-ioschedulers.rules"

@@ -14,7 +14,7 @@ roots:
     database: /home/reza/.local/share/lutris/pga.db
 redirects: []
 backup:
-  path: /media/D/Backup/Game/ludusavi
+  path: /home/reza/.config/ludusavi/backup
   ignoredGames: []
   filter:
     excludeStoreScreenshots: false
@@ -52,7 +52,7 @@ backup:
         level: 10
   onlyConstructive: true
 restore:
-  path: /media/D/Backup/Game/ludusavi
+  path: /home/reza/.config/ludusavi/backup
   ignoredGames:
     - "Assassin's Creed: Black Flag Resynced"
   toggledPaths: {}

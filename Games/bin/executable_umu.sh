@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ==============================================================================
-# USER CONFIGURATION (Tailored for RX 6800 / CachyOS / 1440p 165Hz)
+# USER CONFIGURATION
 # ==============================================================================
 # Game Information
 export GAME_NAME=""
@@ -17,8 +17,8 @@ export PROTON_VERB="run"
 # Bypasses Anti-Cheat / Linux restrictions on games with Anti-Cheat
 export SteamOS=1
 
-# Graphics & Performance (Mesa RADV + RX 6800)
-export DXVK_FRAME_RATE="160"                 # 5 FPS buffer inside 165Hz VRR window
+# Graphics & Performance
+export DXVK_FRAME_RATE="160"
 export PROTON_USE_OPTISCALER="0"
 export PROTON_FSR4_INDICATOR="0"
 export PROTON_FSR4_UPGRADE="0"
@@ -41,7 +41,7 @@ export DXVK_HUD="0"
 export MANGOHUD="1"
 export all_proxy=""
 
-# GameScope Settings (Matched to Samsung 1440p @ 165Hz Display)
+# GameScope Settings
 export GAMESCOPE="0"                        # "1" = enable gamescope, "0" = disable
 export GAMESCOPE_HDR="1"                    # "1" = enable HDR, "0" = disable
 export GAMESCOPE_OUTPUT_RES="2560x1440"     # Matches 1440p display resolution
@@ -51,7 +51,7 @@ export GAMESCOPE_WINDOW_MODE="Fullscreen"  # Options: "Fullscreen", "Borderless"
 
 # LACT GPU Profile Settings
 export LACT_ENABLE="1"                       # "1" = enable profile switching, "0" = disable
-export LACT_GAME_PROFILE="OC"               # Overclock profile (/home/reza/.config/lact/LACT-profile-OC.json)
+export LACT_GAME_PROFILE="OC"               # Overclock profile
 export LACT_DEFAULT_PROFILE="Default"       # Default profile restored on game exit
 
 # ==============================================================================
