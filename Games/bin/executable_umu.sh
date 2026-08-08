@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ==============================================================================
-# USER CONFIGURATION
+# USER CONFIGURATION (Tailored for RX 6800 / CachyOS / 1440p 165Hz)
 # ==============================================================================
 # Game Information
 export GAME_NAME=""
@@ -15,8 +15,8 @@ export PROTONPATH="/usr/share/steam/compatibilitytools.d/proton-cachyos-native"
 export PROTON_VERB="run"
 # Bypasses Anti-Cheat / Linux restrictions on games with Anti-Cheat
 export SteamOS=1
-# Graphics & Performance
-export DXVK_FRAME_RATE="165"
+# Graphics & Performance (Mesa RADV + RX 6800)
+export DXVK_FRAME_RATE="160"
 export PROTON_USE_OPTISCALER="0"
 export PROTON_FSR4_INDICATOR="0"
 export PROTON_FSR4_UPGRADE="0"
@@ -37,6 +37,13 @@ export PROTON_PREFER_SDL="1"
 export DXVK_HUD="0"
 export MANGOHUD="1"
 export all_proxy=""
+# GameScope Settings (Matched to Samsung 1440p @ 165Hz Display)
+export GAMESCOPE="1"                        # "1" = enable gamescope, "0" = disable
+export GAMESCOPE_HDR="1"                    # "1" = enable HDR, "0" = disable
+export GAMESCOPE_OUTPUT_RES="2560x1440"     # Matches 1440p display resolution
+export GAMESCOPE_GAME_RES="2560x1440"       # Internal game rendering resolution
+export GAMESCOPE_REFRESH_RATE="165"         # Target refresh rate matching 165Hz monitor
+export GAMESCOPE_WINDOW_MODE="Fullscreen"  # Options: "Fullscreen", "Borderless", "Windowed"
 # ==============================================================================
 # SCRIPT LOGIC (Do not edit below unless modifying functionality)
 # ==============================================================================
@@ -151,8 +158,63 @@ if [ -d "$GAME_DIR" ]; then
     cd "$GAME_DIR" || exit 1
 fi
 
+# Build execution command chain
+LAUNCH_CMD=()
+
+# 1. Performance Wrapper check (game-performance)
 if command -v game-performance >/dev/null 2>&1; then
-    exec game-performance umu-run "$GAME_EXE" "$@"
-else
-    exec umu-run "$GAME_EXE" "$@"
+    LAUNCH_CMD+=("game-performance")
 fi
+
+# 2. GameScope configuration
+if [ "$GAMESCOPE" = "1" ]; then
+    if command -v gamescope >/dev/null 2>&1; then
+        GAMESCOPE_ARGS=("gamescope")
+
+        # Output Display Resolution (-W / -H)
+        if [ -n "$GAMESCOPE_OUTPUT_RES" ]; then
+            IFS='x' read -r OUT_W OUT_H <<< "$GAMESCOPE_OUTPUT_RES"
+            [ -n "$OUT_W" ] && [ -n "$OUT_H" ] && GAMESCOPE_ARGS+=("-W" "$OUT_W" "-H" "$OUT_H")
+        fi
+
+        # Internal Game Render Resolution (-w / -h)
+        if [ -n "$GAMESCOPE_GAME_RES" ]; then
+            IFS='x' read -r GAME_W GAME_H <<< "$GAMESCOPE_GAME_RES"
+            [ -n "$GAME_W" ] && [ -n "$GAME_H" ] && GAMESCOPE_ARGS+=("-w" "$GAME_W" "-h" "$GAME_H")
+        fi
+
+        # Target Refresh Rate (-r)
+        if [ -n "$GAMESCOPE_REFRESH_RATE" ]; then
+            GAMESCOPE_ARGS+=("-r" "$GAMESCOPE_REFRESH_RATE")
+        fi
+
+        # Window Mode (-f = Fullscreen, -b = Borderless)
+        case "${GAMESCOPE_WINDOW_MODE,,}" in
+            fullscreen) GAMESCOPE_ARGS+=("-f") ;;
+            borderless) GAMESCOPE_ARGS+=("-b") ;;
+            # windowed mode requires no flag
+        esac
+
+        # HDR Support & Gamescope WSI Integration for Proton-CachyOS
+        if [ "$GAMESCOPE_HDR" = "1" ]; then
+            GAMESCOPE_ARGS+=("--hdr-enabled")
+            export ENABLE_GAMESCOPE_WSI="1"
+            export PROTON_ENABLE_HDR="1"
+        fi
+
+        # MangoHud / MangoApp Integration inside Gamescope
+        if [ "$MANGOHUD" = "1" ]; then
+            GAMESCOPE_ARGS+=("--mangoapp")
+        fi
+
+        GAMESCOPE_ARGS+=("--")
+        LAUNCH_CMD+=("${GAMESCOPE_ARGS[@]}")
+    else
+        echo "[WARNING] GAMESCOPE is set to 1, but 'gamescope' command was not found. Launching normally..."
+    fi
+fi
+
+# 3. Final command execution via UMU
+LAUNCH_CMD+=("umu-run" "$GAME_EXE" "$@")
+
+exec "${LAUNCH_CMD[@]}"

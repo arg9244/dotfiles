@@ -1,18 +1,19 @@
 #!/usr/bin/env bash
 # ==============================================================================
-# USER CONFIGURATION (Edit your settings here)
+# USER CONFIGURATION
 # ==============================================================================
 # Game Information
-export GAME_NAME="Punishing Gray Raven"
-export GAME_EXE="/media/C/Games/Punishing Gray Raven/Punishing Gray Raven/PGR.exe"
+export GAME_NAME=""
+export GAME_EXE=""
 export WINEPREFIX=""
+# https://umu.openwinecomponents.org
 export GAMEID=""
 export STORE=""
 # Proton & Environment Settings
 export PROTONPATH="/usr/share/steam/compatibilitytools.d/proton-cachyos-native"
 # Controls Proton startup mode: "run" = normal, "waitforexitandrun" = verbose logs
 export PROTON_VERB="run"
-# Bypasses Anti-Cheat / Linux restrictions on games
+# Bypasses Anti-Cheat / Linux restrictions on games with Anti-Cheat
 export SteamOS=1
 # Graphics & Performance
 export DXVK_FRAME_RATE="165"
@@ -36,6 +37,12 @@ export PROTON_PREFER_SDL="1"
 export DXVK_HUD="0"
 export MANGOHUD="1"
 export all_proxy=""
+# GameScope Settings
+export GAMESCOPE="1"                        # "1" = enable gamescope, "0" = disable
+export GAMESCOPE_HDR="1"                    # "1" = enable HDR, "0" = disable
+export GAMESCOPE_OUTPUT_RES="2560x1440"     # Display output resolution (WidthxHeight)
+export GAMESCOPE_GAME_RES="2560x1440"       # Internal game render resolution (WidthxHeight)
+export GAMESCOPE_WINDOW_MODE="Fullscreen"  # Options: "Fullscreen", "Borderless", "Windowed"
 # ==============================================================================
 # SCRIPT LOGIC (Do not edit below unless modifying functionality)
 # ==============================================================================
@@ -150,8 +157,56 @@ if [ -d "$GAME_DIR" ]; then
     cd "$GAME_DIR" || exit 1
 fi
 
+# Build execution command chain
+LAUNCH_CMD=()
+
+# 1. Performance Wrapper check (game-performance)
 if command -v game-performance >/dev/null 2>&1; then
-    exec game-performance umu-run "$GAME_EXE" "$@"
-else
-    exec umu-run "$GAME_EXE" "$@"
+    LAUNCH_CMD+=("game-performance")
 fi
+
+# 2. GameScope configuration
+if [ "$GAMESCOPE" = "1" ]; then
+    if command -v gamescope >/dev/null 2>&1; then
+        GAMESCOPE_ARGS=("gamescope")
+
+        # Output Resolution (-W / -H)
+        if [ -n "$GAMESCOPE_OUTPUT_RES" ]; then
+            IFS='x' read -r OUT_W OUT_H <<< "$GAMESCOPE_OUTPUT_RES"
+            [ -n "$OUT_W" ] && [ -n "$OUT_H" ] && GAMESCOPE_ARGS+=("-W" "$OUT_W" "-H" "$OUT_H")
+        fi
+
+        # Internal Game Resolution (-w / -h)
+        if [ -n "$GAMESCOPE_GAME_RES" ]; then
+            IFS='x' read -r GAME_W GAME_H <<< "$GAMESCOPE_GAME_RES"
+            [ -n "$GAME_W" ] && [ -n "$GAME_H" ] && GAMESCOPE_ARGS+=("-w" "$GAME_W" "-h" "$GAME_H")
+        fi
+
+        # Window Mode (-f = Fullscreen, -b = Borderless)
+        case "${GAMESCOPE_WINDOW_MODE,,}" in
+            fullscreen) GAMESCOPE_ARGS+=("-f") ;;
+            borderless) GAMESCOPE_ARGS+=("-b") ;;
+            # windowed mode requires no flag
+        esac
+
+        # HDR Support
+        if [ "$GAMESCOPE_HDR" = "1" ]; then
+            GAMESCOPE_ARGS+=("--hdr-enabled")
+        fi
+
+        # MangoHud Integration
+        if [ "$MANGOHUD" = "1" ]; then
+            GAMESCOPE_ARGS+=("--mangoapp")
+        fi
+
+        GAMESCOPE_ARGS+=("--")
+        LAUNCH_CMD+=("${GAMESCOPE_ARGS[@]}")
+    else
+        echo "[WARNING] GAMESCOPE is set to 1, but 'gamescope' command was not found. Launching normally..."
+    fi
+fi
+
+# 3. Final command execution
+LAUNCH_CMD+=("umu-run" "$GAME_EXE" "$@")
+
+exec "${LAUNCH_CMD[@]}"

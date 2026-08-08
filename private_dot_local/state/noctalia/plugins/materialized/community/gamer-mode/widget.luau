@@ -1,7 +1,7 @@
 --!nonstrict
 --
--- Bar widget: a live metrics label plus a hover tooltip. It owns no state -- it renders
--- whatever the service publishes and sends commands back through `noctalia.state`.
+-- Bar widget: a glyph plus a live tooltip. It owns no state -- it renders whatever the
+-- service publishes and sends commands back through `noctalia.state`.
 
 local PANEL_ID = "nomadcxx/gamer-mode:main"
 local MIB_PER_GIB = 1024
@@ -21,10 +21,10 @@ local function percent(fraction)
 end
 
 -- withTemp appends a temperature only when there is one to show, so a machine without
--- sensors reads as "GPU 18%" rather than "GPU 18% 0°".
+-- sensors reads as "GPU 18%" rather than "GPU 18% 0°C".
 local function withTemp(label, showTemps, temp)
     if showTemps and tonumber(temp) then
-        return label .. string.format(" %d°", math.floor(tonumber(temp) + 0.5))
+        return label .. string.format(" %d°C", math.floor(tonumber(temp) + 0.5))
     end
     return label
 end
@@ -55,84 +55,12 @@ function M.formatTooltip(m, showTemps, gm)
     return tooltip
 end
 
--- netRate formats a byte-per-second value compactly for the bar. MB/s gets two
--- decimals below 10M and one at/above (1.67M, 12.3M); K and B stay integer
--- (340K, 52) — they carry enough weight at 0 decimals to read at a glance.
-local function netRate(bps)
-    local b = tonumber(bps) or 0
-    if b >= 1024 * 1024 then
-        local mbps = b / (1024 * 1024)
-        if mbps < 10 then
-            return string.format("%.2fM", mbps)
-        else
-            return string.format("%.1fM", mbps)
-        end
-    elseif b >= 1024 then
-        return string.format("%.0fK", b / 1024)
-    end
-    return string.format("%.0f", b)
-end
-
--- formatBarText builds the compact bar label: raw values only, no icons or letter
--- labels. CPU+temp and RAM form one group, GPU+temp and VRAM form another, and the
--- two are separated by extra spacing. Network rates follow with a smaller gap. The
--- full labelled reading stays on the hover tooltip.
-function M.formatBarText(m, showTemps)
-    m = m or {}
-    if not m.available then
-        return noctalia.tr("widget.tooltip_loading")
-    end
-
-    -- System group: CPU% + temp + RAM
-    local system = percent(m.cpuPerc) .. withTemp("", showTemps, m.cpuTemp) .. " " .. gibibytes(m.memUsedMb)
-
-    -- Graphics group: GPU% + temp + VRAM (only when GPU is present)
-    local graphics = nil
-    if m.gpuAvailable and m.gpuPerc then
-        graphics = percent(m.gpuPerc) .. withTemp("", showTemps, m.gpuTemp)
-        if m.vramUsedMb then
-            graphics = graphics .. " " .. gibibytes(m.vramUsedMb)
-        end
-    end
-
-    -- Network: RX / TX rates (small gap after the preceding group)
-    local network = nil
-    if m.netRxPerSec and m.netTxPerSec then
-        network = "↓" .. netRate(m.netRxPerSec) .. " ↑" .. netRate(m.netTxPerSec)
-    end
-
-    -- System and graphics are distinct groups (3-space gap); network follows
-    -- with a smaller 2-space gap.
-    local text = system
-    if graphics then
-        text = text .. "   " .. graphics
-    end
-    if network then
-        text = text .. "  " .. network
-    end
-    return text
-end
-
--- atThreshold returns true when any supported metric has crossed 90%, so the
--- bar can turn red without opening the panel — matching niri's default warning.
-local function atThreshold(m)
-    if type(m) ~= "table" or not m.available then
-        return false
-    end
-    return (tonumber(m.cpuPerc) or 0) >= 0.9
-        or (tonumber(m.memPerc) or 0) >= 0.9
-        or (m.gpuPerc and (tonumber(m.gpuPerc) or 0) >= 0.9)
-        or (m.vramPerc and (tonumber(m.vramPerc) or 0) >= 0.9)
-end
-
 local function render()
-    local showTemps = noctalia.getConfig("show_temps") ~= false
-    local baseColor = gameMode.enabled and "primary" or "on_surface"
-
-    barWidget.setTooltip(M.formatTooltip(metrics, showTemps, gameMode))
-    barWidget.setText(M.formatBarText(metrics, showTemps))
-    -- Red when any metric crosses 90%, otherwise primary (GM on) or on_surface.
-    barWidget.setColor(atThreshold(metrics) and "error" or baseColor)
+    barWidget.setGlyph(noctalia.getConfig("glyph") or "device-gamepad-2")
+    barWidget.setTooltip(M.formatTooltip(metrics, noctalia.getConfig("show_temps") ~= false, gameMode))
+    -- Accent the glyph while gamer mode is on, so the bar shows the state at a glance
+    -- without needing the tooltip.
+    barWidget.setGlyphColor(gameMode.enabled and "primary" or "on_surface")
 end
 
 local function sendCommand(action)
