@@ -1,19 +1,18 @@
 #!/usr/bin/env bash
 # ==============================================================================
-# USER CONFIGURATION
+# USER CONFIGURATION (Edit your settings here)
 # ==============================================================================
 # Game Information
-export GAME_NAME=""
-export GAME_EXE=""
+export GAME_NAME="Brown Dust II"
+export GAME_EXE="/media/C/Games/Brown Dust 2/C/Browndust2/Browndust2/BrownDust2_10000002/BrownDust II.exe"
 export WINEPREFIX=""
-# https://umu.openwinecomponents.org
 export GAMEID=""
 export STORE=""
 # Proton & Environment Settings
 export PROTONPATH="/usr/share/steam/compatibilitytools.d/proton-cachyos-native"
 # Controls Proton startup mode: "run" = normal, "waitforexitandrun" = verbose logs
 export PROTON_VERB="run"
-# Bypasses Anti-Cheat / Linux restrictions on games with Anti-Cheat
+# Bypasses Anti-Cheat / Linux restrictions on games
 export SteamOS=1
 # Graphics & Performance
 export DXVK_FRAME_RATE="165"

@@ -1,5 +1,5 @@
 source /usr/share/cachyos-fish-config/cachyos-config.fish
-set -gx PATH $HOME/.local/bin $HOME/.npm-global/bin $HOME/.bun/bin $PATH
+set -gx PATH $HOME/.local/bin $HOME/.npm-global/bin $HOME/.bun/bin $HOME/Games/bin $PATH
 set -gx HSA_OVERRIDE_GFX_VERSION 10.3.0
 set -gx EDITOR micro
 set -gx VISUAL micro
