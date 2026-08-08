@@ -43,6 +43,7 @@ PACMAN=(
     aria2 bun nodejs npm uv rclone lact adw-gtk-theme
     blocky kitty zed github-cli chezmoi ayugram-desktop
     mpv yt-dlp playerctl mpv-mpris amberol qbittorrent
+    icoutils
 )
 
 AUR=(
