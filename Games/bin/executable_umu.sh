@@ -9,14 +9,16 @@ export WINEPREFIX=""
 # https://umu.openwinecomponents.org
 export GAMEID=""
 export STORE=""
+
 # Proton & Environment Settings
 export PROTONPATH="/usr/share/steam/compatibilitytools.d/proton-cachyos-native"
 # Controls Proton startup mode: "run" = normal, "waitforexitandrun" = verbose logs
 export PROTON_VERB="run"
 # Bypasses Anti-Cheat / Linux restrictions on games with Anti-Cheat
 export SteamOS=1
+
 # Graphics & Performance (Mesa RADV + RX 6800)
-export DXVK_FRAME_RATE="160"
+export DXVK_FRAME_RATE="160"                 # 5 FPS buffer inside 165Hz VRR window
 export PROTON_USE_OPTISCALER="0"
 export PROTON_FSR4_INDICATOR="0"
 export PROTON_FSR4_UPGRADE="0"
@@ -31,19 +33,27 @@ export WINE_DISABLE_VULKAN_OPWR="1"
 export PROTON_ENABLE_WAYLAND="1"
 export PROTON_NO_WM_DECORATION="1"
 export XDG_CURRENT_DESKTOP="steamcompmgr"
+
 # Input, Overlays & Network
 export PROTON_NO_STEAMINPUT="1"
 export PROTON_PREFER_SDL="1"
 export DXVK_HUD="0"
 export MANGOHUD="1"
 export all_proxy=""
+
 # GameScope Settings (Matched to Samsung 1440p @ 165Hz Display)
-export GAMESCOPE="1"                        # "1" = enable gamescope, "0" = disable
+export GAMESCOPE="0"                        # "1" = enable gamescope, "0" = disable
 export GAMESCOPE_HDR="1"                    # "1" = enable HDR, "0" = disable
 export GAMESCOPE_OUTPUT_RES="2560x1440"     # Matches 1440p display resolution
 export GAMESCOPE_GAME_RES="2560x1440"       # Internal game rendering resolution
 export GAMESCOPE_REFRESH_RATE="165"         # Target refresh rate matching 165Hz monitor
 export GAMESCOPE_WINDOW_MODE="Fullscreen"  # Options: "Fullscreen", "Borderless", "Windowed"
+
+# LACT GPU Profile Settings
+export LACT_ENABLE="1"                       # "1" = enable profile switching, "0" = disable
+export LACT_GAME_PROFILE="OC"               # Overclock profile (/home/reza/.config/lact/LACT-profile-OC.json)
+export LACT_DEFAULT_PROFILE="Default"       # Default profile restored on game exit
+
 # ==============================================================================
 # SCRIPT LOGIC (Do not edit below unless modifying functionality)
 # ==============================================================================
@@ -57,15 +67,18 @@ elif [ -n "$GAME_EXE" ]; then
 else
     DISPLAY_NAME="default_game"
 fi
+
 # Format name for Wine prefix directory inside ~/Games/ (lowercase, spaces to hyphens)
 PREFIX_DIR_NAME="${DISPLAY_NAME,,}"
 PREFIX_DIR_NAME="${PREFIX_DIR_NAME// /-}"
 PREFIX_DIR_NAME="${PREFIX_DIR_NAME//[^a-z0-9_-]/}"
+
 # If WINEPREFIX is empty, set default directory in ~/Games/
 if [ -z "$WINEPREFIX" ]; then
     export WINEPREFIX="$HOME/Games/$PREFIX_DIR_NAME"
     mkdir -p "$WINEPREFIX"
 fi
+
 # ------------------------------------------------------------------------------
 # 2. Application Shortcut & Icon Extraction (First-Run Check)
 # ------------------------------------------------------------------------------
@@ -146,7 +159,7 @@ EOF
 fi
 
 # ------------------------------------------------------------------------------
-# 3. Game Launch Execution
+# 3. Game Launch Execution & LACT Profile Management
 # ------------------------------------------------------------------------------
 if [ -z "$GAME_EXE" ]; then
     echo "[ERROR] GAME_EXE is not set! Please edit the script to point to your game .exe."
@@ -214,7 +227,42 @@ if [ "$GAMESCOPE" = "1" ]; then
     fi
 fi
 
-# 3. Final command execution via UMU
+# Add UMU execution to command chain
 LAUNCH_CMD+=("umu-run" "$GAME_EXE" "$@")
 
-exec "${LAUNCH_CMD[@]}"
+# Helper function for LACT profile switching
+set_lact_profile() {
+    local profile="$1"
+    if [ "$LACT_ENABLE" = "1" ] && [ -n "$profile" ]; then
+        if command -v lact >/dev/null 2>&1; then
+            echo "[INFO] Switching LACT GPU profile to '$profile'..."
+            lact cli profile set "$profile" >/dev/null 2>&1 || echo "[WARNING] Failed to set LACT profile to '$profile'."
+        else
+            echo "[WARNING] LACT is enabled, but 'lact' CLI binary was not found in PATH."
+        fi
+    fi
+}
+
+# 3. Execute Game with LACT Profile Management
+if [ "$LACT_ENABLE" = "1" ]; then
+    # Function to restore default profile when game closes or if script is terminated
+    cleanup_lact() {
+        echo "[INFO] Game session ended. Restoring LACT GPU profile to '$LACT_DEFAULT_PROFILE'..."
+        set_lact_profile "$LACT_DEFAULT_PROFILE"
+    }
+
+    # Trap script exit and signal interrupts (Ctrl+C / SIGTERM)
+    trap cleanup_lact EXIT INT TERM
+
+    # Switch GPU to OC Profile
+    set_lact_profile "$LACT_GAME_PROFILE"
+
+    # Run game command
+    "${LAUNCH_CMD[@]}"
+    GAME_EXIT_CODE=$?
+
+    exit $GAME_EXIT_CODE
+else
+    # Standard launch replacing script process
+    exec "${LAUNCH_CMD[@]}"
+fi
