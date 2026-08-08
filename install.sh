@@ -38,16 +38,16 @@ export PATH="$ORIGINAL_HOME/.local/bin:$PATH"
 
 PACMAN=(
     gnome-keyring xdg-desktop-portal-gnome komikku
-    loupe baobab file-roller gnome-disk-utility
-    ntfs-3g bottom lxsession mangohud vkd3d lutris
+    loupe baobab file-roller gnome-disk-utility evince
+    ntfs-3g bottom lxsession mangohud vkd3d lutris niri
     aria2 bun nodejs npm uv rclone lact adw-gtk-theme
-    kitty zed github-cli chezmoi ayugram-desktop niri
+    blocky kitty zed github-cli chezmoi ayugram-desktop
     mpv yt-dlp playerctl mpv-mpris amberol qbittorrent
 )
 
 AUR=(
     noctalia-git noctalia-greeter-git throne-bin
-    mihomo-bin ludusavi-bin qt6ct-kde
+    mihomo-bin ludusavi-bin qt6ct-kde comicthumb
 )
 
 # Dependencies to EXCLUDE when installing cachyos-gaming-meta
@@ -110,8 +110,7 @@ ok "Ready"
 
 # ── 1. Pacman packages ──
 head "1/6 — Pacman packages"
-require "Update databases" sudo pacman -Sy --noconfirm
-require "Install packages" sudo pacman -S --noconfirm --needed "${PACMAN[@]}"
+require "Update & install packages" sudo pacman -Syu --noconfirm --needed "${PACMAN[@]}"
 
 # ── 2. AUR helper (paru) ──
 head "2/6 — AUR helper (paru)"
@@ -157,7 +156,7 @@ head "5/6 — Dotfiles"
 # Init / apply user dotfiles (as the original user, even if running via sudo)
 CHEZMOI_SOURCE="$ORIGINAL_HOME/.local/share/chezmoi"
 if [[ -d "$CHEZMOI_SOURCE" ]]; then
-    run "chezmoi re-apply" as_user bash -c "chezmoi reapply 2>&1 || chezmoi apply 2>&1"
+    run "chezmoi reapply" as_user bash -c "chezmoi reapply 2>&1 || chezmoi apply 2>&1"
 else
     require "chezmoi init" as_user chezmoi init --apply "$DOTFILES_REPO"
 fi
@@ -167,7 +166,7 @@ sudo chezmoi --source-path "$CHEZMOI_SOURCE" apply 2>&1 ||
     warn "System files not applied. Try: sudo chezmoi --source-path ~/.local/share/chezmoi apply"
 # Symlink blocky config into /etc/blocky/
 run "Create /etc/blocky directory" sudo mkdir -p /etc/blocky
-run "Symlink blocky.yml" sudo ln -sf "$ORIGINAL_HOME/.local/share/chezmoi/dot_config/blocky/blocky.yml" /etc/blocky/blocky.yml
+run "Symlink blocky.yml" sudo ln -sf "$ORIGINAL_HOME/.config/blocky/blocky.yml" /etc/blocky/blocky.yml
 # Symlink game performance sysctl config into /etc/sysctl.d/
 run "Create /etc/sysctl.d directory" sudo mkdir -p /etc/sysctl.d
 run "Symlink 99-game-performance.conf" sudo ln -sf "$ORIGINAL_HOME/.config/sysctl.d/99-game-performance.conf" /etc/sysctl.d/99-game-performance.conf
@@ -209,6 +208,8 @@ for svc in mount-media-c.service mount-media-d.service; do
     fi
 done
 run "Reload systemd" sudo systemctl daemon-reload
+run "Enable mount-media-c" sudo systemctl enable mount-media-c.service
+run "Enable mount-media-d" sudo systemctl enable mount-media-d.service
 run "Restart mount services" sudo systemctl restart mount-media-c.service mount-media-d.service
 
 # Deploy udev I/O scheduler rules
