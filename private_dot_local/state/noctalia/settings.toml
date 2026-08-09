@@ -1,7 +1,7 @@
 config_version = 8
 
 [bar.default]
-center = [ "clock", "date", "weather", "media", "gamermode" ]
+center = [ "clock", "date", "weather", "media", "widget", "gamermode" ]
 end = [
     "recorder_2",
     "screenshot",
@@ -137,7 +137,15 @@ panel_position = "auto"
 video_source = "portal"
 
 [plugin_settings."nomadcxx/gamer-mode"]
+glyph = ""
 main_open_near_click = true
+poll_interval = "5"
+profile = "heavy"
+
+[plugin_settings."weinguyen/procmon"]
+panel_placement = "attached"
+refresh_interval = 3000
+sort_by = "mem"
 
 [plugins]
 enabled = [
@@ -146,7 +154,8 @@ enabled = [
     "apex077/eyecare",
     "yuuto/calculator",
     "nightwatch75/todo",
-    "nomadcxx/gamer-mode"
+    "nomadcxx/gamer-mode",
+    "weinguyen/procmon"
 ]
 
     [[plugins.source]]
@@ -237,9 +246,6 @@ type = "noctalia/screen_recorder:recorder"
 [widget.spacer_2]
 type = "spacer"
 
-[widget.status]
-type = "goodroot/noctwhspr:status"
-
 [widget.sysmon]
 display = "text"
 stat = "gpu_vram"
@@ -249,6 +255,10 @@ type = "nightwatch75/todo:todo"
 
 [widget.weather]
 show_condition = false
+
+[widget.widget]
+icon_only = true
+type = "weinguyen/procmon:widget"
 
 [widget.workspaces]
 hide_when_empty = true

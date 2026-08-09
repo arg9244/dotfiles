@@ -53,8 +53,7 @@ backup:
   onlyConstructive: true
 restore:
   path: /home/reza/.config/ludusavi/backup
-  ignoredGames:
-    - "Assassin's Creed: Black Flag Resynced"
+  ignoredGames: []
   toggledPaths: {}
   toggledRegistry: {}
   sort:
@@ -75,11 +74,4 @@ apps:
   rclone:
     path: /usr/bin/rclone
     arguments: "--fast-list --ignore-checksum"
-customGames:
-  - name: Komikku
-    integration: extend
-    files:
-      - /home/reza/.local/share/komikku/komikku.db
-    registry: []
-    installDir: []
-    winePrefix: []
+customGames: []

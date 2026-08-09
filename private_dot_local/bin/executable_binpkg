@@ -1,0 +1,191 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# binpkg — update GitHub-release binaries in ~/.local/bin
+#
+# Manifest format, one package per line in the packages array (| separated):
+#   name|owner/repo|asset globs|files to install
+#     asset globs      space-separated globs matched against the asset names of
+#                      the latest GitHub release (e.g. '*Linux_x86_64.tar.gz')
+#     files to install space-separated member names to extract from archives
+#                      (.tar.gz/.zip).  Leave empty for raw assets: they are
+#                      installed as-is under their own asset name.
+#
+# Commands:
+#   binpkg            update every outdated package
+#   binpkg check      report versions only, change nothing
+#   binpkg install    (re)install every package, ignoring version stamps
+#   binpkg update N   update only the named package(s)
+#   binpkg install N  force-reinstall the named package(s)
+#   binpkg list       print the manifest
+#
+# The installed version of each package is stamped in
+# $BINPKG_STATE_DIR/<name> (default ~/.cache/binpkg).  Latest versions come
+# from GitHub's /releases/latest redirect — no API calls for plain checks;
+# the API is only consulted when an update actually runs.
+
+bin_dir="${BINPKG_BIN_DIR:-$HOME/.local/bin}"
+state_dir="${BINPKG_STATE_DIR:-$HOME/.cache/binpkg}"
+
+packages=(
+  'aether|CluvexStudio/Aether|aether-linux-x86_64.tar.gz|aether'
+  'geo|Chocolate4U/Iran-v2ray-rules|geoip.dat geosite.dat|'
+  'seanime|5rahim/seanime|*Linux_x86_64.tar.gz|seanime'
+  'xray|xtls/xray-core|Xray-linux-64.zip|xray'
+)
+
+die() { echo "binpkg: $*" >&2; exit 1; }
+
+usage() {
+  cat <<'EOF'
+binpkg — update GitHub-release binaries in ~/.local/bin
+
+usage: binpkg [command] [package...]
+
+commands:
+  update [name...]   update outdated packages (default: all)
+  check [name...]    report versions only, change nothing
+  install [name...]  (re)install packages, ignoring version stamps
+  list               print the manifest
+
+Packages are defined in the packages array at the top of this script.
+Version stamps are kept in ~/.cache/binpkg (override: BINPKG_STATE_DIR).
+EOF
+}
+
+find_pkg() {
+  local line
+  for line in "${packages[@]}"; do
+    [[ "${line%%|*}" == "$1" ]] && { echo "$line"; return 0; }
+  done
+  return 1
+}
+
+all_names() {
+  local line
+  for line in "${packages[@]}"; do echo "${line%%|*}"; done
+}
+
+latest_tag() {  # owner/repo -> tag of the latest release
+  local url
+  url="$(curl -fsSL -o /dev/null -w '%{url_effective}' "https://github.com/$1/releases/latest")"
+  echo "${url##*/}"
+}
+
+check_pkg() {
+  local line repo latest installed=""
+  line="$(find_pkg "$1")" || die "unknown package: $1"
+  IFS='|' read -r _ repo _ _ <<< "$line"
+  [[ -f "$state_dir/$1" ]] && installed="$(<"$state_dir/$1")"
+  latest="$(latest_tag "$repo")" || die "cannot resolve latest release for $1"
+  local status="not installed"
+  [[ -n "$installed" ]] && status="update available"
+  [[ "$installed" == "$latest" ]] && status="up to date"
+  printf '  %-8s latest=%-14s installed=%-14s %s\n' "$1" "$latest" "${installed:--}" "$status"
+}
+
+install_pkg() {
+  local name=$1 force=0
+  [[ ${2:-} == force ]] && force=1
+  local line repo assets files
+  line="$(find_pkg "$name")" || die "unknown package: $name"
+  IFS='|' read -r _ repo assets files <<< "$line"
+  [[ -n "$repo" && -n "$assets" ]] || die "bad manifest entry: $line"
+
+  # installed targets = archive members, or exact raw asset names
+  local -a targets=()
+  local glob
+  if [[ -n "$files" ]]; then
+    read -r -a targets <<< "$files"
+  else
+    for glob in $assets; do
+      case "$glob" in *[*?[]*) ;; *) targets+=("$glob") ;; esac
+    done
+  fi
+
+  local latest installed=""
+  [[ -f "$state_dir/$name" ]] && installed="$(<"$state_dir/$name")"
+  latest="$(latest_tag "$repo")" || die "cannot resolve latest release for $name"
+
+  if ((!force)); then
+    local t ok=1
+    for t in "${targets[@]}"; do [[ -f "$bin_dir/$t" ]] || ok=0; done
+    if [[ -n "$installed" && "$installed" == "$latest" && $ok == 1 ]]; then
+      echo "  $name: up to date ($latest)"
+      return 0
+    fi
+  fi
+
+  if [[ -n "$installed" ]]; then
+    echo "  $name: updating $installed -> $latest"
+  else
+    echo "  $name: installing $latest"
+  fi
+
+  # resolve asset names against the latest release
+  local json aname matched=()
+  json="$(curl -fsSL "https://api.github.com/repos/$repo/releases/latest")"
+  while read -r aname; do
+    for glob in $assets; do
+      [[ "$aname" == $glob ]] && matched+=("$aname")
+    done
+  done < <(jq -r '.assets[].name' <<<"$json")
+  ((${#matched[@]})) || die "no asset of $name matches: $assets"
+
+  local tmp url
+  tmp="$(mktemp -d)"
+  trap 'rm -rf "$tmp"' EXIT
+
+  for aname in "${matched[@]}"; do
+    url="https://github.com/$repo/releases/download/$latest/$aname"
+    case "$aname" in
+      *.tar.gz|*.tgz) curl -fsSL "$url" | tar -xzf - -C "$tmp" ;;
+      *.zip)          curl -fsSL -o "$tmp/archive.zip" "$url" && unzip -qo "$tmp/archive.zip" -d "$tmp" ;;
+      *)              curl -fsSL -o "$tmp/$aname" "$url" ;;
+    esac
+    echo "    downloaded $aname"
+  done
+
+  local t src
+  for t in "${targets[@]}"; do
+    if [[ -n "$files" ]]; then
+      src="$(find "$tmp" -type f -name "$t" -print -quit)"
+      [[ -n "$src" ]] || die "member '$t' not found in $name archive"
+    else
+      src="$tmp/$t"
+      [[ -f "$src" ]] || die "asset '$t' missing for $name"
+    fi
+    install -m755 -D "$src" "$bin_dir/$t" || die "failed to install $t"
+    echo "    installed $bin_dir/$t"
+  done
+
+  mkdir -p "$state_dir"
+  printf '%s\n' "$latest" > "$state_dir/$name"
+  rm -rf "$tmp"
+  trap - EXIT
+}
+
+main() {
+  local cmd="${1:-update}"
+  shift || true
+  local n
+  case "$cmd" in
+    update)
+      if (($#)); then for n in "$@"; do install_pkg "$n"; done
+      else for n in $(all_names); do install_pkg "$n"; done; fi
+      ;;
+    check)
+      if (($#)); then for n in "$@"; do check_pkg "$n"; done
+      else for n in $(all_names); do check_pkg "$n"; done; fi
+      ;;
+    install)
+      if (($#)); then for n in "$@"; do install_pkg "$n" force; done
+      else for n in $(all_names); do install_pkg "$n" force; done; fi
+      ;;
+    list) for line in "${packages[@]}"; do echo "  $line"; done ;;
+    -h|--help|help) usage ;;
+    *) usage >&2; exit 1 ;;
+  esac
+}
+
+main "$@"

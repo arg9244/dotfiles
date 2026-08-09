@@ -36,7 +36,11 @@ function FindProxyForURL(url, host) {
         // Kimi
         "kimi.com", "moonshot.cn",
         // AniList
-        "anilist.co"
+        "anilist.co",
+        // Anime torrent providers
+        "animetosho.org", "arm.haglund.dev",
+        "nyaa.si",
+        "tokyotosho.info"
       ]
     }
   ];
