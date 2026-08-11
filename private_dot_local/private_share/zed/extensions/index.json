@@ -1,0 +1,371 @@
+{
+  "extensions": {
+    "fish": {
+      "manifest": {
+        "id": "fish",
+        "name": "Fish",
+        "version": "0.1.0",
+        "schema_version": 1,
+        "description": "Fish language support for Zed",
+        "repository": "https://github.com/hasit/zed-fish",
+        "authors": [
+          "Hasit Mistry <hasitnm@gmail.com>"
+        ],
+        "lib": {
+          "kind": null,
+          "version": null
+        },
+        "themes": [],
+        "icon_themes": [],
+        "languages": [
+          "languages/fish"
+        ],
+        "grammars": {
+          "fish": {
+            "repository": "https://github.com/ram02z/tree-sitter-fish",
+            "rev": "f435b0bd772578c70e5d158b85267bb886316f88",
+            "path": null
+          }
+        },
+        "language_servers": {},
+        "context_servers": {},
+        "slash_commands": {},
+        "snippets": null,
+        "capabilities": []
+      },
+      "dev": false
+    },
+    "ghostty": {
+      "manifest": {
+        "id": "ghostty",
+        "name": "Ghostty",
+        "version": "0.3.2",
+        "schema_version": 1,
+        "description": "Ghostty configuration file support",
+        "repository": "https://github.com/Else00/ghostty-zed-extension",
+        "authors": [
+          "Else"
+        ],
+        "lib": {
+          "kind": "Rust",
+          "version": "0.7.0"
+        },
+        "themes": [],
+        "icon_themes": [],
+        "languages": [
+          "languages/ghostty"
+        ],
+        "grammars": {
+          "ghostty": {
+            "repository": "https://github.com/bezhermoso/tree-sitter-ghostty",
+            "rev": "c14d6cb4dd36ff9dd569978491aa52e4726cbe86",
+            "path": null
+          }
+        },
+        "language_servers": {
+          "ghostty-lsp": {
+            "language": null,
+            "languages": [
+              "Ghostty"
+            ],
+            "language_ids": {},
+            "code_action_kinds": null
+          }
+        },
+        "context_servers": {},
+        "slash_commands": {},
+        "snippets": null,
+        "capabilities": []
+      },
+      "dev": false
+    },
+    "html": {
+      "manifest": {
+        "id": "html",
+        "name": "HTML",
+        "version": "0.3.1",
+        "schema_version": 1,
+        "description": "HTML support.",
+        "repository": "https://github.com/zed-industries/zed",
+        "authors": [
+          "Isaac Clayton <slightknack@gmail.com>"
+        ],
+        "lib": {
+          "kind": "Rust",
+          "version": "0.7.0"
+        },
+        "themes": [],
+        "icon_themes": [],
+        "languages": [
+          "languages/html"
+        ],
+        "grammars": {
+          "html": {
+            "repository": "https://github.com/tree-sitter/tree-sitter-html",
+            "rev": "bfa075d83c6b97cd48440b3829ab8d24a2319809",
+            "path": null
+          }
+        },
+        "language_servers": {
+          "vscode-html-language-server": {
+            "language": "HTML",
+            "languages": [],
+            "language_ids": {
+              "CSS": "css",
+              "HTML": "html"
+            },
+            "code_action_kinds": null
+          }
+        },
+        "context_servers": {},
+        "slash_commands": {},
+        "snippets": null,
+        "capabilities": []
+      },
+      "dev": false
+    },
+    "ini": {
+      "manifest": {
+        "id": "ini",
+        "name": "ini",
+        "version": "0.0.9",
+        "schema_version": 1,
+        "description": "Support for ini and ini like files (ini, conf, cfg) and systemd unit files (automount, mount, path, scope, service, slice, socket, swap, target, timer)",
+        "repository": "https://github.com/bajrangCoder/zed-ini",
+        "authors": [
+          "Raunak Raj <bajrangcoders@gmail.com>"
+        ],
+        "lib": {
+          "kind": null,
+          "version": null
+        },
+        "themes": [],
+        "icon_themes": [],
+        "languages": [
+          "languages/ini"
+        ],
+        "grammars": {
+          "ini": {
+            "repository": "https://github.com/justinmk/tree-sitter-ini",
+            "rev": "e4018b5176132b4f3c5d6e61cea383f42288d0f5",
+            "path": null
+          }
+        },
+        "language_servers": {},
+        "context_servers": {},
+        "slash_commands": {},
+        "snippets": null,
+        "capabilities": []
+      },
+      "dev": false
+    },
+    "lua": {
+      "manifest": {
+        "id": "lua",
+        "name": "Lua",
+        "version": "0.1.10",
+        "schema_version": 1,
+        "description": "Lua support.",
+        "repository": "https://github.com/zed-extensions/lua",
+        "authors": [
+          "Max Brunsfeld <max@zed.dev>"
+        ],
+        "lib": {
+          "kind": "Rust",
+          "version": "0.7.0"
+        },
+        "themes": [],
+        "icon_themes": [],
+        "languages": [
+          "languages/lua",
+          "languages/emmyluadoc"
+        ],
+        "grammars": {
+          "emmyluadoc": {
+            "repository": "https://github.com/EmmyLuaLs/tree-sitter-emmyluadoc",
+            "rev": "ea755c0fd34c07e16597bd62a404d6eba2a3891e",
+            "path": null
+          },
+          "lua": {
+            "repository": "https://github.com/tree-sitter-grammars/tree-sitter-lua",
+            "rev": "10fe0054734eec83049514ea2e718b2a56acd0c9",
+            "path": null
+          }
+        },
+        "language_servers": {
+          "lua-language-server": {
+            "language": null,
+            "languages": [
+              "Lua",
+              "EmmyLuadoc"
+            ],
+            "language_ids": {},
+            "code_action_kinds": null
+          }
+        },
+        "context_servers": {},
+        "slash_commands": {},
+        "snippets": null,
+        "capabilities": []
+      },
+      "dev": false
+    },
+    "toml": {
+      "manifest": {
+        "id": "toml",
+        "name": "TOML",
+        "version": "1.0.3",
+        "schema_version": 1,
+        "description": "TOML support.",
+        "repository": "https://github.com/zed-extensions/toml",
+        "authors": [
+          "Max Brunsfeld <max@zed.dev>",
+          "Ammar Arif <evergreenkary@gmail.com>"
+        ],
+        "lib": {
+          "kind": null,
+          "version": null
+        },
+        "themes": [],
+        "icon_themes": [],
+        "languages": [
+          "languages/toml"
+        ],
+        "grammars": {
+          "toml": {
+            "repository": "https://github.com/tree-sitter/tree-sitter-toml",
+            "rev": "342d9be207c2dba869b9967124c679b5e6fd0ebe",
+            "path": null
+          }
+        },
+        "language_servers": {},
+        "context_servers": {},
+        "slash_commands": {},
+        "snippets": null,
+        "capabilities": []
+      },
+      "dev": false
+    }
+  },
+  "themes": {},
+  "icon_themes": {},
+  "languages": {
+    "EmmyLuadoc": {
+      "extension": "lua",
+      "path": "languages/emmyluadoc",
+      "matcher": {
+        "path_suffixes": [],
+        "first_line_pattern": null,
+        "modeline_aliases": []
+      },
+      "hidden": true,
+      "grammar": "emmyluadoc"
+    },
+    "Fish": {
+      "extension": "fish",
+      "path": "languages/fish",
+      "matcher": {
+        "path_suffixes": [
+          "fish"
+        ],
+        "first_line_pattern": "^#!.*\\bfish\\b",
+        "modeline_aliases": []
+      },
+      "hidden": false,
+      "grammar": "fish"
+    },
+    "Ghostty": {
+      "extension": "ghostty",
+      "path": "languages/ghostty",
+      "matcher": {
+        "path_suffixes": [
+          "ghostty/config",
+          "com.mitchellh.ghostty/config",
+          "config/ghostty/config",
+          "ghostty"
+        ],
+        "first_line_pattern": "#\\s*(vim?:\\s*(set\\s+)?ft=ghostty|-\\*-\\s*(mode:\\s*)?ghostty\\s*-\\*-)",
+        "modeline_aliases": []
+      },
+      "hidden": false,
+      "grammar": "ghostty"
+    },
+    "HTML": {
+      "extension": "html",
+      "path": "languages/html",
+      "matcher": {
+        "path_suffixes": [
+          "html",
+          "htm",
+          "shtml"
+        ],
+        "first_line_pattern": null,
+        "modeline_aliases": []
+      },
+      "hidden": false,
+      "grammar": "html"
+    },
+    "Lua": {
+      "extension": "lua",
+      "path": "languages/lua",
+      "matcher": {
+        "path_suffixes": [
+          "lua"
+        ],
+        "first_line_pattern": null,
+        "modeline_aliases": []
+      },
+      "hidden": false,
+      "grammar": "lua"
+    },
+    "TOML": {
+      "extension": "toml",
+      "path": "languages/toml",
+      "matcher": {
+        "path_suffixes": [
+          "Cargo.lock",
+          "toml",
+          "Pipfile",
+          "uv.lock"
+        ],
+        "first_line_pattern": null,
+        "modeline_aliases": []
+      },
+      "hidden": false,
+      "grammar": "toml"
+    },
+    "ini": {
+      "extension": "ini",
+      "path": "languages/ini",
+      "matcher": {
+        "path_suffixes": [
+          "ini",
+          "inf",
+          "conf",
+          "cfg",
+          "automount",
+          "mount",
+          "path",
+          "scope",
+          "service",
+          "slice",
+          "socket",
+          "swap",
+          "target",
+          "timer",
+          "container",
+          "volume",
+          "network",
+          "kube",
+          "image",
+          "build",
+          "pod"
+        ],
+        "first_line_pattern": null,
+        "modeline_aliases": []
+      },
+      "hidden": false,
+      "grammar": "ini"
+    }
+  }
+}

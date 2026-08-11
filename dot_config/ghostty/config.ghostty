@@ -1,0 +1,6 @@
+# Theme
+theme = noctalia
+
+# Cursor trail effect
+custom-shader = ~/.config/ghostty/shaders/wisp-cursor.glsl
+custom-shader-animation = true

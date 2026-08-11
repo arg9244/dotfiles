@@ -157,8 +157,7 @@ enabled = [
     "yuuto/calculator",
     "nightwatch75/todo",
     "nomadcxx/gamer-mode",
-    "weinguyen/procmon",
-    "umedbazarov/ruh-vpn"
+    "weinguyen/procmon"
 ]
 
     [[plugins.source]]
@@ -196,8 +195,7 @@ source = "community"
 wallpaper_scheme = "m3-content"
 
     [theme.templates]
-    builtin_ids = [ "gtk3", "gtk4", "kcolorscheme", "kitty", "niri", "qt" ]
-    community_ids = [ "pi-agent" ]
+    builtin_ids = [ "gtk3", "gtk4", "ghostty", "kcolorscheme", "niri", "qt" ]
 
 [wallpaper]
 directory = "~/Pictures/Wallpapers"
