@@ -1,7 +1,7 @@
 config_version = 8
 
 [bar.default]
-center = [ "clock", "date", "weather", "media", "widget", "gamermode" ]
+center = [ "clock", "date", "weather", "media", "widget", "monitor" ]
 end = [
     "recorder_2",
     "screenshot",
@@ -20,7 +20,7 @@ margin_ends = 0
 position = "bottom"
 radius = 10
 shadow = false
-start = [ "launcher", "workspaces", "tray", "taskbar" ]
+start = [ "launcher", "workspaces", "tray", "taskbar", "vpn_widget" ]
 
 [brightness]
 sync_all_monitors = true
@@ -137,10 +137,12 @@ panel_position = "auto"
 video_source = "portal"
 
 [plugin_settings."nomadcxx/gamer-mode"]
-glyph = ""
 main_open_near_click = true
 poll_interval = "5"
 profile = "heavy"
+
+[plugin_settings."umedbazarov/ruh-vpn"]
+vpn_panel_open_near_click = true
 
 [plugin_settings."weinguyen/procmon"]
 panel_placement = "attached"
@@ -155,7 +157,8 @@ enabled = [
     "yuuto/calculator",
     "nightwatch75/todo",
     "nomadcxx/gamer-mode",
-    "weinguyen/procmon"
+    "weinguyen/procmon",
+    "umedbazarov/ruh-vpn"
 ]
 
     [[plugins.source]]
@@ -194,6 +197,7 @@ wallpaper_scheme = "m3-content"
 
     [theme.templates]
     builtin_ids = [ "gtk3", "gtk4", "kcolorscheme", "kitty", "niri", "qt" ]
+    community_ids = [ "pi-agent" ]
 
 [wallpaper]
 directory = "~/Pictures/Wallpapers"
@@ -220,13 +224,15 @@ type = "yuuto/calculator:bar"
 [widget.cat]
 type = "noctalia/bongocat:cat"
 
-[widget.gamermode]
-type = "nomadcxx/gamer-mode:gamermode"
-
 [widget.media]
 album_art_only = true
 hide_when_no_media = true
 title_scroll = "on_hover"
+
+[widget.monitor]
+highlight_gamer_mode = false
+show_vram = true
+type = "nomadcxx/gamer-mode:monitor"
 
 [widget.mpvpaper]
 type = "noctalia/mpvpaper:mpvpaper"
@@ -252,6 +258,9 @@ stat = "gpu_vram"
 
 [widget.todo]
 type = "nightwatch75/todo:todo"
+
+[widget.vpn_widget]
+type = "umedbazarov/ruh-vpn:vpn_widget"
 
 [widget.weather]
 show_condition = false

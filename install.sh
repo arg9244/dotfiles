@@ -47,11 +47,11 @@ PACMAN=(
 
 AUR=(
     noctalia-git noctalia-greeter-git qt6ct-kde
-    mihomo-bin throne-bin ludusavi-bin
+    mihomo-bin throne-bin ludusavi-bin moonbit
 )
 
 # Dependencies to EXCLUDE when installing cachyos-gaming-meta
-GAMING_EXCLUDE=( proton-cachyos-slr wine)
+GAMING_EXCLUDE=( proton-cachyos-slr wine wine-cachyos-opt)
 
 DOTFILES_REPO="https://github.com/arg9244/dotfiles"
 
