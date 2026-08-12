@@ -13,6 +13,7 @@ binds {
     Mod+S                               hotkey-overlay-title="Open Control Center: noctalia controlCenter" { spawn-sh "noctalia msg panel-toggle control-center"; }
     Mod+Space                           hotkey-overlay-title="Open App Launcher: noctalia launcher" { spawn-sh "noctalia msg panel-toggle launcher"; }
     Mod+N                               hotkey-overlay-title="Open Notes" { spawn-sh "   noctalia msg panel-toggle noctalia/notes:panel"; }
+    CTRL+Shift+ESCAPE                    hotkey-overlay-title="Open Process Monitor" { spawn-sh "noctalia msg panel-toggle weinguyen/procmon:panel"; }
 
     // ─── Applications ───
     Mod+Return                          hotkey-overlay-title="Open Terminal: Ghostty" { spawn "ghostty"; }

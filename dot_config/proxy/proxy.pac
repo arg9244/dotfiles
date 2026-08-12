@@ -1,7 +1,6 @@
 function FindProxyForURL(url, host) {
   // Proxy endpoints — all mixed (HTTP + SOCKS5) ports
   const MITM   = "PROXY 127.0.0.1:10808";
-  const FRAG   = "PROXY 127.0.0.1:10809";
   const CFW    = "PROXY 127.0.0.1:7890";
   const THRONE = "PROXY 127.0.0.1:2080"; // defined, no routes assigned yet
   const DIRECT = "DIRECT";
@@ -20,17 +19,12 @@ function FindProxyForURL(url, host) {
       ]
     },
     {
-      proxy: FRAG,
-      domains: [
-        // X (incl. legacy Twitter domains, shortener, media)
-        "x.com", "twitter.com", "t.co", "twimg.com"
-      ]
-    },
-    {
       proxy: CFW,
       domains: [
         // Discord (incl. CDN, invites, media)
         "discord.com", "discordapp.com", "discordapp.net", "discord.gg",
+        // X / Twitter (incl. shortener, media)
+        "x.com", "twitter.com", "t.co", "twimg.com",
         // Google Gemini / AI Studio
         "gemini.google.com", "bard.google.com", "aistudio.google.com",
         // Kimi

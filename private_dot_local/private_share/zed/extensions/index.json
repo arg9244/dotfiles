@@ -210,6 +210,48 @@
       },
       "dev": false
     },
+    "luau": {
+      "manifest": {
+        "id": "luau",
+        "name": "Luau",
+        "version": "0.3.8",
+        "schema_version": 1,
+        "description": "Luau support.",
+        "repository": "https://github.com/4teapo/zed-luau",
+        "authors": [
+          "teapo <4teapo@gmail.com>"
+        ],
+        "lib": {
+          "kind": "Rust",
+          "version": "0.7.0"
+        },
+        "themes": [],
+        "icon_themes": [],
+        "languages": [
+          "languages/luau"
+        ],
+        "grammars": {
+          "luau": {
+            "repository": "https://github.com/4teapo/tree-sitter-luau",
+            "rev": "4f09f79945de3d5575b079103d86a515030c62ab",
+            "path": null
+          }
+        },
+        "language_servers": {
+          "luau-lsp": {
+            "language": "Luau",
+            "languages": [],
+            "language_ids": {},
+            "code_action_kinds": null
+          }
+        },
+        "context_servers": {},
+        "slash_commands": {},
+        "snippets": null,
+        "capabilities": []
+      },
+      "dev": false
+    },
     "toml": {
       "manifest": {
         "id": "toml",
@@ -317,6 +359,19 @@
       },
       "hidden": false,
       "grammar": "lua"
+    },
+    "Luau": {
+      "extension": "luau",
+      "path": "languages/luau",
+      "matcher": {
+        "path_suffixes": [
+          "luau"
+        ],
+        "first_line_pattern": "^#!.*\b(lune|luau|zune)\b",
+        "modeline_aliases": []
+      },
+      "hidden": false,
+      "grammar": "luau"
     },
     "TOML": {
       "extension": "toml",

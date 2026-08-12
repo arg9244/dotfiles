@@ -1,8 +1,10 @@
-config_version = 8
+config_version = 12
 
 [bar.default]
-center = [ "clock", "date", "weather", "media", "widget", "monitor" ]
+center = [ "clock", "date", "weather", "media", "monitor", "widget" ]
 end = [
+    "widget_2",
+    "mihomo-tun",
     "recorder_2",
     "screenshot",
     "status",
@@ -20,7 +22,7 @@ margin_ends = 0
 position = "bottom"
 radius = 10
 shadow = false
-start = [ "launcher", "workspaces", "tray", "taskbar", "vpn_widget" ]
+start = [ "launcher", "workspaces", "tray", "taskbar" ]
 
 [brightness]
 sync_all_monitors = true
@@ -126,11 +128,15 @@ widget_order = [ "lockscreen-login-box@DP-3", "lockscreen-login-box@HDMI-A-1", "
 [nightlight]
 enabled = true
 
+[plugin_settings."mdj2812/mihomo-control"]
+panel_open_near_click = true
+panel_placement = "attached"
+refresh_interval = 5
+
 [plugin_settings."noctalia/mpvpaper"]
 video_directory = "/media/D/Picture/Wallpaper/Animted"
 
 [plugin_settings."noctalia/notes"]
-panel_placement = "floating"
 panel_position = "auto"
 
 [plugin_settings."noctalia/screen_recorder"]
@@ -141,9 +147,6 @@ main_open_near_click = true
 poll_interval = "5"
 profile = "heavy"
 
-[plugin_settings."umedbazarov/ruh-vpn"]
-vpn_panel_open_near_click = true
-
 [plugin_settings."weinguyen/procmon"]
 panel_placement = "attached"
 refresh_interval = 3000
@@ -151,13 +154,15 @@ sort_by = "mem"
 
 [plugins]
 enabled = [
+    "reza/mihomo-tun",
     "noctalia/notes",
     "noctalia/screen_recorder",
     "apex077/eyecare",
     "yuuto/calculator",
     "nightwatch75/todo",
     "nomadcxx/gamer-mode",
-    "weinguyen/procmon"
+    "weinguyen/procmon",
+    "mdj2812/mihomo-control"
 ]
 
     [[plugins.source]]
@@ -169,6 +174,11 @@ enabled = [
     kind = "git"
     location = "https://github.com/noctalia-dev/community-plugins"
     name = "community"
+
+    [[plugins.source]]
+    kind = "path"
+    location = "/home/reza/.local/share/noctalia/plugins"
+    name = "dev"
 
 [shell]
 avatar_path = "/home/reza/Pictures/Wallpapers/wallhaven-ly353y.jpg"
@@ -227,6 +237,9 @@ album_art_only = true
 hide_when_no_media = true
 title_scroll = "on_hover"
 
+[widget.mihomo-tun]
+type = "reza/mihomo-tun:tun-toggle"
+
 [widget.monitor]
 highlight_gamer_mode = false
 show_vram = true
@@ -251,14 +264,12 @@ type = "noctalia/screen_recorder:recorder"
 type = "spacer"
 
 [widget.sysmon]
-display = "text"
+show_value = true
 stat = "gpu_vram"
+visualization = "none"
 
 [widget.todo]
 type = "nightwatch75/todo:todo"
-
-[widget.vpn_widget]
-type = "umedbazarov/ruh-vpn:vpn_widget"
 
 [widget.weather]
 show_condition = false
@@ -266,6 +277,9 @@ show_condition = false
 [widget.widget]
 icon_only = true
 type = "weinguyen/procmon:widget"
+
+[widget.widget_2]
+type = "mdj2812/mihomo-control:widget"
 
 [widget.workspaces]
 hide_when_empty = true

@@ -37,12 +37,12 @@ export PATH="$ORIGINAL_HOME/.local/bin:$PATH"
 # ══════════════════════════════════════════════════════════════════════════════
 
 PACMAN=(
-    gnome-keyring xdg-desktop-portal-gnome icoutils
-    loupe baobab file-roller gnome-disk-utility
-    bottom lxsession mangohud niri telegram-desktop
-    aria2 bun nodejs npm uv rclone lact noctalia-greeter
-    blocky zed github-cli chezmoi noctalia ghostty-nautilus
-    mpv yt-dlp playerctl mpv-mpris amberol qbittorrent
+    niri noctalia noctalia-greeter lxsession gnome-keyring
+    xdg-desktop-portal-gnome baobab file-roller loupe gvfs-mtp
+    gnome-disk-utility ghostty-nautilus bottom chezmoi icoutils
+    mpv mpv-mpris playerctl yt-dlp amberol lutris mangohud lact
+    nodejs npm bun uv zed github-cli python-icoextract neovim
+    chromium ayugram-desktop qbittorrent aria2 blocky rclone
 )
 
 AUR=(
