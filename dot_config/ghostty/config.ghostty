@@ -4,3 +4,10 @@ theme = noctalia
 # Cursor trail effect
 custom-shader = ~/.config/ghostty/shaders/wisp-cursor.glsl
 custom-shader-animation = true
+
+# Copy & Paste
+copy-on-select = clipboard
+keybind = ctrl+v=paste_from_clipboard
+
+# Window / Closing behavior
+confirm-close-surface = false
