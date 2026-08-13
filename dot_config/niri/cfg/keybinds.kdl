@@ -16,7 +16,7 @@ binds {
     CTRL+Shift+ESCAPE                    hotkey-overlay-title="Open Process Monitor" { spawn-sh "noctalia msg panel-toggle weinguyen/procmon:panel"; }
 
     // ─── Applications ───
-    Mod+Return                          hotkey-overlay-title="Open Terminal: Ghostty" { spawn "ghostty"; }
+    Mod+Return                          hotkey-overlay-title="Open Terminal: Kitty" { spawn "kitty"; }
     Mod+B                               hotkey-overlay-title="Open Browser: Chromium" { spawn "chromium"; }
     Mod+X                               hotkey-overlay-title="Open Text Editor: Zed" { spawn "zeditor"; }
     Mod+E                               hotkey-overlay-title="File Manager: Nautilus" { spawn "nautilus"; }

@@ -1,0 +1,119 @@
+# ==============================================================================
+# Rio Terminal Configuration
+# Docs: https://rioterm.com/docs/config
+# Note: In Rio, all top-level settings MUST appear before any [headers].
+# ==============================================================================
+
+# Theme
+theme = "noctalia"
+
+confirm-before-quit = false               # Disable confirmation popup before quitting
+copy-on-select = true                     # Automatically copy text on mouse selection
+hide-mouse-cursor-when-typing = true      # Hide mouse pointer while typing
+enable-scroll-bar = true                  # Enable the overlay scrollbar
+
+# Padding & Spacing (Top-level settings)
+padding-x = 12                            # Padding (in pixels) on left and right edges
+padding-y = [10, 10]                      # Padding [top, bottom] in pixels
+line-height = 1.0                         # Adjust vertical line height ratio
+
+# ------------------------------------------------------------------------------
+# Font Settings
+# ------------------------------------------------------------------------------
+[fonts]
+family = "MesloLGS Nerd Font"
+size = 16
+
+# ------------------------------------------------------------------------------
+# Cursor Settings & Effects
+# ------------------------------------------------------------------------------
+[cursor]
+shape = "beam"                            # Options: "block", "beam", "underline"
+blinking = true                           # Enable cursor blinking
+
+[effects]
+trail-cursor = true                       # Enable cursor movement trail animation
+
+# ------------------------------------------------------------------------------
+# Window Settings
+# ------------------------------------------------------------------------------
+[window]
+decorations = "Disabled"
+# opacity = 0.7
+# blur = true
+
+# ------------------------------------------------------------------------------
+# Tab & Navigation Settings
+# ------------------------------------------------------------------------------
+[navigation]
+mode = "Tab"                           # Options: "TopTab", "BottomTab", "Breadcrumb", "Plain"
+use-current-path = true                   # Open new tabs in the current directory
+
+# ------------------------------------------------------------------------------
+# Default Shell (Optional: customize for your system)
+# ------------------------------------------------------------------------------
+# [shell]
+# program = "/bin/zsh"                    # e.g., "pwsh", "wsl", "/bin/zsh"
+# args = ["--login"]
+
+# ------------------------------------------------------------------------------
+# Performance & Renderer Settings
+# ------------------------------------------------------------------------------
+[renderer]
+disable-unfocused-render = true           # Save GPU/battery when window is not focused
+
+# ------------------------------------------------------------------------------
+# Preferred Config Editor (Triggered via OpenConfigEditor action)
+# ------------------------------------------------------------------------------
+[editor]
+program = "zed"                          # Editor executable (e.g., "code", "nvim")
+args = []
+
+# ------------------------------------------------------------------------------
+# Key Bindings
+# ------------------------------------------------------------------------------
+[bindings]
+keys = [
+  # Paste with Ctrl + V
+  { key = "v", with = "control", action = "Paste" },
+
+  # Scroll Up / Down with PageUp / PageDown
+  { key = "pageup", action = "ScrollPageUp" },
+  { key = "pagedown", action = "ScrollPageDown" },
+
+  # Scroll to Top / Bottom with Shift + Home / Shift + End
+  { key = "home", with = "shift", action = "ScrollToTop" },
+  { key = "end", with = "shift", action = "ScrollToBottom" },
+
+  # Change Font Size (Zoom In / Zoom Out / Reset)
+  { key = "=", with = "control", action = "IncreaseFontSize" },
+  { key = "+", with = "control", action = "IncreaseFontSize" },
+  { key = "-", with = "control", action = "DecreaseFontSize" },
+  { key = "0", with = "control", action = "ResetFontSize" },
+
+  # Open Config File in defined Editor
+  { key = ",", with = "control", action = "OpenConfigEditor" },
+]
+
+# ------------------------------------------------------------------------------
+# Hints & Clickable Links Configuration
+# ------------------------------------------------------------------------------
+[hints]
+alphabet = "jfkdls;ahgurieowpq"
+
+[[hints.rules]]
+regex = "(https://|http://)[^\\u{0000}-\\u{001F}\\u{007F}-\\u{009F}<>\"\\s{-}\\^⟨⟩`\\\\]+"
+hyperlinks = true
+post-processing = true
+persist = false
+
+[hints.rules.action]
+command = "xdg-open"                      # Linux/BSD. Use "open" for macOS or "explorer" for Windows
+
+[hints.rules.mouse]
+enabled = true
+mods = []                                 # Empty [] allows direct clicking without holding Alt/Cmd
+
+[hints.rules.binding]
+key = "O"                                 # Ctrl + Shift + O toggles keyboard hint overlay for links
+mods = ["Control", "Shift"]

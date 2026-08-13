@@ -39,7 +39,7 @@ export PATH="$ORIGINAL_HOME/.local/bin:$PATH"
 PACMAN=(
     niri noctalia noctalia-greeter lxsession gnome-keyring
     xdg-desktop-portal-gnome baobab file-roller loupe gvfs-mtp
-    gnome-disk-utility ghostty-nautilus bottom chezmoi icoutils
+    gnome-disk-utility bottom chezmoi icoutils kitty
     mpv mpv-mpris playerctl yt-dlp amberol lutris mangohud lact
     nodejs npm bun uv zed github-cli python-icoextract neovim
     chromium ayugram-desktop qbittorrent aria2 blocky rclone
@@ -47,7 +47,7 @@ PACMAN=(
 
 AUR=(
     qt6ct-kde mihomo-bin throne-bin ludusavi-bin
-    moonbit twintaillauncher-bin
+    moonbit twintaillauncher-bin nautilus-open-any-terminal
 )
 
 # Dependencies to EXCLUDE when installing cachyos-gaming-meta
@@ -177,6 +177,9 @@ _marker="# path: user local bins"
 if [[ -f "$_bashrc" ]] && ! grep -qF "$_marker" "$_bashrc"; then
     printf '\n%s\n%s\n' "$_marker" "$_path_line" >> "$_bashrc"
 fi
+
+# Configure Nautilus terminal setting for user
+run "Set Nautilus terminal to Kitty" as_user gsettings set com.github.stunkymonkey.nautilus-open-any-terminal terminal 'kitty'
 
 
 # ── 6. Service management ──
