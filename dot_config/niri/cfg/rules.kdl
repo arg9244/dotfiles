@@ -19,19 +19,3 @@
             fixed 920
         }
     }
-
-    // VRR (on-demand): enable variable refresh rate when a game or video
-    // player is shown. Find more app-ids with `niri msg pick-window`.
-    window-rule {
-        // Wine/Proton games (app-id is the game's executable, e.g. game.exe).
-        match app-id=r#"\.exe$"#
-        variable-refresh-rate true
-    }
-
-
-    window-rule {
-        // Video players.
-        match app-id=r#"^(mpv|vlc|Celluloid|io\.github\.celluloid_player\.Celluloid)$"#
-        variable-refresh-rate true
-    }
-

@@ -53,6 +53,11 @@ export LACT_ENABLE="1"                       # "1" = enable profile switching, "
 export LACT_GAME_PROFILE="OC"               # Overclock profile (/home/reza/.config/lact/LACT-profile-OC.json)
 export LACT_DEFAULT_PROFILE="Default"       # Default profile restored on game exit
 
+# Niri Window Manager VRR Settings
+export NIRI_VRR_ENABLE="1"                  # "1" = enable Niri VRR on game launch, "0" = disable
+export NIRI_VRR_OUTPUT="Samsung Electric Company LS32CG51x H9JWA00258"  # Locked to Samsung 1440p display
+export NIRI_VRR_OFF_MODE="off"             # Mode restored on exit: "off" or "on-demand"
+
 # ==============================================================================
 # SCRIPT LOGIC (Do not edit below unless modifying functionality)
 # ==============================================================================
@@ -158,7 +163,7 @@ EOF
 fi
 
 # ------------------------------------------------------------------------------
-# 3. Game Launch Execution & LACT Profile Management
+# 3. Game Launch Execution & Session Management
 # ------------------------------------------------------------------------------
 if [ -z "$GAME_EXE" ]; then
     echo "[ERROR] GAME_EXE is not set! Please edit the script to point to your game .exe."
@@ -242,19 +247,60 @@ set_lact_profile() {
     fi
 }
 
-# 3. Execute Game with LACT Profile Management
-if [ "$LACT_ENABLE" = "1" ]; then
-    # Function to restore default profile when game closes or if script is terminated
-    cleanup_lact() {
-        echo "[INFO] Game session ended. Restoring LACT GPU profile to '$LACT_DEFAULT_PROFILE'..."
+# Helper function for Niri VRR switching
+set_niri_vrr() {
+    local state="$1" # "on", "off", or "on-demand"
+    if [ "$NIRI_VRR_ENABLE" = "1" ] && [ -n "$state" ]; then
+        if command -v niri >/dev/null 2>&1; then
+            # Verify Niri IPC session is running
+            if niri msg outputs >/dev/null 2>&1; then
+                local target_output="$NIRI_VRR_OUTPUT"
+
+                # Auto-detect focused display if not manually set
+                if [ -z "$target_output" ]; then
+                    if command -v jq >/dev/null 2>&1; then
+                        target_output=$(niri msg --json focused-output 2>/dev/null | jq -r '.name // empty')
+                    fi
+                    if [ -z "$target_output" ]; then
+                        target_output=$(niri msg outputs 2>/dev/null | awk '/^Output/ {print $NF}' | tr -d '()' | head -n 1)
+                    fi
+                fi
+
+                if [ -n "$target_output" ]; then
+                    echo "[INFO] Setting Niri VRR to '$state' on display '$target_output'..."
+                    niri msg output "$target_output" vrr "$state" >/dev/null 2>&1 || echo "[WARNING] Failed to set Niri VRR on '$target_output'."
+                else
+                    echo "[WARNING] Could not determine target Niri display for VRR."
+                fi
+            else
+                echo "[WARNING] Niri VRR is enabled, but Niri IPC socket/session is not active."
+            fi
+        else
+            echo "[WARNING] Niri VRR is enabled, but 'niri' executable was not found in PATH."
+        fi
+    fi
+}
+
+# Execute Game with Profile & VRR Management
+if [ "$LACT_ENABLE" = "1" ] || [ "$NIRI_VRR_ENABLE" = "1" ]; then
+    CLEANUP_DONE=0
+    cleanup_session() {
+        if [ "$CLEANUP_DONE" -eq 1 ]; then
+            return
+        fi
+        CLEANUP_DONE=1
+
+        echo "[INFO] Game session ended. Restoring performance & display settings..."
         set_lact_profile "$LACT_DEFAULT_PROFILE"
+        set_niri_vrr "${NIRI_VRR_OFF_MODE:-off}"
     }
 
     # Trap script exit and signal interrupts (Ctrl+C / SIGTERM)
-    trap cleanup_lact EXIT INT TERM
+    trap cleanup_session EXIT INT TERM
 
-    # Switch GPU to OC Profile
+    # Apply pre-launch settings
     set_lact_profile "$LACT_GAME_PROFILE"
+    set_niri_vrr "on"
 
     # Run game command
     "${LAUNCH_CMD[@]}"
