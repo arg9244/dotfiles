@@ -1,0 +1,6 @@
+{
+  "settings.api_url.label": "Mihomo API URL",
+  "settings.api_url.description": "URL of the Mihomo external control API (e.g. http://127.0.0.1:9090).",
+  "settings.api_secret.label": "API Secret",
+  "settings.api_secret.description": "Bearer token for the Mihomo API. Leave empty if the API is unauthenticated."
+}

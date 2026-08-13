@@ -1,0 +1,11 @@
+{
+  "settings.api_url.label": "Mihomo API URL",
+  "settings.api_url.description": "URL of the Mihomo external control API (e.g. http://127.0.0.1:9090).",
+  "settings.api_secret.label": "API Secret",
+  "settings.api_secret.description": "Bearer token for the Mihomo API. Leave empty if the API is unauthenticated.",
+  "settings.stack.label": "Default TUN Stack",
+  "settings.stack.description": "Stack used when left-clicking the widget to enable TUN mode.",
+  "settings.stack.options.gvisor": "GVisor",
+  "settings.stack.options.system": "System",
+  "settings.stack.options.mixed": "Mixed"
+}

@@ -1,0 +1,51 @@
+# ── Plugin identity ──────────────────────────────────────────
+id           = "reza/mihomo-tun"
+name         = "Mihomo TUN"
+version      = "1.0.0"
+plugin_api   = 14
+author       = "reza"
+license      = "MIT"
+description  = "Bar widget that toggles Mihomo TUN mode. Left-click toggles on/off using the selected stack; right-click opens a panel to switch stacks."
+tags         = ["mihomo", "tun", "gvisor", "network", "toggle"]
+
+# ── Shared settings (edited in Settings → Plugins) ──────────
+[[setting]]
+key            = "api_url"
+type           = "string"
+label_key      = "settings.api_url.label"
+description_key = "settings.api_url.description"
+default        = "http://127.0.0.1:9090"
+
+[[setting]]
+key            = "api_secret"
+type           = "string"
+label_key      = "settings.api_secret.label"
+description_key = "settings.api_secret.description"
+default        = ""
+
+[[setting]]
+key            = "stack"
+type           = "select"
+label_key      = "settings.stack.label"
+description_key = "settings.stack.description"
+default        = "gVisor"
+options = [
+  { value = "gVisor", label_key = "settings.stack.options.gvisor" },
+  { value = "system", label_key = "settings.stack.options.system" },
+  { value = "mixed",  label_key = "settings.stack.options.mixed" },
+]
+
+# ── Bar widget entry ─────────────────────────────────────────
+[[widget]]
+id    = "tun-toggle"
+entry = "widget.luau"
+
+# ── Stack selection panel (opened by right-click) ────────────
+[[panel]]
+id    = "panel"
+entry = "panel.luau"
+width = 300
+height = 280
+placement = "attached"
+position = "auto"
+open_near_click = true

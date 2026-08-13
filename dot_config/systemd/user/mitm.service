@@ -1,0 +1,13 @@
+[Unit]
+Description=xray MITM Domain Fronting
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/home/reza/.local/bin/xray run -c /home/reza/.local/bin/MITM-DomainFronting.json
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=default.target
