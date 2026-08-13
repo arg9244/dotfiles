@@ -38,9 +38,9 @@ export PATH="$ORIGINAL_HOME/.local/bin:$PATH"
 
 PACMAN=(
     niri noctalia noctalia-greeter lxsession gnome-keyring
-    xdg-desktop-portal-gnome baobab file-roller loupe gvfs-mtp
-    gnome-disk-utility bottom chezmoi icoutils kitty
-    mpv mpv-mpris playerctl yt-dlp amberol lutris mangohud lact
+    xdg-desktop-portal-gnome baobab file-roller loupe kitty
+    gnome-disk-utility bottom chezmoi icoutils lact gvfs-mtp
+    mpv mpv-mpris playerctl yt-dlp amberol lutris mangohud
     nodejs npm bun uv zed github-cli python-icoextract neovim
     chromium ayugram-desktop qbittorrent aria2 blocky rclone
 )
