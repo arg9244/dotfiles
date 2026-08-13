@@ -46,7 +46,8 @@ PACMAN=(
 )
 
 AUR=(
-    qt6ct-kde mihomo-bin throne-bin ludusavi-bin moonbit
+    qt6ct-kde mihomo-bin throne-bin ludusavi-bin
+    moonbit twintaillauncher-bin
 )
 
 # Dependencies to EXCLUDE when installing cachyos-gaming-meta

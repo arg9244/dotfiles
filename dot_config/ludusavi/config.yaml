@@ -14,24 +14,20 @@ roots:
     database: /home/reza/.local/share/lutris/pga.db
 redirects: []
 backup:
-  path: /home/reza/.config/ludusavi/backup
+  path: /home/reza/Games/backup
   ignoredGames: []
   filter:
-    excludeStoreScreenshots: false
+    excludeStoreScreenshots: true
     cloud:
-      exclude: true
-      epic: true
-      gog: true
-      origin: true
-      steam: true
-      uplay: true
+      exclude: false
+      epic: false
+      gog: false
+      origin: false
+      steam: false
+      uplay: false
     ignoredPaths: []
     ignoredRegistry: []
-  toggledPaths:
-    "Assassin's Creed: Black Flag Resynced":
-      "/home/reza/Games/ACBF/drive_c/users/steamuser/AppData/Local/Ubisoft/Assassin's Creed Black Flag Resynced/save": false
-    Persona 3 Reload:
-      /home/reza/Games/P3R/drive_c/users/steamuser/AppData/Local/P3R/Saved/Config/WindowsNoEditor: false
+  toggledPaths: {}
   toggledRegistry: {}
   sort:
     key: status
@@ -49,10 +45,10 @@ backup:
       bzip2:
         level: 6
       zstd:
-        level: 10
+        level: 22
   onlyConstructive: true
 restore:
-  path: /home/reza/.config/ludusavi/backup
+  path: /home/reza/Games/backup
   ignoredGames: []
   toggledPaths: {}
   toggledRegistry: {}
@@ -67,7 +63,7 @@ scan:
 cloud:
   remote:
     GoogleDrive:
-      id: ludusavi-1785846074
+      id: ludusavi-1786586796
   path: ludusavi-backup
   synchronize: true
 apps:
