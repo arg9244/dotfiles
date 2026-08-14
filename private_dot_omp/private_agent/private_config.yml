@@ -6,7 +6,7 @@ providers:
   tinyModel: lfm2-350m
   tinyModelDevice: auto
 modelRoles: 
-  default: kilo/kilo-auto/free
+  default: opencode-zen/laguna-s-2.1-free
 symbolPreset: nerd
 theme: 
   dark: titanium
@@ -22,6 +22,8 @@ display:
   cacheMissMarker: true
 task: 
   showResolvedModelBadge: true
+  agentAdvisor: 
+    task: "on"
 images: 
   blockImages: true
 steeringMode: one-at-a-time
@@ -46,7 +48,6 @@ secrets:
   enabled: true
 advisor: 
   enabled: false
-  subagents: true
   syncBacklog: "1"
 error: 
   notify: "on"
