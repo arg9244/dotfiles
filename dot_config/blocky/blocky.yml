@@ -2,8 +2,8 @@
 upstreams:
   groups:
     default:
-      - "https://sky.rethinkdns.com/dns-query"
-      - "https://freedom.mydns.network/dns-query"
+      - "https://paranoia.mydns.network/dns-query"
+      - "https://dukun.de/dns-query"
   strategy: parallel_best
   timeout: 2s
   userAgent: "CachyOS/blocky"

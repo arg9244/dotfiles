@@ -4,12 +4,14 @@ set -euo pipefail
 # binpkg — update GitHub-release binaries in ~/.local/bin
 #
 # Manifest format, one package per line in the packages array (| separated):
-#   name|owner/repo|asset globs|files to install
+#   name|owner/repo|asset globs|files to install|[prerelease]
 #     asset globs      space-separated globs matched against the asset names of
 #                      the latest GitHub release (e.g. '*Linux_x86_64.tar.gz')
 #     files to install space-separated member names to extract from archives
 #                      (.tar.gz/.zip).  Leave empty for raw assets: they are
 #                      installed as-is under their own asset name.
+#     prerelease       optional keyword; when "prerelease", the latest
+#                      pre-release is used instead of the latest stable.
 #
 # Commands:
 #   binpkg            update every outdated package
@@ -21,8 +23,9 @@ set -euo pipefail
 #
 # The installed version of each package is stamped in
 # $BINPKG_STATE_DIR/<name> (default ~/.cache/binpkg).  Latest versions come
-# from GitHub's /releases/latest redirect — no API calls for plain checks;
-# the API is only consulted when an update actually runs.
+# from GitHub's /releases/latest redirect — no API calls for plain stable
+# checks; the API is only consulted when an update actually runs.  Packages
+# marked "prerelease" always require API calls to resolve pre-releases.
 
 bin_dir="${BINPKG_BIN_DIR:-$HOME/.local/bin}"
 state_dir="${BINPKG_STATE_DIR:-$HOME/.cache/binpkg}"
@@ -31,7 +34,7 @@ packages=(
   'aether|CluvexStudio/Aether|aether-linux-x86_64.tar.gz|aether'
   'geo|Chocolate4U/Iran-v2ray-rules|geoip.dat geosite.dat|'
   'seanime|5rahim/seanime|*Linux_x86_64.tar.gz|seanime'
-  'xray|xtls/xray-core|Xray-linux-64.zip|xray'
+  'xray|xtls/xray-core|Xray-linux-64.zip|xray|prerelease'
 )
 
 die() { echo "binpkg: $*" >&2; exit 1; }
@@ -66,18 +69,27 @@ all_names() {
   for line in "${packages[@]}"; do echo "${line%%|*}"; done
 }
 
-latest_tag() {  # owner/repo -> tag of the latest release
-  local url
-  url="$(curl -fsSL -o /dev/null -w '%{url_effective}' "https://github.com/$1/releases/latest")"
-  echo "${url##*/}"
+latest_tag() {  # owner/repo [prerelease] -> tag of the latest release
+  local repo=$1 mode=${2:-}
+  if [[ $mode == prerelease ]]; then
+    local tag
+    tag="$(curl -fsSL "https://api.github.com/repos/$repo/releases?per_page=100" \
+      | jq -r '.[] | select(.prerelease == true) | .tag_name' | head -1)"
+    [[ -n "$tag" ]] || return 1
+    echo "$tag"
+  else
+    local url
+    url="$(curl -fsSL -o /dev/null -w '%{url_effective}' "https://github.com/$repo/releases/latest")"
+    echo "${url##*/}"
+  fi
 }
 
 check_pkg() {
-  local line repo latest installed=""
+  local line repo latest installed="" prerelease=""
   line="$(find_pkg "$1")" || die "unknown package: $1"
-  IFS='|' read -r _ repo _ _ <<< "$line"
+  IFS='|' read -r _ repo _ _ prerelease <<< "$line"
   [[ -f "$state_dir/$1" ]] && installed="$(<"$state_dir/$1")"
-  latest="$(latest_tag "$repo")" || die "cannot resolve latest release for $1"
+  latest="$(latest_tag "$repo" "$prerelease")" || die "cannot resolve latest release for $1"
   local status="not installed"
   [[ -n "$installed" ]] && status="update available"
   [[ "$installed" == "$latest" ]] && status="up to date"
@@ -87,9 +99,9 @@ check_pkg() {
 install_pkg() {
   local name=$1 force=0
   [[ ${2:-} == force ]] && force=1
-  local line repo assets files
+  local line repo assets files prerelease=""
   line="$(find_pkg "$name")" || die "unknown package: $name"
-  IFS='|' read -r _ repo assets files <<< "$line"
+  IFS='|' read -r _ repo assets files prerelease <<< "$line"
   [[ -n "$repo" && -n "$assets" ]] || die "bad manifest entry: $line"
 
   # installed targets = archive members, or exact raw asset names
@@ -105,7 +117,7 @@ install_pkg() {
 
   local latest installed=""
   [[ -f "$state_dir/$name" ]] && installed="$(<"$state_dir/$name")"
-  latest="$(latest_tag "$repo")" || die "cannot resolve latest release for $name"
+  latest="$(latest_tag "$repo" "$prerelease")" || die "cannot resolve latest release for $name"
 
   if ((!force)); then
     local t ok=1
@@ -124,7 +136,7 @@ install_pkg() {
 
   # resolve asset names against the latest release
   local json aname matched=()
-  json="$(curl -fsSL "https://api.github.com/repos/$repo/releases/latest")"
+  json="$(curl -fsSL "https://api.github.com/repos/$repo/releases/tags/$latest")"
   while read -r aname; do
     for glob in $assets; do
       [[ "$aname" == $glob ]] && matched+=("$aname")
