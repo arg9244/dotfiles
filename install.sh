@@ -42,8 +42,7 @@ PACMAN=(
     gnome-disk-utility bottom chezmoi icoutils lact gvfs-mtp
     mpv mpv-mpris playerctl yt-dlp amberol lutris mangohud
     nodejs npm bun uv zed github-cli python-icoextract neovim
-    ayugram-desktop qbittorrent aria2 blocky rclone waterfox-bin
-    ffmpeg4.4
+    ayugram-desktop qbittorrent aria2 blocky rclone chromium
 )
 
 AUR=(
