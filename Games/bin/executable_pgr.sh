@@ -39,7 +39,7 @@ export PROTON_NO_STEAMINPUT="1"
 export PROTON_PREFER_SDL="1"
 export DXVK_HUD="0"
 export MANGOHUD="1"
-export all_proxy=""
+export all_proxy="socks5://127.0.0.1:7890"
 
 # GameScope Settings
 export GAMESCOPE="0"                        # "1" = enable gamescope, "0" = disable

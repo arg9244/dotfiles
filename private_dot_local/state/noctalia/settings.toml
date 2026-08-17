@@ -7,7 +7,6 @@ end = [
     "mihomo-tun",
     "recorder_2",
     "screenshot",
-    "status",
     "bar",
     "todo",
     "notes_2",
@@ -154,7 +153,6 @@ sort_by = "mem"
 
 [plugins]
 enabled = [
-    "reza/mihomo-tun",
     "noctalia/notes",
     "noctalia/screen_recorder",
     "apex077/eyecare",
@@ -162,7 +160,8 @@ enabled = [
     "nightwatch75/todo",
     "nomadcxx/gamer-mode",
     "weinguyen/procmon",
-    "mdj2812/mihomo-control"
+    "mdj2812/mihomo-control",
+    "reza/mihomo-tun"
 ]
 
     [[plugins.source]]
