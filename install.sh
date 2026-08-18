@@ -21,18 +21,34 @@ EOF
     exit 1
 fi
 
-# Keep sudo alive when running as a regular user
+# Pre-allocate state for the EXIT trap (must exist before anything can fail)
 sudo_keepalive_pid=""
+ERR_LOG="$(mktemp)"
+errs=0
+
+cleanup() {
+    [[ -n "${ERR_LOG:-}" ]] && rm -f "$ERR_LOG"
+    [[ -n "${sudo_keepalive_pid:-}" ]] && kill "$sudo_keepalive_pid" 2>/dev/null
+}
+trap cleanup EXIT
+
+# Keep sudo alive when running as a regular user
 if [[ $EUID -ne 0 ]]; then
     while true; do sudo -n true; sleep 60; kill -0 "$$" 2>/dev/null || exit; done &>/dev/null &
     sudo_keepalive_pid=$!
 fi
 
 # When invoked via sudo, remember the real user for user-context commands (chezmoi)
-ORIGINAL_USER="${SUDO_USER:-$USER}"
-
+ORIGINAL_USER="${SUDO_USER:-${USER:-$(id -un)}}"
 ORIGINAL_HOME="$(getent passwd "$ORIGINAL_USER" | cut -d: -f6)"
+
+if [[ -z "$ORIGINAL_HOME" || ! -d "$ORIGINAL_HOME" ]]; then
+    echo "✗ Cannot resolve home directory for user '$ORIGINAL_USER'" >&2
+    exit 1
+fi
+
 export PATH="$ORIGINAL_HOME/.local/bin:$PATH"
+
 # 📦 PACKAGES — Edit these arrays to add/remove what gets installed
 # ══════════════════════════════════════════════════════════════════════════════
 
@@ -66,31 +82,47 @@ warn() { echo -e "${Y}⚠${N} $*"; }
 fail() { echo -e "${R}✗${N} $*"; }
 head() { echo; echo "━━━ $* ━━━"; }
 
-ERR_LOG="$(mktemp)"
-errs=0
-
-cleanup() { [[ -n "${ERR_LOG:-}" ]] && rm -f "$ERR_LOG"; [[ -n "${sudo_keepalive_pid:-}" ]] && kill "$sudo_keepalive_pid" 2>/dev/null; }
-trap cleanup EXIT
 run() {
     local desc="$1"; shift
-    if "$@"; then ok "$desc"; else fail "$desc"; echo "$desc" >> "$ERR_LOG"; ((errs++)); fi
+    if "$@"; then
+        ok "$desc"
+    else
+        fail "$desc"
+        echo "$desc" >> "$ERR_LOG"
+        ((++errs)) || true
+    fi
 }
 
 require() {
     local desc="$1"; shift
-    if "$@"; then ok "$desc"; else fail "$desc"; echo "$desc (FATAL)" >> "$ERR_LOG"
-        echo; warn "Fatal error — aborting"; cat "$ERR_LOG"; exit 1
+    if "$@"; then
+        ok "$desc"
+    else
+        fail "$desc"
+        echo "$desc (FATAL)" >> "$ERR_LOG"
+        echo; warn "Fatal error — aborting"; cat "$ERR_LOG"
+        exit 1
     fi
 }
 
 check() { command -v "$1" &>/dev/null; }
 
 # Run a command as the original user (handles sudo ./install.sh case)
+# Sets XDG_RUNTIME_DIR + DBUS_SESSION_BUS_ADDRESS so systemctl --user / gsettings work
 as_user() {
-    if [[ "$EUID" -eq 0 ]] && [[ "$ORIGINAL_USER" != "root" ]]; then
-        sudo -u "$ORIGINAL_USER" -H "$@"
+    local user_uid user_runtime
+    user_uid="$(id -u "$ORIGINAL_USER" 2>/dev/null || echo 0)"
+    user_runtime="/run/user/$user_uid"
+
+    if [[ "$EUID" -eq 0 && "$ORIGINAL_USER" != "root" ]]; then
+        sudo -u "$ORIGINAL_USER" -H \
+            env \
+                PATH="$ORIGINAL_HOME/.local/bin:$PATH" \
+                XDG_RUNTIME_DIR="$user_runtime" \
+                DBUS_SESSION_BUS_ADDRESS="unix:path=$user_runtime/bus" \
+            "$@"
     else
-        "$@"
+        PATH="$ORIGINAL_HOME/.local/bin:$PATH" "$@"
     fi
 }
 
@@ -104,8 +136,8 @@ echo "━━━━━━━━━━━━━━━━━━━━━━━━�
 
 # ── Pre-flight ──
 head "Pre-flight"
-ping -c1 -W2000 archlinux.org &>/dev/null || { fail "No internet"; exit 1; }
-grep -qi "arch" /etc/os-release 2>/dev/null || warn "Not Arch/CachyOS?"
+getent hosts archlinux.org >/dev/null 2>&1 || { fail "No internet (DNS lookup failed)"; exit 1; }
+grep -Eq '^ID=(arch|cachyos)' /etc/os-release 2>/dev/null || warn "Not Arch/CachyOS?"
 ok "Ready"
 
 # ── 1. Pacman packages ──
@@ -119,14 +151,19 @@ if check paru; then
 else
     echo "  paru is needed for AUR packages."
     echo -n "  Install paru? [y/N] "
-    read -r ans
+    read -r ans </dev/tty || ans="n"
     if [[ "$ans" =~ ^[Yy] ]]; then
         require "Install base-devel + git" sudo pacman -S --noconfirm --needed base-devel git
-        d="$(mktemp -d)"
-        git clone --depth=1 https://aur.archlinux.org/paru-bin.git "$d" &>/dev/null
-        (cd "$d" && makepkg -si --noconfirm) &>/dev/null
+        d="$(as_user mktemp -d)"
+        as_user git clone --depth=1 https://aur.archlinux.org/paru-bin.git "$d"
+        if as_user bash -c "cd '$d' && makepkg -si --noconfirm"; then
+            ok "paru installed"
+        else
+            fail "paru install failed (see makepkg output above)"
+            rm -rf "$d"
+            exit 1
+        fi
         rm -rf "$d"
-        ok "paru installed"
     else
         echo "  Install paru manually:"
         echo "    git clone https://aur.archlinux.org/paru.git"
@@ -139,7 +176,7 @@ fi
 # ── 3. AUR packages ──
 head "3/6 — AUR packages"
 if [[ ${#AUR[@]} -gt 0 ]]; then
-    require "Install AUR packages" paru -S --noconfirm --needed "${AUR[@]}"
+    require "Install AUR packages" as_user env PARU_PAGER=cat paru -S --noconfirm --needed "${AUR[@]}"
 else
     ok "No AUR packages to install"
 fi
@@ -148,7 +185,7 @@ fi
 head "4/6 — cachyos-gaming-meta"
 args=()
 for dep in "${GAMING_EXCLUDE[@]}"; do args+=("--assume-installed=${dep}=99.0"); done
-require "Install meta-package" sudo pacman -S --noconfirm "${args[@]}" cachyos-gaming-meta
+require "Install meta-package" sudo pacman -S --noconfirm ${args[@]+"${args[@]}"} cachyos-gaming-meta
 
 # ── 5. chezmoi dotfiles ──
 head "5/6 — Dotfiles"
@@ -161,26 +198,39 @@ else
     require "chezmoi init" as_user chezmoi init --apply "$DOTFILES_REPO"
 fi
 
-# Apply root-owned files (e.g. /etc/greetd/config.toml)
-sudo chezmoi --source-path "$CHEZMOI_SOURCE" apply 2>&1 ||
-    warn "System files not applied. Try: sudo chezmoi --source-path ~/.local/share/chezmoi apply"
+# Apply root-owned files (e.g. /etc/greetd/config.toml) to /, not /root
+sudo chezmoi --source "$CHEZMOI_SOURCE" --destination / apply 2>&1 ||
+    warn "System files not applied. Try: sudo chezmoi --source ~/.local/share/chezmoi --destination / apply"
+
 # Symlink blocky config into /etc/blocky/
 run "Create /etc/blocky directory" sudo mkdir -p /etc/blocky
-run "Symlink blocky.yml" sudo ln -sf "$ORIGINAL_HOME/.config/blocky/blocky.yml" /etc/blocky/blocky.yml
+if [[ -f "$ORIGINAL_HOME/.config/blocky/blocky.yml" ]]; then
+    run "Symlink blocky.yml" sudo ln -sf "$ORIGINAL_HOME/.config/blocky/blocky.yml" /etc/blocky/blocky.yml
+else
+    warn "$ORIGINAL_HOME/.config/blocky/blocky.yml not found (skipping symlink)"
+fi
+
 # Symlink game performance sysctl config into /etc/sysctl.d/
 run "Create /etc/sysctl.d directory" sudo mkdir -p /etc/sysctl.d
-run "Symlink 99-game-performance.conf" sudo ln -sf "$ORIGINAL_HOME/.config/sysctl.d/99-game-performance.conf" /etc/sysctl.d/99-game-performance.conf
-# Persist user local bin directories in .bashrc
+if [[ -f "$ORIGINAL_HOME/.config/sysctl.d/99-game-performance.conf" ]]; then
+    run "Symlink 99-game-performance.conf" sudo ln -sf "$ORIGINAL_HOME/.config/sysctl.d/99-game-performance.conf" /etc/sysctl.d/99-game-performance.conf
+else
+    warn "$ORIGINAL_HOME/.config/sysctl.d/99-game-performance.conf not found (skipping symlink)"
+fi
+
+# Persist user local bin directories in .bashrc (written as the user, not root)
 _bashrc="$ORIGINAL_HOME/.bashrc"
 _path_line='export PATH="$HOME/.local/bin:$PATH"'
 _marker="# path: user local bins"
+if [[ ! -f "$_bashrc" ]]; then
+    as_user touch "$_bashrc" || warn "Cannot create $_bashrc"
+fi
 if [[ -f "$_bashrc" ]] && ! grep -qF "$_marker" "$_bashrc"; then
-    printf '\n%s\n%s\n' "$_marker" "$_path_line" >> "$_bashrc"
+    as_user bash -c "printf '\n%s\n%s\n' '$_marker' '$_path_line' >> '$_bashrc'"
 fi
 
 # Configure Nautilus terminal setting for user
 run "Set Nautilus terminal to Kitty" as_user gsettings set com.github.stunkymonkey.nautilus-open-any-terminal terminal 'kitty'
-
 
 # ── 6. Service management ──
 head "6/6 — Service management"
@@ -190,7 +240,6 @@ head "6/6 — Service management"
 run "Create aria2 config dir" as_user mkdir -p "$ORIGINAL_HOME/.config/aria2"
 run "Touch aria2 session file" as_user touch "$ORIGINAL_HOME/.config/aria2/aria2.session"
 run "Enable aria2" as_user systemctl --user enable --now aria2.service
-run "Enable route-proxy" as_user systemctl --user enable --now proxy.service
 
 # Enable greetd (system-level display manager)
 run "Disable other DMs" bash -c '
@@ -204,7 +253,7 @@ run "Enable greetd" sudo systemctl enable greetd
 UDEV_SRC="$CHEZMOI_SOURCE/etc/udev/rules.d/60-ioschedulers.rules"
 if [[ -f "$UDEV_SRC" ]]; then
     run "Deploy I/O scheduler rules" sudo cp "$UDEV_SRC" /etc/udev/rules.d/
-    run "Reload udev rules" sudo udevadm control --reload-rules && sudo udevadm trigger
+    run "Reload udev rules" bash -c "sudo udevadm control --reload-rules && sudo udevadm trigger"
 else
     warn "60-ioschedulers.rules not found in chezmoi source"
 fi
@@ -216,6 +265,7 @@ if [[ -b "$HDD_DEV" ]]; then
 else
     warn "$HDD_DEV not present (skipping HDD power management)"
 fi
+
 echo; echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 if [[ "$errs" -eq 0 ]]; then
     ok "All steps completed"
