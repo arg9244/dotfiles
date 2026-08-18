@@ -3,7 +3,7 @@ Type=Application
 Name=Seanime
 Comment=The Anime and Manga media server
 Icon=/home/reza/.config/Seanime/seanime-logo.png
-Exec=env HTTP_PROXY=http://127.0.0.1:10880 HTTPS_PROXY=http://127.0.0.1:10880 ALL_PROXY=socks5://127.0.0.1:10880 NO_PROXY=localhost,127.0.0.1,::1 /home/reza/.local/bin/seanime
+Exec=env HTTP_PROXY=http://127.0.0.1:7890 HTTPS_PROXY=http://127.0.0.1:7890 ALL_PROXY=socks5://127.0.0.1:7890 NO_PROXY=localhost,127.0.0.1,::1 /home/reza/.local/bin/seanime
 Terminal=false
 Categories=Network;WebBrowser;
 StartupNotify=true
