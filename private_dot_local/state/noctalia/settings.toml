@@ -211,16 +211,16 @@ directory = "~/Pictures/Wallpapers"
 transition_on_startup = true
 
     [wallpaper.default]
-    path = "/home/reza/Pictures/Wallpapers/wallhaven-ly353y.jpg"
+    path = "/home/reza/Pictures/Wallpapers/wallhaven-3qq8jd.jpg"
 
     [wallpaper.last]
-    path = "/home/reza/Pictures/Wallpapers/wallhaven-ly353y.jpg"
+    path = "/home/reza/Pictures/Wallpapers/wallhaven-3qq8jd.jpg"
 
     [wallpaper.monitors.DP-2]
-    path = "/home/reza/Pictures/Wallpapers/wallhaven-ly353y.jpg"
+    path = "/home/reza/Pictures/Wallpapers/wallhaven-3qq8jd.jpg"
 
     [wallpaper.monitors.HDMI-A-1]
-    path = "/home/reza/Pictures/Wallpapers/wallhaven-ly353y.jpg"
+    path = "/home/reza/Pictures/Wallpapers/wallhaven-3qq8jd.jpg"
 
 [weather]
 refresh_minutes = 60

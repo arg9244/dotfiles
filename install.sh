@@ -53,21 +53,19 @@ export PATH="$ORIGINAL_HOME/.local/bin:$PATH"
 # ══════════════════════════════════════════════════════════════════════════════
 
 PACMAN=(
-    niri noctalia noctalia-greeter lxsession gnome-keyring npm
-    xdg-desktop-portal-gnome baobab file-roller loupe kitty zed
+    niri noctalia noctalia-greeter lxsession gnome-keyring
+    xdg-desktop-portal-gnome baobab file-roller loupe kitty
     gnome-disk-utility bottom chezmoi icoutils lact gvfs-mtp
     mpv mpv-mpris playerctl yt-dlp amberol lutris mangohud uv
     nodejs github-cli icoextract neovim proton-cachyos-native
     ayugram-desktop qbittorrent aria2 blocky rclone chromium
+    adw-gtk-theme nwg-look npm zed paru
 )
 
 AUR=(
     qt6ct-kde mihomo-bin throne-bin ludusavi-bin omp-bin
     moonbit twintaillauncher-bin nautilus-open-any-terminal
 )
-
-# Dependencies to EXCLUDE when installing cachyos-gaming-meta
-GAMING_EXCLUDE=( proton-cachyos-slr wine wine-cachyos-opt)
 
 DOTFILES_REPO="https://github.com/arg9244/dotfiles"
 
@@ -141,54 +139,19 @@ grep -Eq '^ID=(arch|cachyos)' /etc/os-release 2>/dev/null || warn "Not Arch/Cach
 ok "Ready"
 
 # ── 1. Pacman packages ──
-head "1/6 — Pacman packages"
+head "1/4 — Pacman packages"
 require "Update & install packages" sudo pacman -Syu --noconfirm --needed "${PACMAN[@]}"
 
-# ── 2. AUR helper (paru) ──
-head "2/6 — AUR helper (paru)"
-if check paru; then
-    ok "paru already installed"
-else
-    echo "  paru is needed for AUR packages."
-    echo -n "  Install paru? [y/N] "
-    read -r ans </dev/tty || ans="n"
-    if [[ "$ans" =~ ^[Yy] ]]; then
-        require "Install base-devel + git" sudo pacman -S --noconfirm --needed base-devel git
-        d="$(as_user mktemp -d)"
-        as_user git clone --depth=1 https://aur.archlinux.org/paru-bin.git "$d"
-        if as_user bash -c "cd '$d' && makepkg -si --noconfirm"; then
-            ok "paru installed"
-        else
-            fail "paru install failed (see makepkg output above)"
-            rm -rf "$d"
-            exit 1
-        fi
-        rm -rf "$d"
-    else
-        echo "  Install paru manually:"
-        echo "    git clone https://aur.archlinux.org/paru.git"
-        echo "    cd paru && makepkg -si"
-        echo "  Then re-run this script."
-        exit 1
-    fi
-fi
-
-# ── 3. AUR packages ──
-head "3/6 — AUR packages"
+# ── 2. AUR packages ──
+head "2/4 — AUR packages"
 if [[ ${#AUR[@]} -gt 0 ]]; then
     require "Install AUR packages" as_user env PARU_PAGER=cat paru -S --noconfirm --needed "${AUR[@]}"
 else
     ok "No AUR packages to install"
 fi
 
-# ── 4. cachyos-gaming-meta ──
-head "4/6 — cachyos-gaming-meta"
-args=()
-for dep in "${GAMING_EXCLUDE[@]}"; do args+=("--assume-installed=${dep}=99.0"); done
-require "Install meta-package" sudo pacman -S --noconfirm ${args[@]+"${args[@]}"} cachyos-gaming-meta
-
-# ── 5. chezmoi dotfiles ──
-head "5/6 — Dotfiles"
+# ── 3. chezmoi dotfiles ──
+head "3/4 — Dotfiles"
 
 # Init / apply user dotfiles (as the original user, even if running via sudo)
 CHEZMOI_SOURCE="$ORIGINAL_HOME/.local/share/chezmoi"
@@ -198,9 +161,13 @@ else
     require "chezmoi init" as_user chezmoi init --apply "$DOTFILES_REPO"
 fi
 
-# Apply root-owned files (e.g. /etc/greetd/config.toml) to /, not /root
-sudo chezmoi --source "$CHEZMOI_SOURCE" --destination / apply 2>&1 ||
-    warn "System files not applied. Try: sudo chezmoi --source ~/.local/share/chezmoi --destination / apply"
+# Symlink greetd config from user config to system location
+run "Create /etc/greetd directory" sudo mkdir -p /etc/greetd
+if [[ -f "$ORIGINAL_HOME/.config/greetd/config.toml" ]]; then
+    run "Symlink greetd config" sudo ln -sf "$ORIGINAL_HOME/.config/greetd/config.toml" /etc/greetd/config.toml
+else
+    warn "$ORIGINAL_HOME/.config/greetd/config.toml not found (skipping symlink)"
+fi
 
 # Symlink blocky config into /etc/blocky/
 run "Create /etc/blocky directory" sudo mkdir -p /etc/blocky
@@ -231,9 +198,10 @@ fi
 
 # Configure Nautilus terminal setting for user
 run "Set Nautilus terminal to Kitty" as_user gsettings set com.github.stunkymonkey.nautilus-open-any-terminal terminal 'kitty'
+run "Set GTK theme to adw-gtk3" as_user gsettings set org.gnome.desktop.interface gtk-theme 'adw-gtk3'
 
-# ── 6. Service management ──
-head "6/6 — Service management"
+# ── 4. Service management ──
+head "4/4 — Service management"
 
 # Enable user-level services (managed by chezmoi in dot_config/systemd/user/)
 # Ensure aria2 session file and config directory exist before enabling the service

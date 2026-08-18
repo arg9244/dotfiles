@@ -4,7 +4,7 @@
 # ==============================================================================
 # Game Information
 export GAME_NAME="Punishing Gray Raven"
-export GAME_EXE="/media/C/Games/Punishing Gray Raven/Punishing Gray Raven/PGR.exe"
+export GAME_EXE="/media/C/Games/Punishing Gray Raven/PGR.exe"
 export WINEPREFIX=""
 # https://umu.openwinecomponents.org
 export GAMEID=""

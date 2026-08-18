@@ -4,7 +4,7 @@
 # ==============================================================================
 # Game Information
 export GAME_NAME="Wuthering Waves"
-export GAME_EXE="/media/C/Games/Wuthering Waves/Wuthering Waves/Wuthering Waves.exe"
+export GAME_EXE="/media/C/Games/Wuthering Waves/Wuthering Waves.exe"
 export WINEPREFIX=""
 export GAMEID="umu-3513350"
 export STORE="none"
@@ -20,8 +20,9 @@ export SteamOS=1
 export DXVK_FRAME_RATE="160"                 # 5 FPS buffer inside 165Hz VRR window
 export PROTON_USE_OPTISCALER="1"
 export PROTON_FSR4_INDICATOR="0"
-export PROTON_FSR4_UPGRADE="0"
-export PROTON_XESS_UPGRADE="0"
+export PROTON_FSR4_UPGRADE="1"
+export PROTON_XESS_UPGRADE="1"
+export PROTON_DLSS_UPGRADE="1"
 export AMD_VULKAN_ICD="RADV"
 export MESA_SHADER_CACHE_MAX_SIZE="12G"
 export PROTON_LOCAL_SHADER_CACHE="1"

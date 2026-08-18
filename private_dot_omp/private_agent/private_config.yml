@@ -1,57 +1,53 @@
-providers: 
-  webSearchOrder: 
+providers:
+  webSearchOrder:
     []
-  memoryModel: llama3.2:3b
-  tts: local
-  tinyModel: lfm2-350m
-  tinyModelDevice: auto
-modelRoles: 
+modelRoles:
   default: opencode-zen/laguna-s-2.1-free
 symbolPreset: nerd
-theme: 
+theme:
   dark: titanium
 setupVersion: 1
 defaultThinkingLevel: auto
-statusLine: 
+statusLine:
   preset: default
   transparent: true
-tui: 
+tui:
   textSizing: true
-display: 
+display:
   showTokenUsage: true
   cacheMissMarker: true
-task: 
+task:
   showResolvedModelBadge: true
-  agentAdvisor: 
+  agentAdvisor:
     task: "on"
-images: 
+images:
   blockImages: true
 steeringMode: one-at-a-time
 followUpMode: one-at-a-time
 interruptMode: immediate
-memory: 
+memory:
   backend: local
-autolearn: 
+autolearn:
   enabled: true
-github: 
+github:
   enabled: true
 autoResume: true
-tts: 
+tts:
   localModel: kokoro
   localVoice: bf_emma
-speech: 
+speech:
   enabled: false
   mode: assistant
   enhanced: true
   voice: bf_emma
-secrets: 
+secrets:
   enabled: true
-advisor: 
+advisor:
   enabled: false
   syncBacklog: "1"
-error: 
+error:
   notify: "on"
-features: 
+features:
   unexpectedStopDetection: true
-speechgen: 
+speechgen:
   enabled: true
