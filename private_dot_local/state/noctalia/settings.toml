@@ -204,8 +204,7 @@ source = "community"
 wallpaper_scheme = "m3-content"
 
     [theme.templates]
-    builtin_ids = [ "alacritty", "gtk3", "gtk4", "kcolorscheme", "niri", "qt" ]
-    community_ids = [ "rio" ]
+    builtin_ids = [ "gtk3", "gtk4", "kcolorscheme", "kitty", "niri", "qt" ]
 
 [wallpaper]
 directory = "~/Pictures/Wallpapers"

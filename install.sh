@@ -53,16 +53,16 @@ export PATH="$ORIGINAL_HOME/.local/bin:$PATH"
 # ══════════════════════════════════════════════════════════════════════════════
 
 PACMAN=(
-    niri noctalia noctalia-greeter lxsession gnome-keyring
-    xdg-desktop-portal-gnome baobab file-roller loupe kitty
+    niri noctalia noctalia-greeter lxsession gnome-keyring npm
+    xdg-desktop-portal-gnome baobab file-roller loupe kitty zed
     gnome-disk-utility bottom chezmoi icoutils lact gvfs-mtp
-    mpv mpv-mpris playerctl yt-dlp amberol lutris mangohud
-    nodejs npm bun uv zed github-cli python-icoextract neovim
+    mpv mpv-mpris playerctl yt-dlp amberol lutris mangohud uv
+    nodejs github-cli icoextract neovim proton-cachyos-native
     ayugram-desktop qbittorrent aria2 blocky rclone chromium
 )
 
 AUR=(
-    qt6ct-kde mihomo-bin throne-bin ludusavi-bin
+    qt6ct-kde mihomo-bin throne-bin ludusavi-bin omp-bin
     moonbit twintaillauncher-bin nautilus-open-any-terminal
 )
 
