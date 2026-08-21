@@ -4,7 +4,7 @@
 # ==============================================================================
 # Game Information
 export GAME_NAME="Brown Dust II"
-export GAME_EXE="/media/C/Games/Brown Dust 2/C/Browndust2/Browndust2/BrownDust2_10000002/BrownDust II.exe"
+export GAME_EXE="/home/reza/Games/brown-dust-ii/drive_c/Neowiz/Browndust2/BrownDust2_10000002/BrownDust II.exe"
 export WINEPREFIX=""
 # https://umu.openwinecomponents.org
 export GAMEID=""

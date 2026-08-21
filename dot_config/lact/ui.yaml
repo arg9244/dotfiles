@@ -5,5 +5,5 @@ gpus: {}
 theme: automatic
 color_scheme: Auto
 window_size:
-  width: 960
-  height: 1046
+  width: 1280
+  height: 1406

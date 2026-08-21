@@ -64,7 +64,7 @@ PACMAN=(
 
 AUR=(
     qt6ct-kde mihomo-bin throne-bin ludusavi-bin omp-bin
-    moonbit twintaillauncher-bin nautilus-open-any-terminal
+    nautilus-open-any-terminal
 )
 
 DOTFILES_REPO="https://github.com/arg9244/dotfiles"
