@@ -1,0 +1,12 @@
+[Unit]
+Description=CSR Counterfeit Bluetooth Adapter Fix
+After=bluetooth.service
+PartOf=bluetooth.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/fix-csr-bluetooth.sh
+RemainAfterExit=yes
+
+[Install]
+WantedBy=bluetooth.service

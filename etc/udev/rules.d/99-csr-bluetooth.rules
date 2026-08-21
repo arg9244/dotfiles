@@ -1,0 +1,1 @@
+ACTION=="add", SUBSYSTEM=="bluetooth", KERNEL=="hci0", RUN+="/usr/bin/systemd-run --no-block /usr/local/bin/fix-csr-bluetooth.sh"

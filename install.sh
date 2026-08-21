@@ -225,6 +225,24 @@ if [[ -f "$UDEV_SRC" ]]; then
 else
     warn "60-ioschedulers.rules not found in chezmoi source"
 fi
+- # --------------------------------------------------------------------------
+- # Deploy Bluetooth fix for counterfeit CSR adapter (0a12:0001)
+- # --------------------------------------------------------------------------
+- BT_SRC="$CHEZMOI_SOURCE/etc/bluetooth"
+- if [[ -f "$BT_SRC/main.conf" && -f "$BT_SRC/input.conf" ]]; then
+-     echo ":: Deploying Counterfeit CSR Bluetooth Fix..."
+-     run "Deploy bluetooth main.conf"   sudo cp "$BT_SRC/main.conf" /etc/bluetooth/
+-     run "Deploy bluetooth input.conf"  sudo cp "$BT_SRC/input.conf" /etc/bluetooth/
+-     run "Deploy bluetooth modprobe"    sudo cp "$CHEZMOI_SOURCE/etc/modprobe.d/bluetooth.conf" /etc/modprobe.d/
+-     run "Deploy fix script"            sudo cp "$CHEZMOI_SOURCE/usr/local/bin/fix-csr-bluetooth.sh" /usr/local/bin/
+-     run "Set script permissions"       sudo chmod 755 /usr/local/bin/fix-csr-bluetooth.sh
+-     run "Deploy CSR udev rule"         sudo cp "$CHEZMOI_SOURCE/etc/udev/rules.d/99-csr-bluetooth.rules" /etc/udev/rules.d/
+-     run "Deploy systemd service"       sudo cp "$CHEZMOI_SOURCE/etc/systemd/system/csr-bluetooth-fix.service" /etc/systemd/system/
+-     run "Reload systemd daemon"        sudo systemctl daemon-reload
+-     run "Reload udev rules"            bash -c "sudo udevadm control --reload-rules && sudo udevadm trigger"
+-     run "Restart bluetooth"            sudo systemctl restart bluetooth
+-     run "Enable CSR fix service"       sudo systemctl enable --now csr-bluetooth-fix.service
+- fi
 
 # HDD device variable – adjust if your drive is not /dev/sda
 HDD_DEV="/dev/sda"
