@@ -16,3 +16,7 @@ auto = true
 
 [system.monitor]
 gpu_poll_seconds = 3
+
+[brightness]
+# Enable DDC/CI for external monitor brightness control
+enable_ddcutil = true

@@ -59,12 +59,12 @@ PACMAN=(
     mpv mpv-mpris playerctl yt-dlp amberol lutris mangohud uv
     nodejs github-cli icoextract neovim proton-cachyos-native
     ayugram-desktop qbittorrent aria2 blocky rclone chromium
-    adw-gtk-theme nwg-look npm zed paru
+    adw-gtk-theme nwg-look npm zed paru bleachbit python-mutagen
 )
 
 AUR=(
     qt6ct-kde mihomo-bin throne-bin ludusavi-bin omp-bin
-    nautilus-open-any-terminal
+    nautilus-open-any-terminal rar
 )
 
 DOTFILES_REPO="https://github.com/arg9244/dotfiles"
