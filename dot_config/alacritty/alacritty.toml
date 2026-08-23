@@ -1,6 +1,5 @@
 [general]
 import = [
-    "~/.config/alacritty/themes/noctalia.toml"
 ]
 live_config_reload = true
 

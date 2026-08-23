@@ -1,0 +1,25 @@
+[Default Applications]
+text/x-shellscript=dev.zed.Zed.desktop
+x-scheme-handler/tg=userapp-AyuGram Desktop-GT4IU3.desktop
+x-scheme-handler/tonsite=userapp-AyuGram Desktop-J4IIU3.desktop
+x-scheme-handler/throne=throne-url-handler.desktop
+application/yaml=dev.zed.Zed.desktop
+application/json=dev.zed.Zed.desktop
+application/x-desktop=dev.zed.Zed.desktop
+text/plain=dev.zed.Zed.desktop
+text/x-python3=dev.zed.Zed.desktop
+image/jpeg=org.gnome.Loupe.desktop
+inode/directory=org.gnome.Nautilus.desktop
+text/css=dev.zed.Zed.desktop
+
+[Added Associations]
+text/x-shellscript=dev.zed.Zed.desktop;
+x-scheme-handler/tg=userapp-AyuGram Desktop-GT4IU3.desktop;
+x-scheme-handler/tonsite=userapp-AyuGram Desktop-J4IIU3.desktop;
+application/yaml=dev.zed.Zed.desktop;
+application/json=dev.zed.Zed.desktop;
+application/x-desktop=dev.zed.Zed.desktop;
+text/plain=dev.zed.Zed.desktop;
+text/x-python3=dev.zed.Zed.desktop;
+image/jpeg=org.gnome.Loupe.desktop;
+text/css=dev.zed.Zed.desktop;

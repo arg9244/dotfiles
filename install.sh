@@ -54,17 +54,19 @@ export PATH="$ORIGINAL_HOME/.local/bin:$PATH"
 
 PACMAN=(
     niri noctalia noctalia-greeter lxsession gnome-keyring
-    xdg-desktop-portal-gnome baobab file-roller loupe kitty
-    gnome-disk-utility bottom chezmoi icoutils lact gvfs-mtp
-    mpv mpv-mpris playerctl yt-dlp amberol lutris mangohud uv
-    nodejs github-cli icoextract neovim proton-cachyos-native
-    ayugram-desktop qbittorrent aria2 blocky rclone chromium
-    adw-gtk-theme nwg-look npm zed paru bleachbit python-mutagen
+    xdg-desktop-portal-gnome  loupe kitty bottom chezmoi yazi
+    icoutils lact gvfs-mtp zed paru python-mutagen nwg-look
+    mpv mpv-mpris playerctl yt-dlp amberol mangohud chromium
+    github-cli icoextract proton-cachyos-native winetricks
+    ayugram-desktop qbittorrent aria2 blocky adw-gtk-theme
+
+    baobab file-roller gnome-disk-utility lutris uv nodejs neovim
+    rclone bleachbit
 )
 
 AUR=(
-    qt6ct-kde mihomo-bin throne-bin ludusavi-bin omp-bin
-    nautilus-open-any-terminal rar
+    qt6ct-kde mihomo-bin throne-bin omp-bin moonbit
+    nautilus-open-any-terminal rar mcomix-rs-bin
 )
 
 DOTFILES_REPO="https://github.com/arg9244/dotfiles"

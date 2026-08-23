@@ -1191,6 +1191,90 @@ class YtdlpAppWindow(Gtk.ApplicationWindow):
         return False
 
 
+# ─── Self-Install (.desktop launcher, terminal runs only) ────────────────────
+
+_DESKTOP_ID = "io.github.ytdlp_gui.desktop"
+_ICON_NAME = "ytdlp-gtk"
+
+_ICON_SVG = """<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <!-- Play button with download arrow -->
+  <rect x="10" y="18" width="108" height="76" rx="20" fill="#cc241d"/>
+  <polygon points="52,38 52,74 84,56" fill="#ffffff"/>
+  <rect x="56" y="98" width="16" height="16" rx="3" fill="#ebdbb2"/>
+  <polygon points="46,110 82,110 64,126" fill="#ebdbb2"/>
+</svg>
+"""
+
+
+def _is_terminal_run():
+    """True only when launched interactively (not via .desktop spawn)."""
+    try:
+        return bool((sys.stdout and sys.stdout.isatty()) or (sys.stderr and sys.stderr.isatty()))
+    except Exception:
+        return False
+
+
+def ensure_self_install():
+    """Install menu .desktop + generated SVG icon. No-op unless run from a TTY."""
+    if not _is_terminal_run():
+        return
+    try:
+        apps_dir = os.path.expanduser("~/.local/share/applications")
+        icon_dir = os.path.expanduser("~/.local/share/icons/hicolor/scalable/apps")
+        os.makedirs(apps_dir, exist_ok=True)
+        os.makedirs(icon_dir, exist_ok=True)
+
+        icon_path = os.path.join(icon_dir, f"{_ICON_NAME}.svg")
+        desktop_path = os.path.join(apps_dir, _DESKTOP_ID)
+        exec_line = f'"{sys.executable}" "{os.path.abspath(__file__)}"'
+
+        entry = (
+            "[Desktop Entry]\n"
+            "Type=Application\n"
+            "Version=1.0\n"
+            "Name=yt-dlp GUI\n"
+            "GenericName=Video Downloader\n"
+            "Comment=Download videos/audio via yt-dlp with format picking, proxy and aria2 acceleration\n"
+            f"Exec={exec_line}\n"
+            f"Icon={_ICON_NAME}\n"
+            "Terminal=false\n"
+            "Categories=Network;GTK;\n"
+            "Keywords=youtube;download;video;audio;yt-dlp;\n"
+            f"StartupWMClass=io.github.ytdlp_gui\n"
+        )
+
+        changed = False
+        if not os.path.exists(icon_path):
+            with open(icon_path, "w") as f:
+                f.write(_ICON_SVG)
+            changed = True
+
+        current = ""
+        if os.path.exists(desktop_path):
+            with open(desktop_path, "r") as f:
+                current = f.read()
+        if current != entry:
+            with open(desktop_path, "w") as f:
+                f.write(entry)
+            changed = True
+
+        if changed:
+            subprocess.run(
+                ["update-desktop-database", "-q", apps_dir],
+                capture_output=True, timeout=10,
+            )
+            subprocess.run(
+                ["gtk-update-icon-cache", "-q", "-f",
+                 os.path.expanduser("~/.local/share/icons/hicolor")],
+                capture_output=True, timeout=10,
+            )
+            print(f"[install] Menu entry ready: {desktop_path}")
+    except Exception as e:
+        # Cosmetic install must never prevent the app from launching.
+        print(f"[install] skipped ({e})", file=sys.stderr)
+
+
 # ─── Application Main ────────────────────────────────────────────────────────
 
 class YtdlpApplication(Gtk.Application):
@@ -1199,6 +1283,7 @@ class YtdlpApplication(Gtk.Application):
             application_id="io.github.ytdlp_gui",
             flags=Gio.ApplicationFlags.FLAGS_NONE,
         )
+
 
     def do_startup(self):
         Gtk.Application.do_startup(self)
@@ -1223,6 +1308,7 @@ def main():
     if "--version" in sys.argv:
         print(f"ytdlp-gtk {__version__}")
         return 0
+    ensure_self_install()
     app = YtdlpApplication()
     return app.run(sys.argv)
 

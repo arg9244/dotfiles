@@ -44,6 +44,41 @@
         "capabilities": []
       },
       "dev": false
+    },
+    "ini": {
+      "manifest": {
+        "id": "ini",
+        "name": "ini",
+        "version": "0.0.9",
+        "schema_version": 1,
+        "description": "Support for ini and ini like files (ini, conf, cfg) and systemd unit files (automount, mount, path, scope, service, slice, socket, swap, target, timer)",
+        "repository": "https://github.com/bajrangCoder/zed-ini",
+        "authors": [
+          "Raunak Raj <bajrangcoders@gmail.com>"
+        ],
+        "lib": {
+          "kind": null,
+          "version": null
+        },
+        "themes": [],
+        "icon_themes": [],
+        "languages": [
+          "languages/ini"
+        ],
+        "grammars": {
+          "ini": {
+            "repository": "https://github.com/justinmk/tree-sitter-ini",
+            "rev": "e4018b5176132b4f3c5d6e61cea383f42288d0f5",
+            "path": null
+          }
+        },
+        "language_servers": {},
+        "context_servers": {},
+        "slash_commands": {},
+        "snippets": null,
+        "capabilities": []
+      },
+      "dev": false
     }
   },
   "themes": {},
@@ -63,6 +98,39 @@
       },
       "hidden": false,
       "grammar": "html"
+    },
+    "ini": {
+      "extension": "ini",
+      "path": "languages/ini",
+      "matcher": {
+        "path_suffixes": [
+          "ini",
+          "inf",
+          "conf",
+          "cfg",
+          "automount",
+          "mount",
+          "path",
+          "scope",
+          "service",
+          "slice",
+          "socket",
+          "swap",
+          "target",
+          "timer",
+          "container",
+          "volume",
+          "network",
+          "kube",
+          "image",
+          "build",
+          "pod"
+        ],
+        "first_line_pattern": null,
+        "modeline_aliases": []
+      },
+      "hidden": false,
+      "grammar": "ini"
     }
   }
 }
