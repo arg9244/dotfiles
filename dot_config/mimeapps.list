@@ -11,6 +11,9 @@ text/x-python3=dev.zed.Zed.desktop
 image/jpeg=org.gnome.Loupe.desktop
 inode/directory=org.gnome.Nautilus.desktop
 text/css=dev.zed.Zed.desktop
+application/x-ms-dos-executable=io.github.winux.desktop
+application/x-msdownload=io.github.winux.desktop
+application/vnd.microsoft.portable-executable=wine.desktop
 
 [Added Associations]
 text/x-shellscript=dev.zed.Zed.desktop;
@@ -23,3 +26,4 @@ text/plain=dev.zed.Zed.desktop;
 text/x-python3=dev.zed.Zed.desktop;
 image/jpeg=org.gnome.Loupe.desktop;
 text/css=dev.zed.Zed.desktop;
+application/vnd.microsoft.portable-executable=wine.desktop;

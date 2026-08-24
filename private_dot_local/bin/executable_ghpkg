@@ -1,0 +1,309 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# ghpkg — update GitHub-release packages into ~/.local/bin and ~/Apps
+#
+# All package data lives in JSON under $GHPKG_CONFIG_DIR (default
+# ~/.config/ghpkg):
+#
+#   packages.json   the manifest:
+#                    name        unique package id
+#                    repo        owner/repo on GitHub
+#                    assets      array of globs matched against release
+#                                asset names of the latest release
+#                    files       array of archive members to install flat
+#                                into dest; an entry "member=newname" is
+#                                installed under newname.  ["."] = install
+#                                the ENTIRE tree (a single wrapper dir at
+#                                the root is stripped); [] = raw assets
+#                                installed as-is under their asset names.
+#                     dest        "" => $bin_dir (~/.local/bin)
+#                                 "apps/<dir>" => $apps_dir/<dir> (~/Apps),
+#                                 updated in place WITHOUT wiping, so app
+#                                 state kept inside the dir survives.
+#                     prerelease  true => track latest pre-release
+#
+#   state.json      written by ghpkg after each install/update:
+#                     <name>.version      installed release tag
+#                     <name>.updated_at   ISO-8601 timestamp
+#                     <name>.assets       { "<asset>": {sha256, size} }
+#
+# Commands:
+#   ghpkg            update every outdated package
+#   ghpkg check      report versions only, change nothing
+#   ghpkg install    (re)install every package, ignoring version stamps
+#   ghpkg update N   update only the named package(s)
+#   ghpkg install N  force-reinstall the named package(s)
+#   ghpkg list       print the manifest
+
+config_dir="${GHPKG_CONFIG_DIR:-$HOME/.config/ghpkg}"
+packages_file="${GHPKG_PACKAGES:-$config_dir/packages.json}"
+state_file="${GHPKG_STATE_FILE:-$config_dir/state.json}"
+
+bin_dir="${GHPKG_BIN_DIR:-$HOME/.local/bin}"
+apps_dir="${GHPKG_APPS_DIR:-$HOME/Apps}"
+
+die() { echo "ghpkg: $*" >&2; exit 1; }
+
+[[ -f "$packages_file" ]] || die "manifest not found: $packages_file"
+jq -e . "$packages_file" >/dev/null 2>&1 || die "invalid JSON in: $packages_file"
+
+usage() {
+  cat <<'EOF'
+ghpkg — update GitHub-release packages in ~/.local/bin and ~/Apps
+
+usage: ghpkg [command] [package...]
+
+commands:
+  update [name...]   update outdated packages (default: all)
+  check [name...]    report versions only, change nothing
+  install [name...]  (re)install packages, ignoring version stamps
+  list               print the manifest
+
+Data files live in ~/.config/ghpkg:
+  packages.json   package manifest (edit to add/remove packages)
+  state.json      installed versions + asset sha256 checksums
+EOF
+}
+
+# ── Manifest access ──────────────────────────────────────────────────────────
+
+get_pkg() {  # name -> US(\x1f)-separated: repo US assets US files US dest US prerelease
+  jq -er --arg n "$1" '
+    (first(.packages[] | select(.name == $n)) // empty)
+    | [.repo,
+       (.assets | join(" ")),
+       ((.files // []) | join(" ")),
+       (.dest // ""),
+       ((.prerelease == true) | tostring)]
+    | join("\u001f")' "$packages_file"
+}
+
+all_names() {
+  jq -r '.packages[].name' "$packages_file"
+}
+
+valid_pkg() {
+  jq -e --arg n "$1" 'any(.packages[]; .name == $n)' "$packages_file" >/dev/null
+}
+
+# ── State access ─────────────────────────────────────────────────────────────
+
+installed_version() {  # name -> version or ""
+  [[ -s "$state_file" ]] || return 0
+  jq -r --arg n "$1" '.[$n].version // empty' "$state_file" 2>/dev/null || return 0
+}
+
+save_state() {  # name version sums_json(object keyed by asset name)
+  local cur="{}"
+  [[ -s "$state_file" ]] && cur="$(cat "$state_file")"
+  jq -e . <<<"$cur" >/dev/null 2>&1 || cur="{}"
+
+  local next
+  next="$(jq --arg n "$1" --arg v "$2" --argjson a "$3" \
+    '.[$n] = {version: $v, updated_at: (now | todateiso8601), assets: $a}' \
+    <<<"$cur")"
+
+  mkdir -p "$(dirname "$state_file")"
+  printf '%s\n' "$next" > "$state_file.tmp"
+  mv "$state_file.tmp" "$state_file"
+}
+
+# ── Release resolution ───────────────────────────────────────────────────────
+
+latest_tag() {  # owner/repo prerelease(bool) -> tag of the latest release
+  local repo=$1 mode=${2:-false}
+  if [[ $mode == true ]]; then
+    local tag
+    tag="$(curl -fsSL "https://api.github.com/repos/$repo/releases?per_page=100" \
+      | jq -r '[.[] | select(.prerelease == true)][0].tag_name // empty')"
+    [[ -n "$tag" ]] || return 1
+    echo "$tag"
+  else
+    local url
+    url="$(curl -fsSL -o /dev/null -w '%{url_effective}' "https://github.com/$repo/releases/latest")"
+    echo "${url##*/}"
+  fi
+}
+
+# ── Commands ─────────────────────────────────────────────────────────────────
+
+check_pkg() {
+  local line repo assets files dest prerelease
+  line="$(get_pkg "$1")" || die "unknown package: $1"
+  IFS=$'\x1f' read -r repo assets files dest prerelease <<<"$line"
+  local latest installed=""
+  installed="$(installed_version "$1")"
+  latest="$(latest_tag "$repo" "$prerelease")" || die "cannot resolve latest release for $1"
+  local status="not installed"
+  [[ -n "$installed" ]] && status="update available"
+  [[ "$installed" == "$latest" ]] && status="up to date"
+  printf '  %-10s latest=%-14s installed=%-14s %-26s %s\n' \
+    "$1" "$latest" "${installed:--}" "${dest:-bin}" "$status"
+}
+
+install_pkg() {
+  local name=$1 force=0
+  [[ ${2:-} == force ]] && force=1
+  local line repo assets files dest prerelease
+  line="$(get_pkg "$name")" || die "unknown package: $name"
+  IFS=$'\x1f' read -r repo assets files dest prerelease <<<"$line"
+  [[ -n "$repo" && -n "$assets" ]] || die "bad manifest entry for: $name"
+
+  # resolve destination directory
+  local dest_dir=$bin_dir tree=0
+  if [[ -n "$dest" ]]; then
+    [[ "$dest" == apps/* ]] || die "unsupported dest '$dest' for: $name"
+    dest_dir="$apps_dir/${dest#apps/}"
+  fi
+  [[ "$files" == "." ]] && tree=1
+
+  # installed targets = archive members, or exact raw asset names.
+  # An entry may rename on install: "member=newname" (raw: "asset=newname").
+  local -a targets=() outs=()
+  local glob t2
+  if ((tree)); then
+    :
+  elif [[ -n "$files" ]]; then
+    read -r -a targets <<< "$files"
+    for t2 in "${targets[@]}"; do
+      [[ "$t2" == *=* ]] && outs+=("${t2#*=}") || outs+=("$t2")
+    done
+  else
+    for glob in $assets; do
+      case "$glob" in *[*?[]*) ;; *) targets+=("$glob") ;; esac
+    done
+    for t2 in "${targets[@]}"; do outs+=("$t2"); done
+  fi
+
+  local latest installed=""
+  installed="$(installed_version "$name")"
+  latest="$(latest_tag "$repo" "$prerelease")" || die "cannot resolve latest release for $name"
+
+  if ((!force)); then
+    local i ok=1
+    if ((tree)); then
+      [[ -d "$dest_dir" ]] || ok=0
+    else
+      for i in "${!outs[@]}"; do [[ -f "$dest_dir/${outs[$i]}" ]] || ok=0; done
+    fi
+    if [[ -n "$installed" && "$installed" == "$latest" && $ok == 1 ]]; then
+      echo "  $name: up to date ($latest)"
+      return 0
+    fi
+  fi
+
+  if [[ -n "$installed" ]]; then
+    echo "  $name: updating $installed -> $latest"
+  else
+    echo "  $name: installing $latest"
+  fi
+  # resolve asset names against the latest release
+  local json aname matched=()
+  json="$(curl -fsSL "https://api.github.com/repos/$repo/releases/tags/$latest")"
+  while read -r aname; do
+    for glob in $assets; do
+      [[ "$aname" == $glob ]] && matched+=("$aname")
+    done
+  done < <(jq -r '.assets[].name' <<<"$json")
+  ((${#matched[@]})) || die "no asset of $name matches: $assets"
+
+  local tmp url dl
+  tmp="$(mktemp -d)"
+  trap 'rm -rf "${tmp:-}"' EXIT
+
+  # download everything, recording sha256 + size per asset
+  local sums='{}' hash size
+  for aname in "${matched[@]}"; do
+    url="https://github.com/$repo/releases/download/$latest/$aname"
+    dl="$tmp/$aname"
+    curl -fsSL -o "$dl" "$url"
+    hash="$(sha256sum "$dl" | cut -d' ' -f1)"
+    size="$(stat -c%s "$dl")"
+    sums="$(jq -c --arg an "$aname" --arg h "$hash" --arg s "$size" \
+      '. + {($an): {sha256: $h, size: ($s | tonumber)}}' <<<"$sums")"
+    case "$aname" in
+      *.tar.gz|*.tgz)   tar -xzf "$dl" -C "$tmp" ;;
+      *.tar.xz|*.txz)   tar -xJf "$dl" -C "$tmp" ;;
+      *.tar.bz2|*.tbz2) tar -xjf "$dl" -C "$tmp" ;;
+      *.tar.zst|*.tzst) tar --zstd -xf "$dl" -C "$tmp" ;;
+      *.tar)            tar -xf "$dl" -C "$tmp" ;;
+      *.zip)            unzip -qo "$dl" -d "$tmp" ;;
+      *)                : ;;  # raw asset — installed as-is below
+    esac
+    echo "    downloaded $aname (sha256 ${hash:0:12}…, $(numfmt --to=iec --suffix=B "$size"))"
+  done
+
+  mkdir -p "$dest_dir"
+
+  if ((tree)); then
+    # whole-tree mode: strip one wrapper dir if the extraction root has exactly one
+    local src_root="$tmp"
+    local -a tops=("$tmp"/*)
+    if ((${#tops[@]} == 1)) && [[ -d "${tops[0]}" ]]; then
+      src_root="${tops[0]}"
+    fi
+    cp -a "$src_root"/. "$dest_dir"/
+    echo "    installed tree -> $dest_dir"
+  else
+    local i src member out
+    for i in "${!targets[@]}"; do
+      member="${targets[$i]%%=*}"
+      out="${outs[$i]}"
+      if [[ -n "$files" ]]; then
+        src="$(find "$tmp" -type f -name "$member" -print -quit)"
+        [[ -n "$src" ]] || die "member '$member' not found in $name archive"
+      else
+        src="$tmp/$member"
+        [[ -f "$src" ]] || die "asset '$member' missing for $name"
+      fi
+      install -m755 -D "$src" "$dest_dir/$out" || die "failed to install $out"
+      echo "    installed $dest_dir/$out"
+    done
+  fi
+
+  save_state "$name" "$latest" "$sums"
+  rm -rf "$tmp"
+  trap - EXIT
+}
+
+main() {
+  local cmd="${1:-update}"
+  shift || true
+  local n
+  case "$cmd" in
+    update)
+      if (($#)); then
+        for n in "$@"; do valid_pkg "$n" || die "unknown package: $n"; install_pkg "$n"; done
+      else
+        for n in $(all_names); do install_pkg "$n"; done
+      fi
+      ;;
+    check)
+      if (($#)); then
+        for n in "$@"; do check_pkg "$n"; done
+      else
+        for n in $(all_names); do check_pkg "$n"; done
+      fi
+      ;;
+    install)
+      if (($#)); then
+        for n in "$@"; do valid_pkg "$n" || die "unknown package: $n"; install_pkg "$n" force; done
+      else
+        for n in $(all_names); do install_pkg "$n" force; done
+      fi
+      ;;
+    list)
+      jq -r '.packages[]
+        | [.name, .repo, (.assets | join(" ")), ((.files // []) | join(" ")), (.dest // ""), ((.prerelease == true) | tostring)]
+        | join("\u001f")' "$packages_file" | while IFS=$'\x1f' read -r n repo assets files dest pre; do
+          printf '  %-10s %-34s assets=[%s] files=[%s] dest=%-28s prerelease=%s\n' \
+            "$n" "$repo" "$assets" "${files:--}" "${dest:-bin}" "$pre"
+        done
+      ;;
+    -h|--help|help) usage ;;
+    *) usage >&2; exit 1 ;;
+  esac
+}
+
+main "$@"

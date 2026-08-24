@@ -1,0 +1,99 @@
+{
+  "packages": [
+    {
+      "name": "aether",
+      "repo": "CluvexStudio/Aether",
+      "assets": [
+        "aether-linux-x86_64.tar.gz"
+      ],
+      "files": [
+        "aether"
+      ],
+      "dest": "",
+      "prerelease": false
+    },
+    {
+      "name": "geo",
+      "repo": "Chocolate4U/Iran-v2ray-rules",
+      "assets": [
+        "geoip.dat",
+        "geosite.dat"
+      ],
+      "files": [],
+      "dest": "",
+      "prerelease": false
+    },
+    {
+      "name": "seanime",
+      "repo": "5rahim/seanime",
+      "assets": [
+        "*Linux_x86_64.tar.gz"
+      ],
+      "files": [
+        "seanime"
+      ],
+      "dest": "",
+      "prerelease": false
+    },
+    {
+      "name": "xray",
+      "repo": "xtls/xray-core",
+      "assets": [
+        "Xray-linux-64.zip"
+      ],
+      "files": [
+        "xray"
+      ],
+      "dest": "",
+      "prerelease": true
+    },
+    {
+      "name": "fluffychat",
+      "repo": "krille-chan/fluffychat",
+      "assets": [
+        "fluffychat-linux-x64.tar.gz"
+      ],
+      "files": [
+        "."
+      ],
+      "dest": "apps/fluffychat-linux-x64",
+      "prerelease": false
+    },
+    {
+      "name": "hiddify",
+      "repo": "hiddify/hiddify-app",
+      "assets": [
+        "Hiddify-Linux-x64-AppImage.tar.gz"
+      ],
+      "files": [
+        "Hiddify.AppImage"
+      ],
+      "dest": "apps/hiddify-linux-appimage",
+      "prerelease": false
+    },
+    {
+      "name": "pattn",
+      "repo": "patterniha/PattN",
+      "assets": [
+        "PattN-linux-64.zip"
+      ],
+      "files": [
+        "."
+      ],
+      "dest": "apps/PattN-linux-64",
+      "prerelease": false
+    },
+    {
+      "name": "rdnbenet",
+      "repo": "mirarr-app/network-checker",
+      "assets": [
+        "rdnbenet-linux-x64.zip"
+      ],
+      "files": [
+        "."
+      ],
+      "dest": "apps/rdnbenet-linux-x64",
+      "prerelease": false
+    }
+  ]
+}
