@@ -18,10 +18,10 @@ export PROTON_VERB="run"
 export SteamOS=1
 
 # Graphics & Performance
-export DXVK_FRAME_RATE="160"
+export DXVK_FRAME_RATE="90"
 export PROTON_USE_OPTISCALER="0"
 export PROTON_FSR4_INDICATOR="0"
-export PROTON_FSR4_UPGRADE="0"
+export PROTON_FSR4_UPGRADE="1"
 export PROTON_XESS_UPGRADE="0"
 export PROTON_DLSS_UPGRADE="0"
 export AMD_VULKAN_ICD="RADV"
