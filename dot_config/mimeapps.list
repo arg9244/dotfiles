@@ -13,7 +13,7 @@ inode/directory=org.gnome.Nautilus.desktop
 text/css=dev.zed.Zed.desktop
 application/x-ms-dos-executable=io.github.winux.desktop
 application/x-msdownload=io.github.winux.desktop
-application/vnd.microsoft.portable-executable=wine.desktop
+application/vnd.microsoft.portable-executable=winux.desktop
 
 [Added Associations]
 text/x-shellscript=dev.zed.Zed.desktop;
@@ -26,4 +26,8 @@ text/plain=dev.zed.Zed.desktop;
 text/x-python3=dev.zed.Zed.desktop;
 image/jpeg=org.gnome.Loupe.desktop;
 text/css=dev.zed.Zed.desktop;
-application/vnd.microsoft.portable-executable=wine.desktop;
+application/vnd.microsoft.portable-executable=wine.desktop;winux.desktop;
+application/x-ms-dos-executable=io.github.winux.desktop;io.github.winux.run.desktop;
+application/x-msdownload=io.github.winux.desktop;io.github.winux.run.desktop;
+application/x-wine-extension-exe=io.github.winux.desktop;io.github.winux.run.desktop;
+application/x-executable=io.github.winux.desktop;io.github.winux.run.desktop;

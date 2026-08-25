@@ -1,0 +1,229 @@
+#!/usr/bin/env bash
+
+# 1. Inputs & Path Resolution
+EXE="${1:-}"
+NAME="${2:-}"
+
+if [ -z "$EXE" ]; then
+    echo "=================================================="
+    echo "             UMU Game Installer & Setup           "
+    echo "=================================================="
+    read -e -p "Enter path to game executable (.exe): " EXE
+fi
+
+# Expand ~ and get canonical path
+EXE="$(realpath "${EXE/#\~/$HOME}" 2>/dev/null || echo "$EXE")"
+if [ ! -f "$EXE" ]; then
+    echo "[!] Executable not found: $EXE"
+    exit 1
+fi
+
+GAME_DIR="$(dirname "$EXE")"
+EXE_NAME="$(basename "$EXE")"
+
+if [ -z "$NAME" ]; then
+    read -e -p "Enter game name [${EXE_NAME%.*}]: " NAME
+    NAME="${NAME:-${EXE_NAME%.*}}"
+fi
+
+SLUG="$(echo "$NAME" | tr '[:upper:]' '[:lower:]' | tr ' ' '-' | tr -cd 'a-z0-9_-')"
+[ -z "$SLUG" ] && SLUG="game_$(date +%s)"
+
+RUN_SCRIPT="$GAME_DIR/run.sh"
+APPS_DIR="$HOME/.local/share/applications"
+ICON_DIR="$HOME/.local/share/icons/hicolor/256x256/apps"
+ICON_FILE="$ICON_DIR/${SLUG}.png"
+
+# Safe mkdir: does NOT delete or overwrite existing .wine prefixes or saves
+mkdir -p "$GAME_DIR/.wine" "$APPS_DIR" "$ICON_DIR"
+
+# 2. Extract Icon (Robust Array + Nullglob Strategy from umu.sh)
+ICON_ENTRY="Icon=wine"
+
+if command -v wrestool >/dev/null 2>&1 && command -v icotool >/dev/null 2>&1 && [ -f "$EXE" ]; then
+    TMP_DIR="$(mktemp -d)"
+
+    # Step A: Extract Group Icon resources (-t 14)
+    wrestool -x -t 14 "$EXE" -o "$TMP_DIR" 2>/dev/null || true
+
+    shopt -s nullglob
+    ICO_FILES=("$TMP_DIR"/*.ico)
+
+    # Step B: Fallback to all icon types if -t 14 yielded nothing
+    if [ ${#ICO_FILES[@]} -eq 0 ]; then
+        wrestool -x "$EXE" -o "$TMP_DIR" 2>/dev/null || true
+        ICO_FILES=("$TMP_DIR"/*.ico)
+    fi
+
+    # Step C: Convert extracted .ico files into .png
+    if [ ${#ICO_FILES[@]} -gt 0 ]; then
+        icotool -x -o "$TMP_DIR" "${ICO_FILES[@]}" 2>/dev/null || true
+        PNG_FILES=("$TMP_DIR"/*.png)
+
+        if [ ${#PNG_FILES[@]} -gt 0 ]; then
+            LARGEST_PNG="$(ls -S "$TMP_DIR"/*.png 2>/dev/null | head -n 1)"
+            if [ -n "$LARGEST_PNG" ] && [ -f "$LARGEST_PNG" ]; then
+                cp "$LARGEST_PNG" "$ICON_FILE"
+                cp "$LARGEST_PNG" "$GAME_DIR/icon.png" 2>/dev/null || true
+                touch "$HOME/.local/share/icons/hicolor" 2>/dev/null || true
+                gtk-update-icon-cache -f -t "$HOME/.local/share/icons/hicolor" 2>/dev/null || true
+                ICON_ENTRY="Icon=${ICON_FILE}"
+                echo "[✓] Icon successfully extracted: $ICON_FILE"
+            fi
+        fi
+    fi
+    shopt -u nullglob
+    rm -rf "$TMP_DIR"
+fi
+
+if [ "$ICON_ENTRY" = "Icon=wine" ]; then
+    echo "[!] No icon found in executable. Defaulting desktop entry to generic 'wine' icon."
+fi
+
+# 3. Generate run.sh in Game Directory
+cat << 'EOF' > "$RUN_SCRIPT"
+#!/usr/bin/env bash
+# Directory & Identity (Portable)
+DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
+cd "$DIR" || exit 1
+
+EOF
+
+cat << EOF >> "$RUN_SCRIPT"
+export GAME_NAME="${NAME}"
+export GAME_EXE="\${DIR}/${EXE_NAME}"
+export WINEPREFIX="\${DIR}/.wine"
+export GAMEID=""
+export STORE=""
+
+# Proton & Environment Settings
+export PROTONPATH="/usr/share/steam/compatibilitytools.d/proton-cachyos-native"
+export PROTON_VERB="run"
+export SteamOS=1
+
+# Graphics & Performance (Mesa / RADV Optimizations)
+export DXVK_FRAME_RATE="90"
+export PROTON_USE_OPTISCALER="0"
+export PROTON_FSR4_INDICATOR="0"
+export PROTON_FSR4_UPGRADE="1"
+export PROTON_XESS_UPGRADE="0"
+export PROTON_DLSS_UPGRADE="0"
+export AMD_VULKAN_ICD="RADV"
+export RADV_PERFTEST="gpl,sam"
+export MESA_SHADER_CACHE_MAX_SIZE="12G"
+export PROTON_LOCAL_SHADER_CACHE="1"
+export RADV_TEX_ANISO="16"
+export ENABLE_LAYER_MESA_ANTI_LAG="1"
+export RADV_ANTI_LAG="1"
+export PROTON_USE_NTSYNC="1"
+export WINE_DISABLE_VULKAN_OPWR="1"
+export PROTON_NO_WM_DECORATION="1"
+export XDG_CURRENT_DESKTOP="steamcompmgr"
+
+# Input, Overlays & Network
+export PROTON_NO_STEAMINPUT="1"
+export PROTON_PREFER_SDL="1"
+export DXVK_HUD="0"
+export MANGOHUD="1"
+export all_proxy=""
+
+# GameScope Settings
+export GAMESCOPE="0"
+export GAMESCOPE_HDR="1"
+export GAMESCOPE_OUTPUT_RES="2560x1440"
+export GAMESCOPE_GAME_RES="2560x1440"
+export GAMESCOPE_REFRESH_RATE="165"
+export GAMESCOPE_WINDOW_MODE="Fullscreen" # "Fullscreen", "Borderless", "Windowed"
+
+# Prevent Gamescope & Native Wayland Conflict
+if [ "\$GAMESCOPE" = "1" ]; then
+    export PROTON_ENABLE_WAYLAND="0"
+else
+    export PROTON_ENABLE_WAYLAND="1"
+fi
+
+# LACT & Niri Display Settings
+export LACT_ENABLE="1"
+export LACT_GAME_PROFILE="OC"
+export LACT_DEFAULT_PROFILE="Default"
+export NIRI_VRR_ENABLE="1"
+export NIRI_VRR_OUTPUT="Samsung Electric Company LS32CG51x H9JWA00258"
+export NIRI_VRR_OFF_MODE="off"
+
+# Helper Functions
+set_lact() {
+    [ "\$LACT_ENABLE" = "1" ] && command -v lact &>/dev/null && lact cli profile set "\$1" &>/dev/null
+}
+
+set_vrr() {
+    if [ "\$NIRI_VRR_ENABLE" = "1" ] && command -v niri &>/dev/null && niri msg outputs &>/dev/null; then
+        local out="\$NIRI_VRR_OUTPUT"
+        [ -z "\$out" ] && out="\$(niri msg focused-output 2>/dev/null | awk '/Output/ {print \$NF}' | tr -d '()')"
+        [ -n "\$out" ] && niri msg output "\$out" vrr "\$1" &>/dev/null
+    fi
+}
+
+# Build Launch Command
+CMD=()
+command -v game-performance &>/dev/null && CMD+=("game-performance")
+
+if [ "\$GAMESCOPE" = "1" ] && command -v gamescope &>/dev/null; then
+    GS_ARGS=("gamescope")
+    [ -n "\$GAMESCOPE_OUTPUT_RES" ] && GS_ARGS+=("-W" "\${GAMESCOPE_OUTPUT_RES%x*}" "-H" "\${GAMESCOPE_OUTPUT_RES#*x}")
+    [ -n "\$GAMESCOPE_GAME_RES" ]   && GS_ARGS+=("-w" "\${GAMESCOPE_GAME_RES%x*}" "-h" "\${GAMESCOPE_GAME_RES#*x}")
+    [ -n "\$GAMESCOPE_REFRESH_RATE" ] && GS_ARGS+=("-r" "\$GAMESCOPE_REFRESH_RATE")
+    [ "\${GAMESCOPE_WINDOW_MODE,,}" = "fullscreen" ] && GS_ARGS+=("-f")
+    [ "\${GAMESCOPE_WINDOW_MODE,,}" = "borderless" ] && GS_ARGS+=("-b")
+    if [ "\$GAMESCOPE_HDR" = "1" ]; then
+        GS_ARGS+=("--hdr-enabled")
+        export ENABLE_GAMESCOPE_WSI="1" PROTON_ENABLE_HDR="1"
+    fi
+    [ "\$MANGOHUD" = "1" ] && GS_ARGS+=("--mangoapp")
+    CMD+=("\${GS_ARGS[@]}" "--")
+fi
+
+CMD+=("umu-run" "\$GAME_EXE" "\$@")
+
+# Execution & Session Cleanup
+if [ "\$LACT_ENABLE" = "1" ] || [ "\$NIRI_VRR_ENABLE" = "1" ]; then
+    trap 'set_lact "\$LACT_DEFAULT_PROFILE"; set_vrr "\${NIRI_VRR_OFF_MODE:-off}"' EXIT INT TERM
+    set_lact "\$LACT_GAME_PROFILE"
+    set_vrr "on"
+    "\${CMD[@]}"
+    exit \$?
+else
+    exec "\${CMD[@]}"
+fi
+EOF
+
+chmod +x "$RUN_SCRIPT"
+
+# 4. Generate Desktop File
+cat << EOF > "$APPS_DIR/${SLUG}.desktop"
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=${NAME}
+Comment=Launch ${NAME} via UMU
+Exec="${RUN_SCRIPT}"
+${ICON_ENTRY}
+Terminal=false
+Categories=Game;
+StartupNotify=true
+Path=${GAME_DIR}
+EOF
+
+chmod +x "$APPS_DIR/${SLUG}.desktop"
+
+# Refresh desktop database index immediately
+if command -v update-desktop-database >/dev/null 2>&1; then
+    update-desktop-database "$APPS_DIR" >/dev/null 2>&1 || true
+fi
+
+echo "=================================================="
+echo "[✓] Configured: $NAME"
+echo "    Directory:  $GAME_DIR"
+echo "    Prefix:     $GAME_DIR/.wine"
+echo "    Launcher:   $RUN_SCRIPT"
+echo "    Desktop:    $APPS_DIR/${SLUG}.desktop"
+echo "=================================================="

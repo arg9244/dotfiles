@@ -54,14 +54,12 @@ export PATH="$ORIGINAL_HOME/.local/bin:$PATH"
 
 PACMAN=(
     niri noctalia noctalia-greeter lxsession gnome-keyring
-    xdg-desktop-portal-gnome  loupe kitty bottom chezmoi yazi
+    xdg-desktop-portal-gnome loupe kitty bottom chezmoi yazi
     icoutils lact gvfs-mtp zed paru python-mutagen nwg-look
     mpv mpv-mpris playerctl yt-dlp amberol mangohud chromium
     github-cli icoextract proton-cachyos-native winetricks
     ayugram-desktop qbittorrent aria2 blocky adw-gtk-theme
-
-    baobab file-roller gnome-disk-utility lutris uv nodejs neovim
-    rclone bleachbit
+    baobab file-roller gnome-disk-utility umu-launcher wine
 )
 
 AUR=(
