@@ -2,7 +2,7 @@ providers:
   webSearchOrder: 
     []
 modelRoles: 
-  default: opencode-zen/x-preview-f-free
+  default: opencode-zen/laguna-s-2.1-free
 symbolPreset: nerd
 theme: 
   dark: titanium

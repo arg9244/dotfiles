@@ -102,7 +102,7 @@ export PROTON_VERB="run"
 export SteamOS=1
 
 # Graphics & Performance (Mesa / RADV Optimizations)
-export DXVK_FRAME_RATE="90"
+export DXVK_FRAME_RATE="160"
 export PROTON_USE_OPTISCALER="0"
 export PROTON_FSR4_INDICATOR="0"
 export PROTON_FSR4_UPGRADE="1"
