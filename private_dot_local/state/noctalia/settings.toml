@@ -21,7 +21,7 @@ margin_ends = 0
 position = "bottom"
 radius = 10
 shadow = false
-start = [ "launcher", "workspaces", "tray", "taskbar", "summary" ]
+start = [ "launcher", "workspaces", "tray", "taskbar" ]
 
 [brightness]
 sync_all_monitors = true
@@ -285,13 +285,6 @@ type = "noctalia/screen_recorder:recorder"
 
 [widget.spacer_2]
 type = "spacer"
-
-[widget.summary]
-disk_display_mode = "used"
-ram_display_mode = "used"
-show_disk = false
-show_swap = false
-type = "tmelik/system-monitor:summary"
 
 [widget.sysmon]
 show_value = true
