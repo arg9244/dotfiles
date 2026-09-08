@@ -60,6 +60,7 @@ PACMAN=(
     github-cli icoextract proton-cachyos-native winetricks
     ayugram-desktop qbittorrent aria2 blocky adw-gtk-theme
     baobab file-roller gnome-disk-utility umu-launcher yazi
+    brasero neovim
 )
 
 AUR=(

@@ -1,19 +1,17 @@
-config_version = 13
+config_version = 14
 
 [bar.default]
 center = [ "clock", "date", "weather", "media", "monitor", "widget" ]
 end = [
-    "widget_2",
+    "tray",
     "mihomo-tun",
     "recorder_2",
     "screenshot",
     "bar",
-    "todo",
-    "notes_2",
+    "bar_2",
     "clipboard",
     "notifications",
     "keyboard_layout",
-    "control-center",
     "session"
 ]
 margin_edge = 0
@@ -21,7 +19,7 @@ margin_ends = 0
 position = "bottom"
 radius = 10
 shadow = false
-start = [ "launcher", "workspaces", "tray", "taskbar" ]
+start = [ "workspaces", "taskbar" ]
 
 [brightness]
 sync_all_monitors = true
@@ -178,14 +176,13 @@ sort_by = "mem"
 
 [plugins]
 enabled = [
-    "noctalia/notes",
     "noctalia/screen_recorder",
     "apex077/eyecare",
     "yuuto/calculator",
-    "nightwatch75/todo",
     "nomadcxx/gamer-mode",
     "weinguyen/procmon",
-    "reza/mihomo-tun"
+    "reza/mihomo-tun",
+    "ahmedhossamdev/sticky-notes"
 ]
 
     [[plugins.source]]
@@ -252,6 +249,9 @@ refresh_minutes = 60
 [widget.bar]
 type = "yuuto/calculator:bar"
 
+[widget.bar_2]
+type = "ahmedhossamdev/sticky-notes:bar"
+
 [widget.cat]
 type = "noctalia/bongocat:cat"
 
@@ -274,9 +274,6 @@ type = "noctalia/mpvpaper:mpvpaper"
 [widget.notes]
 type = "noctalia/notes:notes"
 
-[widget.notes_2]
-type = "noctalia/notes:notes"
-
 [widget.recorder]
 type = "noctalia/screen_recorder:recorder"
 
@@ -291,18 +288,12 @@ show_value = true
 stat = "gpu_vram"
 visualization = "none"
 
-[widget.todo]
-type = "nightwatch75/todo:todo"
-
 [widget.weather]
 show_condition = false
 
 [widget.widget]
 icon_only = true
 type = "weinguyen/procmon:widget"
-
-[widget.widget_2]
-type = "mdj2812/mihomo-control:widget"
 
 [widget.workspaces]
 hide_when_empty = true

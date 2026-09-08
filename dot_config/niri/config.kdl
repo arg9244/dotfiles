@@ -8,3 +8,7 @@ include "./cfg/rules.kdl"
 include "./cfg/misc.kdl"
 
 include "noctalia.kdl"
+
+// BEGIN NIRI RULES STUDIO
+include "./cfg/noctalia-rules-studio.kdl"
+// END NIRI RULES STUDIO

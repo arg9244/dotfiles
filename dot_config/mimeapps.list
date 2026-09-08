@@ -15,6 +15,7 @@ application/x-ms-dos-executable=io.github.winux.desktop
 application/x-msdownload=io.github.winux.desktop
 application/vnd.microsoft.portable-executable=winux.desktop
 application/vnd.efi.iso=gnome-disk-image-mounter.desktop
+x-scheme-handler/superproductivity=superproductivity.desktop
 
 [Added Associations]
 text/x-shellscript=dev.zed.Zed.desktop;
@@ -33,3 +34,4 @@ application/x-msdownload=io.github.winux.desktop;io.github.winux.run.desktop;
 application/x-wine-extension-exe=io.github.winux.desktop;io.github.winux.run.desktop;
 application/x-executable=io.github.winux.desktop;io.github.winux.run.desktop;
 application/vnd.efi.iso=gnome-disk-image-mounter.desktop;
+x-scheme-handler/superproductivity=superproductivity.desktop;
