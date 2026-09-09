@@ -3,7 +3,6 @@ config_version = 14
 [bar.default]
 center = [ "clock", "date", "weather", "media", "monitor", "widget" ]
 end = [
-    "tray",
     "mihomo-tun",
     "recorder_2",
     "screenshot",
@@ -19,7 +18,7 @@ margin_ends = 0
 position = "bottom"
 radius = 10
 shadow = false
-start = [ "workspaces", "taskbar" ]
+start = [ "tray", "workspaces", "taskbar" ]
 
 [brightness]
 sync_all_monitors = true
