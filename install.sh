@@ -56,11 +56,10 @@ PACMAN=(
     niri noctalia noctalia-greeter lxsession gnome-keyring
     xdg-desktop-portal-gnome loupe kitty bottom chezmoi bun
     icoutils lact gvfs-mtp zed paru python-mutagen nwg-look
-    mpv mpv-mpris playerctl yt-dlp amberol mangohud chromium
+    mpv mpv-mpris playerctl yt-dlp amberol mangohud brasero
+    qbittorrent aria2 adw-gtk-theme firefox-wayland-cachy-hg
     github-cli icoextract proton-cachyos-native winetricks
-    ayugram-desktop qbittorrent aria2 blocky adw-gtk-theme
-    baobab file-roller gnome-disk-utility umu-launcher yazi
-    brasero neovim
+    baobab file-roller gnome-disk-utility umu-launcher
 )
 
 AUR=(

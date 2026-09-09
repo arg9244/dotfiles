@@ -1,7 +1,7 @@
 [Default Applications]
 text/x-shellscript=dev.zed.Zed.desktop
-x-scheme-handler/tg=userapp-AyuGram Desktop-GT4IU3.desktop
-x-scheme-handler/tonsite=userapp-AyuGram Desktop-J4IIU3.desktop
+x-scheme-handler/tg=it.belloworld.mercurygram._6bf14d4d739dd3121d948fb1f3a86543.desktop
+x-scheme-handler/tonsite=it.belloworld.mercurygram._6bf14d4d739dd3121d948fb1f3a86543.desktop
 x-scheme-handler/throne=throne-url-handler.desktop
 application/yaml=dev.zed.Zed.desktop
 application/json=dev.zed.Zed.desktop
@@ -31,8 +31,8 @@ application/x-extension-xht=firefox.desktop
 
 [Added Associations]
 text/x-shellscript=dev.zed.Zed.desktop;
-x-scheme-handler/tg=userapp-AyuGram Desktop-GT4IU3.desktop;
-x-scheme-handler/tonsite=userapp-AyuGram Desktop-J4IIU3.desktop;
+x-scheme-handler/tg=userapp-AyuGram Desktop-GT4IU3.desktop;it.belloworld.mercurygram._6bf14d4d739dd3121d948fb1f3a86543.desktop;
+x-scheme-handler/tonsite=userapp-AyuGram Desktop-J4IIU3.desktop;it.belloworld.mercurygram._6bf14d4d739dd3121d948fb1f3a86543.desktop;
 application/yaml=dev.zed.Zed.desktop;
 application/json=dev.zed.Zed.desktop;
 application/x-desktop=dev.zed.Zed.desktop;
