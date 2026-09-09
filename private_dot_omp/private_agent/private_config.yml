@@ -2,7 +2,7 @@ providers:
   webSearchOrder:
     []
 modelRoles:
-  default: kilo/kilo-auto/free
+  default: opencode-zen/nemotron-3.5-lightning-free
 symbolPreset: nerd
 theme:
   dark: titanium

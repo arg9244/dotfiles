@@ -80,6 +80,41 @@
       },
       "dev": false
     },
+    "kdl": {
+      "manifest": {
+        "id": "kdl",
+        "name": "kdl",
+        "version": "0.0.1",
+        "schema_version": 1,
+        "description": "Syntax highlighting for KDL files.",
+        "repository": "https://github.com/elkowar/zed-kdl",
+        "authors": [
+          "ElKowar <dev@elkowar.dev>"
+        ],
+        "lib": {
+          "kind": null,
+          "version": null
+        },
+        "themes": [],
+        "icon_themes": [],
+        "languages": [
+          "languages/kdl"
+        ],
+        "grammars": {
+          "kdl": {
+            "repository": "https://github.com/tree-sitter-grammars/tree-sitter-kdl",
+            "rev": "b37e3d58e5c5cf8d739b315d6114e02d42e66664",
+            "path": null
+          }
+        },
+        "language_servers": {},
+        "context_servers": {},
+        "slash_commands": {},
+        "snippets": null,
+        "capabilities": []
+      },
+      "dev": false
+    },
     "toml": {
       "manifest": {
         "id": "toml",
@@ -133,7 +168,22 @@
         "modeline_aliases": []
       },
       "hidden": false,
-      "grammar": "html"
+      "grammar": "html",
+      "query_files": 63
+    },
+    "Kdl": {
+      "extension": "kdl",
+      "path": "languages/kdl",
+      "matcher": {
+        "path_suffixes": [
+          "kdl"
+        ],
+        "first_line_pattern": null,
+        "modeline_aliases": []
+      },
+      "hidden": false,
+      "grammar": "kdl",
+      "query_files": 31
     },
     "TOML": {
       "extension": "toml",
@@ -149,7 +199,8 @@
         "modeline_aliases": []
       },
       "hidden": false,
-      "grammar": "toml"
+      "grammar": "toml",
+      "query_files": 639
     },
     "ini": {
       "extension": "ini",
@@ -182,7 +233,8 @@
         "modeline_aliases": []
       },
       "hidden": false,
-      "grammar": "ini"
+      "grammar": "ini",
+      "query_files": 5
     }
   }
 }
