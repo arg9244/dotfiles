@@ -55,16 +55,16 @@ export PATH="$ORIGINAL_HOME/.local/bin:$PATH"
 PACMAN=(
     niri noctalia noctalia-greeter lxsession gnome-keyring
     xdg-desktop-portal-gnome loupe kitty bottom chezmoi bun
-    icoutils lact gvfs-mtp zed paru python-mutagen nwg-look
-    mpv mpv-mpris playerctl yt-dlp amberol mangohud brasero
-    qbittorrent aria2 adw-gtk-theme firefox-wayland-cachy-hg
-    github-cli icoextract proton-cachyos-native winetricks
-    baobab file-roller gnome-disk-utility umu-launcher
+    icoutils lact gvfs-mtp paru python-mutagen nwg-look aria2
+    mpv mpv-mpris playerctl yt-dlp amberol mangohud umu-launcher
+    qbittorrent adw-gtk-theme firefox-wayland-cachy-hg brasero
+    github-cli icoextract proton-cachyos-native winetricks zed
+    baobab file-roller gnome-disk-utility
 )
 
 AUR=(
-    qt6ct-kde mihomo-bin throne-bin moonbit rar
-    nautilus-open-any-terminal mcomix-rs-bin
+    qt6ct-kde moonbit rar nautilus-open-any-terminal
+    mcomix-rs-bin mihomo-bin
 )
 
 DOTFILES_REPO="https://github.com/arg9244/dotfiles"
@@ -170,12 +170,12 @@ else
 fi
 
 # Symlink blocky config into /etc/blocky/
-run "Create /etc/blocky directory" sudo mkdir -p /etc/blocky
-if [[ -f "$ORIGINAL_HOME/.config/blocky/blocky.yml" ]]; then
-    run "Symlink blocky.yml" sudo ln -sf "$ORIGINAL_HOME/.config/blocky/blocky.yml" /etc/blocky/blocky.yml
-else
-    warn "$ORIGINAL_HOME/.config/blocky/blocky.yml not found (skipping symlink)"
-fi
+# run "Create /etc/blocky directory" sudo mkdir -p /etc/blocky
+# if [[ -f "$ORIGINAL_HOME/.config/blocky/blocky.yml" ]]; then
+#     run "Symlink blocky.yml" sudo ln -sf "$ORIGINAL_HOME/.config/blocky/blocky.yml" /etc/blocky/blocky.yml
+# else
+#     warn "$ORIGINAL_HOME/.config/blocky/blocky.yml not found (skipping symlink)"
+# fi
 
 # Symlink game performance sysctl config into /etc/sysctl.d/
 run "Create /etc/sysctl.d directory" sudo mkdir -p /etc/sysctl.d

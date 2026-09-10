@@ -1,10 +1,9 @@
 [Default Applications]
-text/x-shellscript=dev.zed.Zed.desktop
+text/x-shellscript=org.gnome.TextEditor.desktop
 x-scheme-handler/tg=it.belloworld.mercurygram._6bf14d4d739dd3121d948fb1f3a86543.desktop
 x-scheme-handler/tonsite=it.belloworld.mercurygram._6bf14d4d739dd3121d948fb1f3a86543.desktop
-x-scheme-handler/throne=throne-url-handler.desktop
 application/yaml=dev.zed.Zed.desktop
-application/json=dev.zed.Zed.desktop
+application/json=org.gnome.TextEditor.desktop
 application/x-desktop=dev.zed.Zed.desktop
 text/plain=dev.zed.Zed.desktop
 text/x-python3=dev.zed.Zed.desktop
@@ -28,13 +27,20 @@ application/x-extension-shtml=firefox.desktop
 application/xhtml+xml=firefox.desktop
 application/x-extension-xhtml=firefox.desktop
 application/x-extension-xht=firefox.desktop
+x-scheme-handler/clash-nyanpasu=clash-nyanpasu-handler.desktop
+x-scheme-handler/clash=clash-nyanpasu-handler.desktop
+x-scheme-handler/clash-verge=clash-verge.desktop;
+x-scheme-handler/mihomo=sparkle.desktop
+x-scheme-handler/sparkle=sparkle.desktop
+x-scheme-handler/sing-box=sing-box.desktop
+application/vnd.debian.binary-package=org.eren.debtapgui.desktop
 
 [Added Associations]
-text/x-shellscript=dev.zed.Zed.desktop;
+text/x-shellscript=dev.zed.Zed.desktop;org.xfce.mousepad.desktop;org.gnome.TextEditor.desktop;
 x-scheme-handler/tg=userapp-AyuGram Desktop-GT4IU3.desktop;it.belloworld.mercurygram._6bf14d4d739dd3121d948fb1f3a86543.desktop;
 x-scheme-handler/tonsite=userapp-AyuGram Desktop-J4IIU3.desktop;it.belloworld.mercurygram._6bf14d4d739dd3121d948fb1f3a86543.desktop;
-application/yaml=dev.zed.Zed.desktop;
-application/json=dev.zed.Zed.desktop;
+application/yaml=dev.zed.Zed.desktop;kitty-open.desktop;
+application/json=dev.zed.Zed.desktop;kitty-open.desktop;org.gnome.TextEditor.desktop;
 application/x-desktop=dev.zed.Zed.desktop;
 text/plain=dev.zed.Zed.desktop;
 text/x-python3=dev.zed.Zed.desktop;
@@ -58,3 +64,7 @@ application/xhtml+xml=firefox.desktop;
 application/x-extension-xhtml=firefox.desktop;
 application/x-extension-xht=firefox.desktop;
 application/octet-stream=dev.zed.Zed.desktop;
+x-scheme-handler/clash=clash-verge.desktop;sparkle.desktop;
+x-scheme-handler/clash-verge=clash-verge.desktop;
+x-scheme-handler/mihomo=sparkle.desktop;
+x-scheme-handler/sparkle=sparkle.desktop;

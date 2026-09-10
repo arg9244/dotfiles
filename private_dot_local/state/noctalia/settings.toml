@@ -180,8 +180,8 @@ enabled = [
     "yuuto/calculator",
     "nomadcxx/gamer-mode",
     "weinguyen/procmon",
-    "reza/mihomo-tun",
-    "ahmedhossamdev/sticky-notes"
+    "ahmedhossamdev/sticky-notes",
+    "reza/mihomo-tun"
 ]
 
     [[plugins.source]]

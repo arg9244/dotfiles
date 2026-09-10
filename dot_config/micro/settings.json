@@ -1,3 +1,6 @@
 {
-    "colorscheme": "gruvbox"
+    "clipboard": "terminal",
+    "colorscheme": "gruvbox",
+    "mkparents": true,
+    "clipboard": "terminal"
 }
