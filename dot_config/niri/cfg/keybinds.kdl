@@ -128,10 +128,15 @@ binds {
     Mod+W                               { toggle-column-tabbed-display; }
     Mod+M                               { maximize-window-to-edges; }
 
-    // ─── Screenshots ───
-    Mod+Shift+S                         { screenshot; }
-    Print                               { screenshot-screen; }
-    Alt+Print                           { screenshot-window; }
+    // // ─── Screenshots Niri ───
+    // Mod+Shift+S                         { screenshot; }
+    // Print                               { screenshot-screen; }
+    // Shift+Print                         { screenshot-window; }
+
+    // ─── Screenshots Noctalia ───
+    Mod+Shift+S                         hotkey-overlay-title="Capture Region: Noctalia" { spawn-sh "noctalia msg screenshot-region"; }
+    Print                               hotkey-overlay-title="Capture Screen: Noctalia" { spawn-sh "noctalia msg screenshot-fullscreen"; }
+    Shift+Print                         { screenshot-window; }
 
     // ─── Emergency Escape Key ───
     Mod+ESCAPE                          allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }

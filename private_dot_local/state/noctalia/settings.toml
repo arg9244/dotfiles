@@ -2,17 +2,7 @@ config_version = 14
 
 [bar.default]
 center = [ "clock", "date", "weather", "media", "monitor", "procmon" ]
-end = [
-    "mihomo-tun",
-    "screen_recorder",
-    "screenshot",
-    "calculator",
-    "sticky_notes",
-    "clipboard",
-    "notifications",
-    "keyboard_layout",
-    "session"
-]
+end = [ "mihomo-tun", "calculator", "notes", "clipboard", "notifications", "keyboard_layout", "session" ]
 margin_edge = 0
 margin_ends = 0
 position = "bottom"
@@ -27,6 +17,30 @@ sync_all_monitors = true
 enabled = true
 refresh_minutes = 240
 
+    [calendar.account.personal_google]
+    type = "google"
+
+[control_center]
+hidden_tabs = [ "power" ]
+
+    [[control_center.shortcuts]]
+    type = "caffeine"
+
+    [[control_center.shortcuts]]
+    type = "nightlight"
+
+    [[control_center.shortcuts]]
+    type = "notification"
+
+    [[control_center.shortcuts]]
+    type = "power_profile"
+
+    [[control_center.shortcuts]]
+    type = "audio"
+
+    [[control_center.shortcuts]]
+    type = "noctalia/screen_recorder:toggle"
+
 [desktop_widgets]
 enabled = false
 
@@ -36,25 +50,24 @@ behavior_order = [ "lock", "screen-off", "lock-and-suspend" ]
     [idle.behavior.lock]
     action = "lock"
     enabled = true
-    timeout = 600.0
+    timeout = 600
 
     [idle.behavior.lock-and-suspend]
     action = "lock_and_suspend"
     enabled = false
-    timeout = 900.0
+    timeout = 900
 
     [idle.behavior.screen-off]
     action = "screen_off"
     enabled = true
-    timeout = 660.0
+    timeout = 660
 
 [location]
-address = "Malard"
+auto_locate = true
 
 [lockscreen_widgets]
-enabled = false
 schema_version = 2
-widget_order = [ "lockscreen-login-box@DP-2", "lockscreen-login-box@HDMI-A-1" ]
+widget_order = [ "lockscreen-login-box@HDMI-A-1", "lockscreen-login-box@DP-2" ]
 
     [lockscreen_widgets.grid]
     cell_size = 16
@@ -118,17 +131,21 @@ widget_order = [ "lockscreen-login-box@DP-2", "lockscreen-login-box@HDMI-A-1" ]
 [nightlight]
 enabled = true
 
+[notification]
+background_opacity = 0.89999997988343239
+position = "bottom_right"
+
 [plugin_settings."ahmedhossamdev/sticky-notes"]
-no_colors = true
+panel_layer = "overlay"
 panel_placement = "floating"
 panel_position = "center"
 show_count = false
+use_wallpaper_colors = true
 
 [plugin_settings."noctalia/screen_recorder"]
 video_source = "portal"
 
 [plugin_settings."nomadcxx/gamer-mode"]
-main_open_near_click = true
 poll_interval = "5"
 profile = "heavy"
 
@@ -138,18 +155,19 @@ refresh_interval = 3000
 sort_by = "mem"
 
 [plugin_settings."yuuto/calculator"]
+panel_layer = "overlay"
 panel_placement = "floating"
 panel_position = "center"
 
 [plugins]
 enabled = [
-    "noctalia/screen_recorder",
-    "apex077/eyecare",
-    "yuuto/calculator",
-    "nomadcxx/gamer-mode",
-    "weinguyen/procmon",
     "ahmedhossamdev/sticky-notes",
-    "reza/mihomo-tun"
+    "apex077/eyecare",
+    "noctalia/screen_recorder",
+    "nomadcxx/gamer-mode",
+    "reza/mihomo-tun",
+    "weinguyen/procmon",
+    "yuuto/calculator"
 ]
 
     [[plugins.source]]
@@ -169,7 +187,10 @@ enabled = [
 
 [shell]
 avatar_path = "/home/reza/Pictures/Avatar.png"
+clipboard_auto_paste = "ctrl_v"
+polkit_agent = true
 screen_time_enabled = true
+show_location = false
 
     [shell.launcher]
     fetch_exchange_rates = false
@@ -178,54 +199,49 @@ screen_time_enabled = true
         global = false
 
     [shell.panel]
-    clipboard_placement = "attached"
+    open_near_click_clipboard = true
 
     [shell.screen_corners]
     enabled = true
+    size = 30
 
     [shell.screenshot]
+    annotate = true
+    close_on_copy = false
     confirm_region = true
     directory = "~/Pictures/Screenshots"
-
-    [shell.shadow]
-    alpha = 0.0
+    remember_last_region = true
 
 [theme]
 builtin = "Kanagawa"
 community_palette = "Gruvbox Material"
-mode = "dark"
 source = "community"
 wallpaper_scheme = "m3-content"
 
     [theme.templates]
     builtin_ids = [ "gtk3", "gtk4", "kcolorscheme", "kitty", "niri", "qt" ]
+    enable_builtin_templates = true
 
 [wallpaper]
 directory = "~/Pictures/Wallpapers"
-transition_on_startup = true
 
     [wallpaper.default]
     path = "/home/reza/Pictures/Wallpapers/wallhaven-jevz8y.png"
 
-    [wallpaper.last]
-    path = "/home/reza/Pictures/Wallpapers/wallhaven-jevz8y.png"
-
-    [wallpaper.monitors.DP-2]
-    path = "/home/reza/Pictures/Wallpapers/wallhaven-jevz8y.png"
-
-    [wallpaper.monitors.HDMI-A-1]
-    path = "/home/reza/Pictures/Wallpapers/wallhaven-jevz8y.png"
-
 [weather]
-refresh_minutes = 600
+enabled = true
+refresh_minutes = 240
 
 [widget.calculator]
 type = "yuuto/calculator:bar"
 
+[widget.date]
+format = "{:%a, %b %d}"
+type = "clock"
+
 [widget.media]
 album_art_only = true
 hide_when_no_media = true
-title_scroll = "on_hover"
 
 [widget.mihomo-tun]
 type = "reza/mihomo-tun:tun-toggle"
@@ -235,15 +251,12 @@ highlight_gamer_mode = false
 show_vram = true
 type = "nomadcxx/gamer-mode:monitor"
 
+[widget.notes]
+type = "ahmedhossamdev/sticky-notes:bar"
+
 [widget.procmon]
 icon_only = true
 type = "weinguyen/procmon:widget"
-
-[widget.screen_recorder]
-type = "noctalia/screen_recorder:recorder"
-
-[widget.sticky_notes]
-type = "ahmedhossamdev/sticky-notes:bar"
 
 [widget.weather]
 show_condition = false

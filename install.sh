@@ -53,18 +53,16 @@ export PATH="$ORIGINAL_HOME/.local/bin:$PATH"
 # ══════════════════════════════════════════════════════════════════════════════
 
 PACMAN=(
-    niri noctalia noctalia-greeter lxsession gnome-keyring
-    xdg-desktop-portal-gnome loupe kitty bottom chezmoi bun
-    icoutils lact gvfs-mtp paru python-mutagen nwg-look aria2
-    mpv mpv-mpris playerctl yt-dlp amberol mangohud umu-launcher
-    qbittorrent adw-gtk-theme firefox-wayland-cachy-hg brasero
-    github-cli icoextract proton-cachyos-native winetricks zed
-    baobab file-roller gnome-disk-utility
+    niri noctalia noctalia-greeter gnome-keyring xdg-desktop-portal-gnome
+    kitty bottom chezmoi bun adw-gtk-theme nwg-look paru github-cli zed
+    nautilus gvfs-mtp icoutils baobab file-roller gnome-disk-utility lact
+    mpv mpv-mpris playerctl yt-dlp amberol python-mutagen loupe brasero
+    proton-cachyos-native mangohud umu-launcher winetricks icoextract
+    firefox-wayland-cachy-hg qbittorrent aria2
 )
 
 AUR=(
-    qt6ct-kde moonbit rar nautilus-open-any-terminal
-    mcomix-rs-bin mihomo-bin
+    qt6ct-kde moonbit rar nautilus-open-any-terminal mcomix-rs-bin mihomo-bin
 )
 
 DOTFILES_REPO="https://github.com/arg9244/dotfiles"
