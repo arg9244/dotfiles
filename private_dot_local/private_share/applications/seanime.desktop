@@ -5,5 +5,5 @@ Comment=The Anime and Manga media server
 Icon=/home/reza/.config/Seanime/seanime-logo.png
 Exec=/home/reza/.local/bin/seanime
 Terminal=false
-Categories=Network;WebBrowser;
+Categories=AudioVideo;
 StartupNotify=true

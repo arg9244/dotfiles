@@ -64,7 +64,7 @@ PACMAN=(
 
 AUR=(
     qt6ct-kde moonbit rar nautilus-open-any-terminal
-    mcomix-rs-bin mihomo-bin
+    mcomix-rs-bin mihomo-bin simple-notes-desktop-bin
 )
 
 DOTFILES_REPO="https://github.com/arg9244/dotfiles"

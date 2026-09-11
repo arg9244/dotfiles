@@ -26,6 +26,31 @@ if [ -z "$NAME" ]; then
     NAME="${NAME:-${EXE_NAME%.*}}"
 fi
 
+# OptiScaler Setup Prompt
+read -e -p "Enable OptiScaler integration? [y/N]: " ENABLE_OPTISCALER_INPUT
+case "${ENABLE_OPTISCALER_INPUT,,}" in
+    y|yes)
+        USE_OPTISCALER="1"
+        OPTISCALER_CONFIG="Upscalers.Dx12Upscaler=fsr31;FrameGen.Enabled=true;FrameGen.FGInput=DLSSG;FrameGen.FGOutput=XeFG;FrameGen.FTInput=2;FSR.Fsr4Update=false"
+
+        echo "Select OptiScaler hook DLL (PROTON_OPTISCALER_NAME):"
+        echo "  1) dxgi.dll (Default - recommended for most games)"
+        echo "  2) d3d12.dll"
+        echo "  3) dbghelp.dll"
+        read -e -p "Choice [1-3, default: 1]: " DLL_CHOICE
+        case "$DLL_CHOICE" in
+            2) OPTISCALER_NAME="d3d12.dll" ;;
+            3) OPTISCALER_NAME="dbghelp.dll" ;;
+            *) OPTISCALER_NAME="dxgi.dll" ;;
+        esac
+        ;;
+    *)
+        USE_OPTISCALER="0"
+        OPTISCALER_CONFIG=""
+        OPTISCALER_NAME="dxgi.dll"
+        ;;
+esac
+
 SLUG="$(echo "$NAME" | tr '[:upper:]' '[:lower:]' | tr ' ' '-' | tr -cd 'a-z0-9_-')"
 [ -z "$SLUG" ] && SLUG="game_$(date +%s)"
 
@@ -103,7 +128,9 @@ export SteamOS=1
 
 # Graphics & Performance (Mesa / RADV Optimizations)
 export DXVK_FRAME_RATE="160"
-export PROTON_USE_OPTISCALER="0"
+export PROTON_USE_OPTISCALER="${USE_OPTISCALER}"
+export PROTON_OPTISCALER_NAME="${OPTISCALER_NAME}"
+export PROTON_OPTISCALER_CONFIG="${OPTISCALER_CONFIG}"
 export PROTON_FSR4_INDICATOR="0"
 export PROTON_FSR4_UPGRADE="1"
 export PROTON_XESS_UPGRADE="0"
@@ -113,7 +140,6 @@ export RADV_PERFTEST="gpl,sam"
 export MESA_SHADER_CACHE_MAX_SIZE="12G"
 export PROTON_LOCAL_SHADER_CACHE="1"
 export RADV_TEX_ANISO="16"
-export ENABLE_LAYER_MESA_ANTI_LAG="1"
 export RADV_ANTI_LAG="1"
 export PROTON_USE_NTSYNC="1"
 export WINE_DISABLE_VULKAN_OPWR="1"
@@ -186,7 +212,7 @@ CMD+=("umu-run" "\$GAME_EXE" "\$@")
 
 # Execution & Session Cleanup
 if [ "\$LACT_ENABLE" = "1" ] || [ "\$NIRI_VRR_ENABLE" = "1" ]; then
-    trap 'set_lact "\$LACT_DEFAULT_PROFILE"; set_vrr "\${NIRI_VRR_OFF_MODE:-off}"' EXIT INT TERM
+    trap 'set_lact "\$LACT_DEFAULTPROFILE"; set_vrr "\${NIRI_VRR_OFF_MODE:-off}"' EXIT INT TERM
     set_lact "\$LACT_GAME_PROFILE"
     set_vrr "on"
     "\${CMD[@]}"
@@ -222,8 +248,9 @@ fi
 
 echo "=================================================="
 echo "[✓] Configured: $NAME"
-echo "    Directory:  $GAME_DIR"
-echo "    Prefix:     $GAME_DIR/.wine"
-echo "    Launcher:   $RUN_SCRIPT"
-echo "    Desktop:    $APPS_DIR/${SLUG}.desktop"
+echo "    Directory:      $GAME_DIR"
+echo "    Prefix:         $GAME_DIR/.wine"
+echo "    Launcher:       $RUN_SCRIPT"
+echo "    Desktop:        $APPS_DIR/${SLUG}.desktop"
+echo "    OptiScaler:     $([ "$USE_OPTISCALER" = "1" ] && echo "Enabled ($OPTISCALER_NAME)" || echo "Disabled")"
 echo "=================================================="

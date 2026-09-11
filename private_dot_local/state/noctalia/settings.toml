@@ -203,6 +203,12 @@ enabled = [
 avatar_path = "/home/reza/Pictures/Avatar.png"
 screen_time_enabled = true
 
+    [shell.launcher]
+    fetch_exchange_rates = false
+
+        [shell.launcher.providers.calculator]
+        global = false
+
     [shell.panel]
     clipboard_placement = "attached"
 
