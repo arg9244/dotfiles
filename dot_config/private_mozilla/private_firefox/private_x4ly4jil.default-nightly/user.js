@@ -424,9 +424,6 @@ user_pref("dom.push.enabled", false);
 // Disable persistent background WebSocket connection to Mozilla Push Service
 user_pref("dom.push.connection.enabled", false);
 
-// Prevent websites from intercepting or modifying copy, cut, and paste events
-user_pref("dom.event.clipboardevents.enabled", false);
-
 // Allow web applications to display custom context menus
 user_pref("dom.event.contextmenu.enabled", true);
 

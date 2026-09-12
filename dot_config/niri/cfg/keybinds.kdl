@@ -8,11 +8,11 @@ binds {
     CTRL+Shift+ESCAPE                    hotkey-overlay-title="Open Process Monitor" { spawn-sh "noctalia msg panel-toggle weinguyen/procmon:panel"; }
 
     // ─── Noctalia Plugins & Panels ───
-    Shift+V                               hotkey-overlay-title="Toggle Clipboard History" { spawn-sh "noctalia msg panel-toggle clipboard"; }
+    Mod+V                               hotkey-overlay-title="Toggle Clipboard History" { spawn-sh "noctalia msg panel-toggle clipboard"; }
     Mod+X                         hotkey-overlay-title="Toggle Calculator" { spawn-sh "noctalia msg panel-toggle yuuto/calculator:panel"; }
     Mod+A                           hotkey-overlay-title="Toggle Notes" { spawn-sh "noctalia msg panel-toggle ahmedhossamdev/sticky-notes:panel"; }
     Mod+Z                           hotkey-overlay-title="Toggle To-Do" { spawn-sh "noctalia msg panel-toggle nightwatch75/todo:panel"; }
-    Mod+V                         hotkey-overlay-title="Toggle Mihomo TUN" { spawn-sh "noctalia msg plugin reza/mihomo-tun:tun-toggle all toggle"; }
+    Mod+N                         hotkey-overlay-title="Toggle Mihomo TUN" { spawn-sh "noctalia msg plugin reza/mihomo-tun:tun-toggle all toggle"; }
 
     // ─── Applications ───
     Mod+Return                          hotkey-overlay-title="Open Terminal: Kitty" { spawn "kitty"; }

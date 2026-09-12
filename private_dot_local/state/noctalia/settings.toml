@@ -136,11 +136,11 @@ background_opacity = 0.89999997988343239
 position = "bottom_right"
 
 [plugin_settings."ahmedhossamdev/sticky-notes"]
+no_colors = true
 panel_layer = "overlay"
 panel_placement = "floating"
 panel_position = "center"
 show_count = false
-use_wallpaper_colors = true
 
 [plugin_settings."nightwatch75/todo"]
 panel_layer = "overlay"
