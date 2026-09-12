@@ -2,7 +2,7 @@ config_version = 14
 
 [bar.default]
 center = [ "clock", "date", "weather", "media", "monitor", "procmon" ]
-end = [ "mihomo-tun", "calculator", "notes", "clipboard", "notifications", "keyboard_layout", "session" ]
+end = [ "mihomo-tun", "calculator", "todo", "notes", "clipboard", "notifications", "keyboard_layout", "session" ]
 margin_edge = 0
 margin_ends = 0
 position = "bottom"
@@ -142,6 +142,11 @@ panel_position = "center"
 show_count = false
 use_wallpaper_colors = true
 
+[plugin_settings."nightwatch75/todo"]
+panel_layer = "overlay"
+panel_placement = "floating"
+panel_position = "center"
+
 [plugin_settings."noctalia/screen_recorder"]
 video_source = "portal"
 
@@ -167,7 +172,8 @@ enabled = [
     "nomadcxx/gamer-mode",
     "reza/mihomo-tun",
     "weinguyen/procmon",
-    "yuuto/calculator"
+    "yuuto/calculator",
+    "nightwatch75/todo"
 ]
 
     [[plugins.source]]
@@ -187,7 +193,8 @@ enabled = [
 
 [shell]
 avatar_path = "/home/reza/Pictures/Avatar.png"
-clipboard_auto_paste = "ctrl_v"
+clipboard_auto_paste = "off"
+clipboard_keep_from_closed_apps = false
 polkit_agent = true
 screen_time_enabled = true
 show_location = false
@@ -199,7 +206,9 @@ show_location = false
         global = false
 
     [shell.panel]
+    borders = false
     open_near_click_clipboard = true
+    shadow = false
 
     [shell.screen_corners]
     enabled = true
@@ -207,7 +216,6 @@ show_location = false
 
     [shell.screenshot]
     annotate = true
-    close_on_copy = false
     confirm_region = true
     directory = "~/Pictures/Screenshots"
     remember_last_region = true
@@ -257,6 +265,9 @@ type = "ahmedhossamdev/sticky-notes:bar"
 [widget.procmon]
 icon_only = true
 type = "weinguyen/procmon:widget"
+
+[widget.todo]
+type = "nightwatch75/todo:todo"
 
 [widget.weather]
 show_condition = false

@@ -9,15 +9,15 @@ binds {
 
     // ─── Noctalia Plugins & Panels ───
     Shift+V                               hotkey-overlay-title="Toggle Clipboard History" { spawn-sh "noctalia msg panel-toggle clipboard"; }
-    Mod+Shift+N                         hotkey-overlay-title="Toggle Notifications" { spawn-sh "noctalia msg panel-toggle notifications"; }
-    Mod+C                         hotkey-overlay-title="Toggle Calculator" { spawn-sh "noctalia msg panel-toggle yuuto/calculator:panel"; }
-    Mod+N                           hotkey-overlay-title="Toggle Sticky Notes" { spawn-sh "noctalia msg panel-toggle ahmedhossamdev/sticky-notes:panel"; }
+    Mod+X                         hotkey-overlay-title="Toggle Calculator" { spawn-sh "noctalia msg panel-toggle yuuto/calculator:panel"; }
+    Mod+A                           hotkey-overlay-title="Toggle Notes" { spawn-sh "noctalia msg panel-toggle ahmedhossamdev/sticky-notes:panel"; }
+    Mod+Z                           hotkey-overlay-title="Toggle To-Do" { spawn-sh "noctalia msg panel-toggle nightwatch75/todo:panel"; }
     Mod+V                         hotkey-overlay-title="Toggle Mihomo TUN" { spawn-sh "noctalia msg plugin reza/mihomo-tun:tun-toggle all toggle"; }
 
     // ─── Applications ───
     Mod+Return                          hotkey-overlay-title="Open Terminal: Kitty" { spawn "kitty"; }
     Mod+B                               hotkey-overlay-title="Open Browser" { spawn "firefox"; }
-    Mod+X                               hotkey-overlay-title="Open Text Editor: Zed" { spawn "zeditor"; }
+    Mod+C                               hotkey-overlay-title="Open Text Editor: Zed" { spawn "zeditor"; }
     Mod+E                               hotkey-overlay-title="File Manager: Nautilus" { spawn "nautilus"; }
 
     // ─── Media Controls ───
