@@ -58,11 +58,12 @@ PACMAN=(
     nautilus gvfs-mtp icoutils baobab file-roller gnome-disk-utility lact
     mpv mpv-mpris playerctl yt-dlp amberol python-mutagen loupe brasero
     proton-cachyos-native mangohud umu-launcher winetricks icoextract
-    firefox-wayland-cachy-hg qbittorrent aria2
+    firefox-wayland-cachy-hg qbittorrent
 )
 
 AUR=(
-    qt6ct-kde moonbit rar nautilus-open-any-terminal mcomix-rs-bin mihomo-bin
+    qt6ct-kde nautilus-open-any-terminal mcomix-rs-bin mihomo-bin
+    hydra-download-manager-bin moonbit rar
 )
 
 DOTFILES_REPO="https://github.com/arg9244/dotfiles"
@@ -201,11 +202,11 @@ run "Set GTK theme to adw-gtk3" as_user gsettings set org.gnome.desktop.interfac
 # ── 4. Service management ──
 head "4/4 — Service management"
 
-# Enable user-level services (managed by chezmoi in dot_config/systemd/user/)
-# Ensure aria2 session file and config directory exist before enabling the service
-run "Create aria2 config dir" as_user mkdir -p "$ORIGINAL_HOME/.config/aria2"
-run "Touch aria2 session file" as_user touch "$ORIGINAL_HOME/.config/aria2/aria2.session"
-run "Enable aria2" as_user systemctl --user enable --now aria2.service
+# # Enable user-level services (managed by chezmoi in dot_config/systemd/user/)
+# # Ensure aria2 session file and config directory exist before enabling the service
+# run "Create aria2 config dir" as_user mkdir -p "$ORIGINAL_HOME/.config/aria2"
+# run "Touch aria2 session file" as_user touch "$ORIGINAL_HOME/.config/aria2/aria2.session"
+# run "Enable aria2" as_user systemctl --user enable --now aria2.service
 
 # Enable greetd (system-level display manager)
 run "Disable other DMs" bash -c '

@@ -88,9 +88,6 @@ user_pref("dom.image-lazy-loading.enabled", true);
 // Enable background preprocessing to speed up IndexedDB reads
 user_pref("dom.indexedDB.preprocessing", true);
 
-// Prevent pages from tracking detailed asset download timing metrics
-user_pref("dom.enable_resource_timing", false);
-
 // Disable Race Cache With Network to prevent redundant network requests
 user_pref("network.http.rcwn.enabled", false);
 
@@ -164,18 +161,6 @@ user_pref("media.cache_readahead_limit", 3600);
 
 // Resume buffering after a seek when buffer drops below 30 minutes
 user_pref("media.cache_resume_threshold", 1800);
-
-// Block all audio and video media from autoplaying across all websites
-user_pref("media.autoplay.default", 5);
-
-// Enforce click-to-play media blocking policy across all elements
-user_pref("media.autoplay.blocking_policy", 2);
-
-// Block browser extensions from playing or buffering media in background pages
-user_pref("media.autoplay.allow-extension-background-pages", false);
-
-// Prevent background tabs from loading or streaming video until focused
-user_pref("media.block-autoplay-until-in-foreground", true);
 
 // Hide the hovering Picture-in-Picture overlay button on video elements
 user_pref("media.videocontrols.picture-in-picture.video-toggle.always-show", false);

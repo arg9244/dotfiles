@@ -1,0 +1,308 @@
+[shortcuts]
+add_url = "cmd+n"
+clipboard_add = "cmd+shift+v"
+close_window = "cmd+w"
+options = "cmd+,"
+quit = "cmd+q"
+remove_selected = "cmd+alt+r"
+resume_last = "cmd+r"
+scheduler = "cmd+e"
+select_all = "cmd+a"
+start_main_queue = "cmd+shift+r"
+stop_last = "cmd+s"
+stop_main_queue = "cmd+shift+s"
+
+[settings]
+launch_on_startup = true
+check_updates_on_startup = true
+beta_channel = false
+start_in_tray = true
+close_to_tray = true
+power_save = false
+hide_from_taskbar = false
+gpu_render = true
+monitor_clipboard = false
+capture_browsers = [
+    [
+    "Apple Safari",
+    true,
+],
+    [
+    "Google Chrome",
+    true,
+],
+    [
+    "Microsoft Edge",
+    true,
+],
+    [
+    "Mozilla Firefox",
+    true,
+],
+    [
+    "Opera",
+    true,
+],
+]
+auto_types = "3GP 7Z AAC ACE AIF APK ARJ ASF AVI BIN BZ2 DMG EXE GZ GZIP IMG ISO LZH M4A M4V MKV MOV MP3 MP4 MPA MPE MPEG MPG MSI MSU OGG OGV PDF PKG PPS PPT QT RA RAR RM RMVB SEA SIT SITX TAR TIF TIFF WAV WMA WMV Z ZIP SAFETENSORS GGUF GGML ONNX PT PTH CKPT PB TFLITE H5 HDF5 KERAS NPY NPZ PKL MLMODEL MLPACKAGE CAFFEMODEL PARQUET PQ ARROW FEATHER AVRO ORC TFRECORD JSONL NDJSON"
+ai_formats_seeded = true
+dont_start_sites = "*.update.microsoft.com download.windowsupdate.com"
+addr_exceptions = []
+show_exception_dialog = true
+remember_last_dir = true
+server_file_date = false
+no_category_dirs = true
+show_file_info_dialog = true
+bg_download = true
+start_minimized = false
+show_speed_tab = true
+show_completion_tab = true
+show_hide_buttons = true
+show_complete_dialog = true
+remove_completed = false
+user_agent = "hydra-gui/0.4.4"
+virus_scanner = ""
+virus_args = ""
+default_conns = 8
+adaptive_conns = true
+conn_exceptions = []
+dl_limit_enabled = false
+dl_limit_mb = 200
+dl_limit_hours = 5
+warn_before_stop = true
+proxy_mode = "None"
+proxy_script = ""
+proxy_host = ""
+proxy_port = ""
+proxy_user = ""
+proxy_pass = ""
+proxy_type = "Http"
+ftp_pasv = false
+logins = []
+theme_mode = "System"
+show_categories = false
+font_size = 15
+speed_limiter_on = false
+column_widths = []
+window_size = [
+    1280.0,
+    1406.0,
+]
+
+[[settings.sounds]]
+event = "Download complete"
+enabled = false
+file = ""
+
+[[settings.sounds]]
+event = "Download failed"
+enabled = false
+file = ""
+
+[[settings.sounds]]
+event = "Queue processing started"
+enabled = false
+file = ""
+
+[[settings.sounds]]
+event = "Queue processing stopped/finished"
+enabled = false
+file = ""
+
+[[categories]]
+name = "General"
+exts = []
+dir = "/home/reza/Downloads"
+
+[[categories]]
+name = "AI & Datasets"
+exts = [
+    "safetensors",
+    "gguf",
+    "ggml",
+    "onnx",
+    "pt",
+    "pth",
+    "ckpt",
+    "pb",
+    "tflite",
+    "h5",
+    "hdf5",
+    "keras",
+    "npy",
+    "npz",
+    "pkl",
+    "mlmodel",
+    "mlpackage",
+    "caffemodel",
+    "parquet",
+    "pq",
+    "arrow",
+    "feather",
+    "avro",
+    "orc",
+    "tfrecord",
+    "jsonl",
+    "ndjson",
+]
+dir = "/home/reza/Downloads/AI & Datasets"
+
+[[categories]]
+name = "Compressed"
+exts = [
+    "zip",
+    "rar",
+    "7z",
+    "gz",
+    "gzip",
+    "bz2",
+    "tar",
+    "arj",
+    "lzh",
+    "sit",
+    "sitx",
+    "sea",
+    "ace",
+    "z",
+    "xz",
+    "zst",
+]
+dir = "/home/reza/Downloads/Compressed"
+
+[[categories]]
+name = "Documents"
+exts = [
+    "doc",
+    "docx",
+    "pdf",
+    "ppt",
+    "pptx",
+    "pps",
+    "txt",
+    "rtf",
+    "odt",
+    "xls",
+    "xlsx",
+    "csv",
+    "epub",
+    "chm",
+    "djvu",
+]
+dir = "/home/reza/Downloads/Documents"
+
+[[categories]]
+name = "Music"
+exts = [
+    "mp3",
+    "aac",
+    "m4a",
+    "wav",
+    "wma",
+    "ogg",
+    "flac",
+    "aif",
+    "mpa",
+    "ra",
+]
+dir = "/home/reza/Downloads/Music"
+
+[[categories]]
+name = "Programs"
+exts = [
+    "exe",
+    "msi",
+    "msu",
+    "dmg",
+    "pkg",
+    "deb",
+    "rpm",
+    "appimage",
+    "apk",
+    "bin",
+    "img",
+    "iso",
+]
+dir = "/home/reza/Downloads/Programs"
+
+[[categories]]
+name = "Video"
+exts = [
+    "avi",
+    "mp4",
+    "mkv",
+    "mov",
+    "mpg",
+    "mpeg",
+    "wmv",
+    "flv",
+    "m4v",
+    "webm",
+    "rm",
+    "rmvb",
+    "ogv",
+    "3gp",
+    "asf",
+    "qt",
+    "ts",
+]
+dir = "/home/reza/Downloads/Video"
+
+[[queues]]
+name = "Main download queue"
+files_at_once = 4
+builtin = true
+
+[queues.schedule]
+periodic = false
+start_on_startup = false
+start_enabled = false
+start_at = "23:00"
+once = false
+days = [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+]
+stop_enabled = false
+stop_at = "07:30"
+retries_enabled = false
+retries = 10
+open_file_enabled = false
+open_file = ""
+exit_when_done = false
+shutdown_when_done = false
+shutdown_action = "Shutdown"
+
+[[queues]]
+name = "Synchronization queue"
+files_at_once = 4
+builtin = true
+
+[queues.schedule]
+periodic = false
+start_on_startup = false
+start_enabled = false
+start_at = "23:00"
+once = false
+days = [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+]
+stop_enabled = false
+stop_at = "07:30"
+retries_enabled = false
+retries = 10
+open_file_enabled = false
+open_file = ""
+exit_when_done = false
+shutdown_when_done = false
+shutdown_action = "Shutdown"

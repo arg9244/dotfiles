@@ -36,6 +36,7 @@ x-scheme-handler/sing-box=sing-box.desktop
 application/vnd.debian.binary-package=org.eren.debtapgui.desktop
 x-scheme-handler/githubstore=github-store-deeplink.desktop
 image/png=org.gnome.Loupe.desktop
+x-scheme-handler/ghostdownloader=io.github.xiaoyouchr.GhostDownloader.desktop
 
 [Added Associations]
 text/x-shellscript=dev.zed.Zed.desktop;org.xfce.mousepad.desktop;org.gnome.TextEditor.desktop;
