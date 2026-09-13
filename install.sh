@@ -55,7 +55,7 @@ export PATH="$ORIGINAL_HOME/.local/bin:$PATH"
 PACMAN=(
     niri noctalia noctalia-greeter gnome-keyring xdg-desktop-portal-gnome
     kitty bottom chezmoi bun adw-gtk-theme nwg-look paru github-cli zed
-    nautilus gvfs-mtp icoutils baobab file-roller gnome-disk-utility lact
+    nautilus gvfs-mtp icoutils baobab peazip gnome-disk-utility lact
     mpv mpv-mpris playerctl yt-dlp amberol python-mutagen loupe brasero
     proton-cachyos-native mangohud umu-launcher winetricks icoextract
     firefox-wayland-cachy-hg qbittorrent
@@ -63,7 +63,7 @@ PACMAN=(
 
 AUR=(
     qt6ct-kde nautilus-open-any-terminal mcomix-rs-bin mihomo-bin
-    hydra-download-manager-bin moonbit rar
+    hydra-download-manager-bin moonbit
 )
 
 DOTFILES_REPO="https://github.com/arg9244/dotfiles"

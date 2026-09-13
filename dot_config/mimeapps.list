@@ -37,6 +37,7 @@ application/vnd.debian.binary-package=org.eren.debtapgui.desktop
 x-scheme-handler/githubstore=github-store-deeplink.desktop
 image/png=org.gnome.Loupe.desktop
 x-scheme-handler/ghostdownloader=io.github.xiaoyouchr.GhostDownloader.desktop
+application/vnd.rar=peazip-extract.desktop
 
 [Added Associations]
 text/x-shellscript=dev.zed.Zed.desktop;org.xfce.mousepad.desktop;org.gnome.TextEditor.desktop;
@@ -72,3 +73,4 @@ x-scheme-handler/clash-verge=clash-verge.desktop;
 x-scheme-handler/mihomo=sparkle.desktop;
 x-scheme-handler/sparkle=sparkle.desktop;
 image/png=org.gnome.Loupe.desktop;
+application/vnd.rar=peazip-extract.desktop;
