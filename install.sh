@@ -58,12 +58,12 @@ PACMAN=(
     nautilus gvfs-mtp icoutils baobab peazip gnome-disk-utility lact
     mpv mpv-mpris playerctl yt-dlp amberol python-mutagen loupe brasero
     proton-cachyos-native mangohud umu-launcher winetricks icoextract
-    firefox-wayland-cachy-hg qbittorrent
+    firefox-wayland-cachy-hg qbittorrent amdgpu_top
 )
 
 AUR=(
     qt6ct-kde nautilus-open-any-terminal mcomix-rs-bin mihomo-bin
-    hydra-download-manager-bin moonbit
+    hydra-download-manager-bin moonbit rar
 )
 
 DOTFILES_REPO="https://github.com/arg9244/dotfiles"

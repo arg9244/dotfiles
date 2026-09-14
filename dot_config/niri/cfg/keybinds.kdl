@@ -8,16 +8,17 @@ binds {
     CTRL+Shift+ESCAPE                    hotkey-overlay-title="Open Process Monitor" { spawn-sh "noctalia msg panel-toggle weinguyen/procmon:panel"; }
 
     // ─── Noctalia Plugins & Panels ───
-    Mod+V                               hotkey-overlay-title="Toggle Clipboard History" { spawn-sh "noctalia msg panel-toggle clipboard"; }
-    Mod+X                         hotkey-overlay-title="Toggle Calculator" { spawn-sh "noctalia msg panel-toggle yuuto/calculator:panel"; }
-    Mod+A                           hotkey-overlay-title="Toggle Notes" { spawn-sh "noctalia msg panel-toggle ahmedhossamdev/sticky-notes:panel"; }
+    CTRL+Shift+V                               hotkey-overlay-title="Toggle Clipboard History" { spawn-sh "noctalia msg panel-toggle clipboard"; }
+    Mod+V                               hotkey-overlay-title="Record Active Window" { spawn-sh "noctalia msg plugin noctalia/screen_recorder:service all toggle focused"; }
+    Mod+C                         hotkey-overlay-title="Toggle Calculator" { spawn-sh "noctalia msg panel-toggle yuuto/calculator:panel"; }
+    Mod+N                           hotkey-overlay-title="Toggle Notes" { spawn-sh "noctalia msg panel-toggle ahmedhossamdev/sticky-notes:panel"; }
     Mod+Z                           hotkey-overlay-title="Toggle To-Do" { spawn-sh "noctalia msg panel-toggle nightwatch75/todo:panel"; }
-    Mod+N                         hotkey-overlay-title="Toggle Mihomo TUN" { spawn-sh "noctalia msg plugin reza/mihomo-tun:tun-toggle all toggle"; }
+    Mod+M                         hotkey-overlay-title="Toggle Mihomo TUN" { spawn-sh "noctalia msg plugin reza/mihomo-tun:tun-toggle all toggle"; }
 
     // ─── Applications ───
     Mod+Return                          hotkey-overlay-title="Open Terminal: Kitty" { spawn "kitty"; }
     Mod+B                               hotkey-overlay-title="Open Browser" { spawn "firefox"; }
-    Mod+C                               hotkey-overlay-title="Open Text Editor: Zed" { spawn "zeditor"; }
+    Mod+X                               hotkey-overlay-title="Open Text Editor: Zed" { spawn "zeditor"; }
     Mod+E                               hotkey-overlay-title="File Manager: Nautilus" { spawn "nautilus"; }
 
     // ─── Media Controls ───
@@ -126,8 +127,6 @@ binds {
     Mod+F                               { maximize-column; }
     Mod+Shift+F                         { fullscreen-window; }
     Mod+W                               { toggle-column-tabbed-display; }
-    Mod+M                               { maximize-window-to-edges; }
-
     // // ─── Screenshots Niri ───
     // Mod+Shift+S                         { screenshot; }
     // Print                               { screenshot-screen; }

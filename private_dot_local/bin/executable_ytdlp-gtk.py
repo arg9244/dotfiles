@@ -1193,7 +1193,7 @@ class YtdlpAppWindow(Gtk.ApplicationWindow):
 
 # ─── Self-Install (.desktop launcher, terminal runs only) ────────────────────
 
-_DESKTOP_ID = "io.github.ytdlp_gui.desktop"
+_DESKTOP_ID = "ytdlp_gui.desktop"
 _ICON_NAME = "ytdlp-gtk"
 
 _ICON_SVG = """<?xml version="1.0" encoding="UTF-8"?>
@@ -1239,9 +1239,9 @@ def ensure_self_install():
             f"Exec={exec_line}\n"
             f"Icon={_ICON_NAME}\n"
             "Terminal=false\n"
-            "Categories=Network;GTK;\n"
+            "Categories=AudioVideo;GTK;\n"
             "Keywords=youtube;download;video;audio;yt-dlp;\n"
-            f"StartupWMClass=io.github.ytdlp_gui\n"
+            f"StartupWMClass=ytdlp_gui\n"
         )
 
         changed = False
@@ -1280,7 +1280,7 @@ def ensure_self_install():
 class YtdlpApplication(Gtk.Application):
     def __init__(self):
         super().__init__(
-            application_id="io.github.ytdlp_gui",
+            application_id="ytdlp_gui",
             flags=Gio.ApplicationFlags.FLAGS_NONE,
         )
 
