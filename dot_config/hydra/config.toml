@@ -58,6 +58,7 @@ start_minimized = true
 show_speed_tab = true
 show_completion_tab = true
 show_hide_buttons = true
+show_conn_details = true
 show_complete_dialog = false
 remove_completed = false
 user_agent = "hydra-gui/0.4.4"
@@ -83,16 +84,7 @@ theme_mode = "System"
 show_categories = false
 font_size = 15
 speed_limiter_on = false
-column_widths = [
-    300.0,
-    40.0,
-    58.32837,
-    66.45285,
-    90.522644,
-    150.0,
-    175.0,
-    200.0,
-]
+column_widths = []
 window_size = [
     1280.0,
     1406.0,
@@ -118,10 +110,62 @@ event = "Queue processing stopped/finished"
 enabled = false
 file = ""
 
+[[settings.speed_profiles]]
+name = "Unlimited"
+
+[[settings.speed_profiles]]
+name = "Background"
+limit = 512000
+
+[[settings.speed_profiles]]
+name = "Night"
+limit = 5242880
+
+[[settings.columns]]
+id = "Name"
+width = 300.0
+visible = true
+
+[[settings.columns]]
+id = "Queue"
+width = 40.0
+visible = true
+
+[[settings.columns]]
+id = "Size"
+width = 58.32837
+visible = true
+
+[[settings.columns]]
+id = "Status"
+width = 66.45285
+visible = true
+
+[[settings.columns]]
+id = "TimeLeft"
+width = 90.522644
+visible = true
+
+[[settings.columns]]
+id = "Rate"
+width = 150.0
+visible = true
+
+[[settings.columns]]
+id = "LastTry"
+width = 175.0
+visible = true
+
+[[settings.columns]]
+id = "Description"
+width = 200.0
+visible = true
+
 [[categories]]
 name = "General"
 exts = []
 dir = "/home/reza/Downloads"
+builtin = true
 
 [[categories]]
 name = "AI & Datasets"
@@ -155,6 +199,7 @@ exts = [
     "ndjson",
 ]
 dir = "/home/reza/Downloads/AI & Datasets"
+builtin = true
 
 [[categories]]
 name = "Compressed"
@@ -177,6 +222,7 @@ exts = [
     "zst",
 ]
 dir = "/home/reza/Downloads/Compressed"
+builtin = true
 
 [[categories]]
 name = "Documents"
@@ -198,6 +244,7 @@ exts = [
     "djvu",
 ]
 dir = "/home/reza/Downloads/Documents"
+builtin = true
 
 [[categories]]
 name = "Music"
@@ -214,6 +261,7 @@ exts = [
     "ra",
 ]
 dir = "/home/reza/Downloads/Music"
+builtin = true
 
 [[categories]]
 name = "Programs"
@@ -232,6 +280,7 @@ exts = [
     "iso",
 ]
 dir = "/home/reza/Downloads/Programs"
+builtin = true
 
 [[categories]]
 name = "Video"
@@ -255,6 +304,7 @@ exts = [
     "ts",
 ]
 dir = "/home/reza/Downloads/Video"
+builtin = true
 
 [[queues]]
 name = "Main download queue"

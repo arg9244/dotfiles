@@ -58,7 +58,7 @@ PACMAN=(
     nautilus gvfs-mtp icoutils baobab peazip gnome-disk-utility lact
     mpv mpv-mpris playerctl yt-dlp amberol python-mutagen loupe brasero
     proton-cachyos-native mangohud umu-launcher winetricks icoextract
-    firefox-wayland-cachy-hg qbittorrent amdgpu_top
+    firefox-wayland-cachy-hg qbittorrent amdgpu_top  python-pillow
 )
 
 AUR=(
