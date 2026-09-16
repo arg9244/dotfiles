@@ -2,13 +2,13 @@ config_version = 14
 
 [bar.default]
 center = [ "clock", "date", "weather", "media", "monitor" ]
-end = [ "mihomo-tun", "agents", "calculator", "todo", "notes", "clipboard", "notifications", "keyboard_layout", "session" ]
+end = [ "mihomo-tun", "calculator", "todo", "notes", "clipboard", "notifications", "keyboard_layout", "session" ]
 margin_edge = 0
 margin_ends = 0
 position = "bottom"
 radius = 10
 shadow = false
-start = [ "tray", "workspaces", "ribbon", "taskbar", "recorder" ]
+start = [ "tray", "workspaces", "taskbar", "recorder" ]
 
 [brightness]
 sync_all_monitors = true
@@ -142,6 +142,12 @@ panel_placement = "floating"
 panel_position = "center"
 show_count = false
 
+[plugin_settings."alexander/mimir"]
+api_endpoint = "http://localhost:20128/v1"
+api_key = "sk-d6b1a7b109aba2f8-u1qxbn-6eaa3eae"
+chat_layer = "overlay"
+chat_position = "bottom_left"
+
 [plugin_settings."ashur-d/wallpaper-widget"]
 wallpaper_dir = "/home/reza/Pictures/Wallpapers"
 
@@ -187,9 +193,7 @@ enabled = [
     "reza/mihomo-tun",
     "yuuto/calculator",
     "nightwatch75/todo",
-    "notfinaldev/agentik",
-    "tordex/processes",
-    "luochen1990/niri-ribbon"
+    "tordex/processes"
 ]
 
     [[plugins.source]]
@@ -265,9 +269,6 @@ directory = "~/Pictures/Wallpapers"
 enabled = true
 refresh_minutes = 240
 
-[widget.agents]
-type = "notfinaldev/agentik:agents"
-
 [widget.calculator]
 type = "yuuto/calculator:bar"
 
@@ -292,9 +293,6 @@ type = "ahmedhossamdev/sticky-notes:bar"
 
 [widget.recorder]
 type = "noctalia/screen_recorder:recorder"
-
-[widget.ribbon]
-type = "luochen1990/niri-ribbon:ribbon"
 
 [widget.todo]
 type = "nightwatch75/todo:todo"

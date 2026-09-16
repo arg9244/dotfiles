@@ -29,10 +29,11 @@ set -euo pipefail
 #                     <name>.assets       { "<asset>": {sha256, size} }
 #
 # Commands:
-#   ghpkg            update every outdated package
+#   ghpkg            check and interactively prompt which packages to update
 #   ghpkg check      report versions only, change nothing
-#   ghpkg install    (re)install every package, ignoring version stamps
+#   ghpkg update     update every outdated package (non-interactive)
 #   ghpkg update N   update only the named package(s)
+#   ghpkg install    (re)install every package, ignoring version stamps
 #   ghpkg install N  force-reinstall the named package(s)
 #   ghpkg list       print the manifest
 
@@ -55,6 +56,7 @@ ghpkg — update GitHub-release packages in ~/.local/bin and ~/Apps
 usage: ghpkg [command] [package...]
 
 commands:
+  (no command)       check for updates and interactively choose packages to update
   update [name...]   update outdated packages (default: all)
   check [name...]    report versions only, change nothing
   install [name...]  (re)install packages, ignoring version stamps
@@ -267,8 +269,90 @@ install_pkg() {
   trap - EXIT
 }
 
+interactive_update() {
+  echo "Checking for updates..."
+  local -a updatable=() updatable_info=()
+  local n line repo assets files dest prerelease installed latest status
+
+  for n in $(all_names); do
+    line="$(get_pkg "$n")" || continue
+    IFS=$'\x1f' read -r repo assets files dest prerelease <<<"$line"
+    installed="$(installed_version "$n")"
+    latest="$(latest_tag "$repo" "$prerelease")" || {
+      echo "  $n: failed to resolve latest release" >&2
+      continue
+    }
+
+    status="not installed"
+    [[ -n "$installed" ]] && status="update available"
+    [[ "$installed" == "$latest" ]] && status="up to date"
+
+    printf '  %-10s latest=%-14s installed=%-14s %-26s %s\n' \
+      "$n" "$latest" "${installed:--}" "${dest:-bin}" "$status"
+
+    if [[ "$status" != "up to date" ]]; then
+      updatable+=("$n")
+      if [[ -n "$installed" ]]; then
+        updatable_info+=("$n ($installed -> $latest)")
+      else
+        updatable_info+=("$n ($latest) [not installed]")
+      fi
+    fi
+  done
+
+  echo ""
+  if ((${#updatable[@]} == 0)); then
+    echo "All packages are up to date."
+    return 0
+  fi
+
+  echo "Packages with updates available:"
+  local i
+  for i in "${!updatable[@]}"; do
+    printf '  %2d) %s\n' "$((i + 1))" "${updatable_info[$i]}"
+  done
+  echo ""
+
+  local reply=""
+  read -r -p "Enter package numbers to update (e.g. 1 3, or 'all', Enter to cancel): " reply || return 0
+  [[ -z "${reply// }" ]] && { echo "Aborted. No packages selected."; return 0; }
+
+  local -a selected=()
+  if [[ "$reply" =~ ^(all|a)$ ]]; then
+    selected=("${updatable[@]}")
+  else
+    local idx pkg p already
+    for idx in $reply; do
+      if [[ "$idx" =~ ^[0-9]+$ ]] && (( idx >= 1 && idx <= ${#updatable[@]} )); then
+        pkg="${updatable[$((idx - 1))]}"
+        already=0
+        if ((${#selected[@]} > 0)); then
+          for p in "${selected[@]}"; do
+            [[ "$p" == "$pkg" ]] && { already=1; break; }
+          done
+        fi
+        ((already)) || selected+=("$pkg")
+      else
+        echo "Ignoring invalid selection: $idx" >&2
+      fi
+    done
+  fi
+
+  ((${#selected[@]} == 0)) && { echo "No valid packages selected."; return 0; }
+
+  echo ""
+  for n in "${selected[@]}"; do
+    install_pkg "$n"
+  done
+}
+
 main() {
-  local cmd="${1:-update}"
+  if (($# == 0)); then
+    interactive_update
+    return
+  fi
+
+  local cmd="$1"
   shift || true
   local n
   case "$cmd" in

@@ -2,7 +2,7 @@ providers:
   webSearchOrder:
     []
 modelRoles:
-  default: kilo/kilo-auto/free
+  default: kilo/stealth/union-alpha
 symbolPreset: nerd
 theme:
   dark: titanium

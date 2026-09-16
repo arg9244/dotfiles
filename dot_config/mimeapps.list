@@ -1,7 +1,7 @@
 [Default Applications]
 text/x-shellscript=org.gnome.TextEditor.desktop
-x-scheme-handler/tg=it.belloworld.mercurygram._6bf14d4d739dd3121d948fb1f3a86543.desktop
-x-scheme-handler/tonsite=it.belloworld.mercurygram._6bf14d4d739dd3121d948fb1f3a86543.desktop
+x-scheme-handler/tg=userapp-AyuGram Desktop-5JXKV3.desktop
+x-scheme-handler/tonsite=userapp-AyuGram Desktop-5HNMV3.desktop
 application/yaml=dev.zed.Zed.desktop
 application/json=org.gnome.TextEditor.desktop
 application/x-desktop=dev.zed.Zed.desktop
@@ -38,11 +38,15 @@ x-scheme-handler/githubstore=github-store-deeplink.desktop
 image/png=org.gnome.Loupe.desktop
 x-scheme-handler/ghostdownloader=io.github.xiaoyouchr.GhostDownloader.desktop
 application/vnd.rar=peazip-extract.desktop
+application/metalink4+xml=dev.zed.Zed.desktop
+x-scheme-handler/sable=sable-handler.desktop
+x-scheme-handler/moe.sable.app=sable-handler.desktop
+x-scheme-handler/xmpp=fluux-messenger-handler.desktop
 
 [Added Associations]
 text/x-shellscript=dev.zed.Zed.desktop;org.xfce.mousepad.desktop;org.gnome.TextEditor.desktop;
-x-scheme-handler/tg=userapp-AyuGram Desktop-GT4IU3.desktop;it.belloworld.mercurygram._6bf14d4d739dd3121d948fb1f3a86543.desktop;
-x-scheme-handler/tonsite=userapp-AyuGram Desktop-J4IIU3.desktop;it.belloworld.mercurygram._6bf14d4d739dd3121d948fb1f3a86543.desktop;
+x-scheme-handler/tg=userapp-AyuGram Desktop-GT4IU3.desktop;it.belloworld.mercurygram._6bf14d4d739dd3121d948fb1f3a86543.desktop;userapp-AyuGram Desktop-5JXKV3.desktop;
+x-scheme-handler/tonsite=userapp-AyuGram Desktop-J4IIU3.desktop;it.belloworld.mercurygram._6bf14d4d739dd3121d948fb1f3a86543.desktop;userapp-AyuGram Desktop-5HNMV3.desktop;
 application/yaml=dev.zed.Zed.desktop;kitty-open.desktop;
 application/json=dev.zed.Zed.desktop;kitty-open.desktop;org.gnome.TextEditor.desktop;
 application/x-desktop=dev.zed.Zed.desktop;
@@ -74,3 +78,4 @@ x-scheme-handler/mihomo=sparkle.desktop;
 x-scheme-handler/sparkle=sparkle.desktop;
 image/png=org.gnome.Loupe.desktop;
 application/vnd.rar=peazip-extract.desktop;
+application/metalink4+xml=dev.zed.Zed.desktop;

@@ -1,7 +1,7 @@
 providers:
-  omniroute:
+  router:
     baseUrl: "http://localhost:20128/v1"
     api: openai-completions
-    apiKey: "sk-9e0e1b14989d4892-93939e-00ac8702"
+    apiKey: "key"
     discovery:
       type: openai-models-list

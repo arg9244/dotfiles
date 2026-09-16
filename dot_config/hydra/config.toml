@@ -71,7 +71,7 @@ dl_limit_enabled = false
 dl_limit_mb = 200
 dl_limit_hours = 5
 warn_before_stop = true
-proxy_mode = "None"
+proxy_mode = "Manual"
 proxy_script = ""
 proxy_host = "127.0.0.1"
 proxy_port = "1819"
@@ -83,11 +83,12 @@ logins = []
 theme_mode = "System"
 show_categories = false
 font_size = 15
+global_speed_limit = 512000
 speed_limiter_on = false
 column_widths = []
 window_size = [
-    1280.0,
-    1406.0,
+    1212.0,
+    1046.0,
 ]
 
 [[settings.sounds]]
@@ -123,7 +124,7 @@ limit = 5242880
 
 [[settings.columns]]
 id = "Name"
-width = 300.0
+width = 420.6664
 visible = true
 
 [[settings.columns]]
@@ -133,7 +134,7 @@ visible = true
 
 [[settings.columns]]
 id = "Size"
-width = 58.32837
+width = 81.40674
 visible = true
 
 [[settings.columns]]
@@ -148,18 +149,18 @@ visible = true
 
 [[settings.columns]]
 id = "Rate"
-width = 150.0
+width = 90.65704
 visible = true
 
 [[settings.columns]]
 id = "LastTry"
 width = 175.0
-visible = true
+visible = false
 
 [[settings.columns]]
 id = "Description"
-width = 200.0
-visible = true
+width = 40.0
+visible = false
 
 [[categories]]
 name = "General"

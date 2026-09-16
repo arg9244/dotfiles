@@ -56,7 +56,7 @@
       "files": [
         "."
       ],
-      "dest": "apps/fluffychat-linux-x64",
+      "dest": "apps/fluffychat",
       "prerelease": false
     },
     {
@@ -68,14 +68,14 @@
       "files": [
         "Hiddify.AppImage"
       ],
-      "dest": "apps/hiddify-linux-appimage",
+      "dest": "apps/hiddify",
       "prerelease": false
     },
     {
       "name": "pattn",
       "repo": "patterniha/PattN",
       "assets": [
-        "PattN-linux-64.zip"
+        "PattN"
       ],
       "files": [
         "."
@@ -92,7 +92,7 @@
       "files": [
         "."
       ],
-      "dest": "apps/rdnbenet-linux-x64",
+      "dest": "apps/rdnbenet",
       "prerelease": false
     }
   ]
