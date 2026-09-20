@@ -2,7 +2,7 @@ providers:
   webSearchOrder:
     []
 modelRoles:
-  default: kilo/stealth/union-alpha
+  default: opencode-zen/jev-1.13-free
 symbolPreset: nerd
 theme:
   dark: titanium

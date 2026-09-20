@@ -19,8 +19,8 @@ set -euo pipefail
 #                                installed as-is under their asset names.
 #                     dest        "" => $bin_dir (~/.local/bin)
 #                                 "apps/<dir>" => $apps_dir/<dir> (~/Apps),
-#                                 updated in place WITHOUT wiping, so app
-#                                 state kept inside the dir survives.
+#                                 or an absolute destination directory.
+#                                 Updates preserve unrelated app state.
 #                     prerelease  true => track latest pre-release
 #
 #   state.json      written by ghpkg after each install/update:
@@ -65,6 +65,10 @@ commands:
 Data files live in ~/.config/ghpkg:
   packages.json   package manifest (edit to add/remove packages)
   state.json      installed versions + asset sha256 checksums
+  settings.json   download_manager: none (curl), aria2c, or hydra
+
+GHPKG_DOWNLOAD_MANAGER overrides the saved download manager.
+Missing optional managers fall back to curl; transfer failures do not.
 EOF
 }
 
@@ -111,6 +115,87 @@ save_state() {  # name version sums_json(object keyed by asset name)
   mv "$state_file.tmp" "$state_file"
 }
 
+download_asset() {  # url output-path
+  local manager="${GHPKG_DOWNLOAD_MANAGER:-}" settings="$config_dir/settings.json"
+  if [[ -z "$manager" && -f "$settings" ]]; then
+    manager="$(jq -er '.download_manager // "none"' "$settings")" || die "invalid download settings: $settings"
+  fi
+  manager="${manager:-none}"
+  case "$manager" in
+    none|aria2c|hydra) ;;
+    *) die "unknown download manager: $manager" ;;
+  esac
+  if [[ "$manager" != none ]] && ! command -v "$manager" >/dev/null 2>&1; then
+    echo "    $manager unavailable; using curl"
+    manager=none
+  fi
+  case "$manager" in
+    none) curl -fsSL -o "$2" "$1" ;;
+    aria2c)
+      echo "    downloading with aria2c"
+      aria2c --no-conf --continue=true -x 16 -s 16 --auto-file-renaming=false \
+        --allow-overwrite=true --dir="${2%/*}" --out="${2##*/}" -- "$1"
+      ;;
+    hydra)
+      echo "    downloading with Hydra"
+      hydra -O "$2" -x 16 --force --fail --no-progress -- "$1"
+      ;;
+  esac
+}
+
+# Replace files on the destination filesystem: running processes retain their
+# old inode. Tree updates merge directories and keep unrelated application data.
+install_replacing() {  # source destination tree|flat
+  python3 - "$@" <<'PY'
+import os
+from pathlib import Path
+import shutil
+import sys
+import tempfile
+
+source, destination, mode = sys.argv[1:]
+
+def replace_file(source, target, executable=False):
+    target = Path(target)
+    target.parent.mkdir(parents=True, exist_ok=True)
+    fd, staged = tempfile.mkstemp(prefix='.ghpkg-', dir=target.parent)
+    os.close(fd)
+    try:
+        if os.path.islink(source):
+            os.unlink(staged)
+            os.symlink(os.readlink(source), staged)
+        else:
+            shutil.copy2(source, staged)
+            if executable:
+                os.chmod(staged, 0o755)
+        os.replace(staged, target)
+    finally:
+        if os.path.lexists(staged):
+            os.unlink(staged)
+
+def merge_tree(source, target):
+    target = Path(target)
+    if target.is_symlink():
+        raise ValueError(f'Refusing to merge into a symlink directory: {target}')
+    existed = target.exists()
+    target.mkdir(parents=True, exist_ok=True)
+    with os.scandir(source) as entries:
+        for entry in entries:
+            child = target / entry.name
+            if entry.is_dir(follow_symlinks=False):
+                merge_tree(entry.path, child)
+            else:
+                replace_file(entry.path, child)
+    if not existed:
+        shutil.copystat(source, target)
+
+if mode == 'tree':
+    merge_tree(source, destination)
+else:
+    replace_file(source, destination, executable=True)
+PY
+}
+
 # ── Release resolution ───────────────────────────────────────────────────────
 
 latest_tag() {  # owner/repo prerelease(bool) -> tag of the latest release
@@ -155,9 +240,13 @@ install_pkg() {
   # resolve destination directory
   local dest_dir=$bin_dir tree=0
   if [[ -n "$dest" ]]; then
-    [[ "$dest" == apps/* ]] || die "unsupported dest '$dest' for: $name"
-    dest_dir="$apps_dir/${dest#apps/}"
+    case "$dest" in
+      apps/*) dest_dir="$apps_dir/${dest#apps/}" ;;
+      /*) dest_dir="$dest" ;;
+      *) die "unsupported dest '$dest' for: $name" ;;
+    esac
   fi
+  [[ "$dest_dir" != / && "/$dest_dir/" != */../* ]] || die "unsafe destination: $dest_dir"
   [[ "$files" == "." ]] && tree=1
 
   # installed targets = archive members, or exact raw asset names.
@@ -187,6 +276,7 @@ install_pkg() {
     if ((tree)); then
       [[ -d "$dest_dir" ]] || ok=0
     else
+      ((${#outs[@]})) || ok=0
       for i in "${!outs[@]}"; do [[ -f "$dest_dir/${outs[$i]}" ]] || ok=0; done
     fi
     if [[ -n "$installed" && "$installed" == "$latest" && $ok == 1 ]]; then
@@ -209,30 +299,55 @@ install_pkg() {
     done
   done < <(jq -r '.assets[].name' <<<"$json")
   ((${#matched[@]})) || die "no asset of $name matches: $assets"
+  if jq -e --arg n "$name" '.packages[] | select(.name == $n) | .selected_asset != null' "$packages_file" >/dev/null; then
+    ((${#matched[@]} == 1)) || die "asset pattern is ambiguous for $name; edit it to match one OS/architecture build"
+  fi
+  if [[ -z "$files" ]]; then
+    targets=("${matched[@]}")
+    outs=("${matched[@]}")
+  fi
 
   local tmp url dl
   tmp="$(mktemp -d)"
   trap 'rm -rf "${tmp:-}"' EXIT
+  mkdir -p "$tmp/downloads" "$tmp/extracted"
 
   # download everything, recording sha256 + size per asset
   local sums='{}' hash size
   for aname in "${matched[@]}"; do
     url="https://github.com/$repo/releases/download/$latest/$aname"
-    dl="$tmp/$aname"
-    curl -fsSL -o "$dl" "$url"
+    [[ "$aname" != */* && "$aname" != . && "$aname" != .. ]] || die "unsafe asset name"
+    dl="$tmp/downloads/$aname"
+    download_asset "$url" "$dl"
     hash="$(sha256sum "$dl" | cut -d' ' -f1)"
     size="$(stat -c%s "$dl")"
     sums="$(jq -c --arg an "$aname" --arg h "$hash" --arg s "$size" \
       '. + {($an): {sha256: $h, size: ($s | tonumber)}}' <<<"$sums")"
-    case "$aname" in
-      *.tar.gz|*.tgz)   tar -xzf "$dl" -C "$tmp" ;;
-      *.tar.xz|*.txz)   tar -xJf "$dl" -C "$tmp" ;;
-      *.tar.bz2|*.tbz2) tar -xjf "$dl" -C "$tmp" ;;
-      *.tar.zst|*.tzst) tar --zstd -xf "$dl" -C "$tmp" ;;
-      *.tar)            tar -xf "$dl" -C "$tmp" ;;
-      *.zip)            unzip -qo "$dl" -d "$tmp" ;;
-      *)                : ;;  # raw asset — installed as-is below
-    esac
+    if [[ -n "$files" ]]; then
+      case "$aname" in
+        *.tar.gz|*.tgz|*.tar.xz|*.txz|*.tar.bz2|*.tbz2|*.tar.zst|*.tzst|*.tar|*.zip)
+          python3 - "$dl" "$tmp/extracted" <<'PY'
+import pathlib, sys, tarfile, zipfile
+source, target = sys.argv[1:]
+if zipfile.is_zipfile(source):
+    with zipfile.ZipFile(source) as archive:
+        for member in archive.infolist():
+            path = pathlib.PurePosixPath(member.filename)
+            if path.is_absolute() or '..' in path.parts or (member.external_attr >> 16) & 0o170000 == 0o120000:
+                raise ValueError('Unsafe ZIP member: ' + member.filename)
+        archive.extractall(target)
+        for member in archive.infolist():
+            mode = (member.external_attr >> 16) & 0o777
+            if mode:
+                pathlib.Path(target, member.filename).chmod(mode)
+else:
+    with tarfile.open(source) as archive:
+        archive.extractall(target, filter='data')
+PY
+          ;;
+        *) die "selected asset is not a supported archive; choose raw mode" ;;
+      esac
+    fi
     echo "    downloaded $aname (sha256 ${hash:0:12}…, $(numfmt --to=iec --suffix=B "$size"))"
   done
 
@@ -240,12 +355,15 @@ install_pkg() {
 
   if ((tree)); then
     # whole-tree mode: strip one wrapper dir if the extraction root has exactly one
-    local src_root="$tmp"
-    local -a tops=("$tmp"/*)
+    local src_root="$tmp/extracted"
+    local -a tops=()
+    shopt -s dotglob nullglob
+    tops=("$src_root"/*)
+    shopt -u dotglob nullglob
     if ((${#tops[@]} == 1)) && [[ -d "${tops[0]}" ]]; then
       src_root="${tops[0]}"
     fi
-    cp -a "$src_root"/. "$dest_dir"/
+    install_replacing "$src_root" "$dest_dir" tree || die "failed to install tree for $name"
     echo "    installed tree -> $dest_dir"
   else
     local i src member out
@@ -253,13 +371,13 @@ install_pkg() {
       member="${targets[$i]%%=*}"
       out="${outs[$i]}"
       if [[ -n "$files" ]]; then
-        src="$(find "$tmp" -type f -name "$member" -print -quit)"
+        src="$(find "$tmp/extracted" -type f -name "$member" -print -quit)"
         [[ -n "$src" ]] || die "member '$member' not found in $name archive"
       else
-        src="$tmp/$member"
+        src="$tmp/downloads/$member"
         [[ -f "$src" ]] || die "asset '$member' missing for $name"
       fi
-      install -m755 -D "$src" "$dest_dir/$out" || die "failed to install $out"
+      install_replacing "$src" "$dest_dir/$out" flat || die "failed to install $out"
       echo "    installed $dest_dir/$out"
     done
   fi

@@ -1,9 +1,23 @@
-selected_tab: displays_page
+selected_tab: thermals_page
 selected_gpu: 1002:73BF-1EAE:6705-0000:0a:00.0
-stats_poll_interval_ms: 500
-gpus: {}
+plots_time_period: 120
+plots_per_row: 2
+stats_poll_interval_ms: 1000
+gpus:
+  1002:73BF-1EAE:6705-0000:0a:00.0:
+    plots:
+    - - !Temperature edge
+      - !Temperature junction
+      - !Temperature mem
+    - - GpuClock
+      - GpuTargetClock
+      - VramClock
+    - - FanRpm
+      - FanPwm
+    - - PowerAverage
+      - PowerCap
 theme: automatic
 color_scheme: Auto
 window_size:
-  width: 1280
-  height: 1406
+  width: 960
+  height: 1046

@@ -1,0 +1,50 @@
+{
+  "packages": [
+    {
+      "selected_asset": "aether-linux-x86_64.tar.gz",
+      "name": "aether",
+      "repo": "CluvexStudio/Aether",
+      "assets": [
+        "aether-linux-x86_64.tar.gz"
+      ],
+      "files": [
+        "."
+      ],
+      "dest": "/home/reza/Apps/aether",
+      "prerelease": false,
+      "os": "linux",
+      "arch": "x86_64"
+    },
+    {
+      "selected_asset": "fluffychat-linux-x64.tar.gz",
+      "name": "fluffychat",
+      "repo": "krille-chan/fluffychat",
+      "assets": [
+        "fluffychat-linux-x64.tar.gz"
+      ],
+      "files": [
+        "."
+      ],
+      "dest": "/home/reza/Apps/fluffychat",
+      "prerelease": false,
+      "os": "linux",
+      "arch": "x86_64"
+    },
+    {
+      "selected_asset": "rdnbenet-linux-x64.zip",
+      "name": "pattn",
+      "repo": "mirarr-app/network-checker",
+      "assets": [
+        "rdnbenet-linux-x64.zip"
+      ],
+      "files": [
+        "."
+      ],
+      "dest": "/home/reza/Apps/rdnbenet",
+      "prerelease": false,
+      "os": "linux",
+      "arch": "x86_64"
+    }
+  ],
+  "schema_version": 2
+}

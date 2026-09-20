@@ -11,7 +11,7 @@ image/jpeg=org.gnome.Loupe.desktop
 inode/directory=org.gnome.Nautilus.desktop
 text/css=dev.zed.Zed.desktop
 application/x-ms-dos-executable=io.github.winux.desktop
-application/x-msdownload=io.github.winux.desktop
+application/x-msdownload=wine.desktop
 application/vnd.microsoft.portable-executable=winux.desktop
 application/vnd.efi.iso=gnome-disk-image-mounter.desktop
 x-scheme-handler/superproductivity=superproductivity.desktop
@@ -42,6 +42,7 @@ application/metalink4+xml=dev.zed.Zed.desktop
 x-scheme-handler/sable=sable-handler.desktop
 x-scheme-handler/moe.sable.app=sable-handler.desktop
 x-scheme-handler/xmpp=fluux-messenger-handler.desktop
+x-scheme-handler/fancy=mumble-tauri-handler.desktop
 
 [Added Associations]
 text/x-shellscript=dev.zed.Zed.desktop;org.xfce.mousepad.desktop;org.gnome.TextEditor.desktop;
@@ -56,7 +57,7 @@ image/jpeg=org.gnome.Loupe.desktop;
 text/css=dev.zed.Zed.desktop;
 application/vnd.microsoft.portable-executable=wine.desktop;winux.desktop;
 application/x-ms-dos-executable=io.github.winux.desktop;io.github.winux.run.desktop;
-application/x-msdownload=io.github.winux.desktop;io.github.winux.run.desktop;
+application/x-msdownload=io.github.winux.desktop;io.github.winux.run.desktop;wine.desktop;
 application/x-wine-extension-exe=io.github.winux.desktop;io.github.winux.run.desktop;
 application/x-executable=io.github.winux.desktop;io.github.winux.run.desktop;
 application/vnd.efi.iso=gnome-disk-image-mounter.desktop;

@@ -8,10 +8,7 @@ margin_ends = 0
 position = "bottom"
 radius = 10
 shadow = false
-start = [ "tray", "workspaces", "taskbar", "recorder" ]
-
-[brightness]
-sync_all_monitors = true
+start = [ "tray", "workspaces", "taskbar", "recorder", "bar" ]
 
 [calendar]
 enabled = true
@@ -181,7 +178,6 @@ sort_by = "mem"
 
 [plugin_settings."yuuto/calculator"]
 panel_layer = "overlay"
-panel_placement = "floating"
 panel_position = "center"
 
 [plugins]
@@ -268,6 +264,9 @@ directory = "~/Pictures/Wallpapers"
 [weather]
 enabled = true
 refresh_minutes = 240
+
+[widget.bar]
+type = "baizhu/paged-todo:bar"
 
 [widget.calculator]
 type = "yuuto/calculator:bar"
