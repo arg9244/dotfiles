@@ -1,358 +1,236 @@
 #!/usr/bin/env bash
+set -euo pipefail
 
-# 1. Inputs & Path Resolution
+GAME_ROOT="$(realpath "$PWD")"
+APPS_DIR="$HOME/.local/share/applications"
+ICON_DIR="$HOME/.local/share/icons/hicolor/256x256/apps"
+BIN_DIR="$HOME/.local/bin"
+
+sanitize_path() {
+    local p="${1#"${1%%[![:space:]]*}"}"
+    p="${p%"${p##*[![:space:]]}"}"
+    p="${p#[\'\"]}"
+    p="${p%[\'\"]}"
+    realpath "${p/#\~/$HOME}" 2>/dev/null || echo "$p"
+}
+
+extract_icon() {
+    local exe="$1" out_png="$2"
+    command -v wrestool >/dev/null 2>&1 && command -v icotool >/dev/null 2>&1 || return 1
+
+    local tmp; tmp="$(mktemp -d)"
+    trap 'rm -rf "$tmp"' RETURN
+
+    wrestool -x -t 14 "$exe" -o "$tmp" 2>/dev/null || wrestool -x "$exe" -o "$tmp" 2>/dev/null || true
+    icotool -x -o "$tmp" "$tmp"/*.ico 2>/dev/null || true
+
+    local largest; largest="$(ls -S "$tmp"/*.png 2>/dev/null | head -n 1)"
+    if [ -n "$largest" ] && [ -f "$largest" ]; then
+        cp "$largest" "$out_png"
+        cp "$largest" "$GAME_ROOT/icon.png" 2>/dev/null || true
+        gtk-update-icon-cache -f -t "$HOME/.local/share/icons/hicolor" >/dev/null 2>&1 || true
+        return 0
+    fi
+    return 1
+}
+
 EXE="${1:-}"
+[ -z "$EXE" ] && read -e -p "Drag & drop game executable (.exe): " EXE
+EXE="$(sanitize_path "$EXE")"
+[ ! -f "$EXE" ] && { echo "[!] Executable not found: $EXE" >&2; exit 1; }
+
 NAME="${2:-}"
+EXE_BASENAME="$(basename "$EXE")"
+[ -z "$NAME" ] && read -e -p "Game name [${EXE_BASENAME%.*}]: " NAME
+NAME="${NAME:-${EXE_BASENAME%.*}}"
 
-if [ -z "$EXE" ]; then
-    echo "=================================================="
-    echo "             UMU Game Installer & Setup           "
-    echo "=================================================="
-    read -e -p "Enter path to game executable (.exe): " EXE
-fi
+read -e -p "Create TTY Gamescope launcher in ~/.local/bin? [y/N]: " GS_INPUT
+GENERATE_TTY_GS="0"
+[[ "${GS_INPUT,,}" =~ ^(y|yes)$ ]] && GENERATE_TTY_GS="1"
 
-# Expand ~ and get canonical path
-EXE="$(realpath "${EXE/#\~/$HOME}" 2>/dev/null || echo "$EXE")"
-if [ ! -f "$EXE" ]; then
-    echo "[!] Executable not found: $EXE"
-    exit 1
-fi
-
-GAME_DIR="$(dirname "$EXE")"
-EXE_NAME="$(basename "$EXE")"
-
-if [ -z "$NAME" ]; then
-    read -e -p "Enter game name [${EXE_NAME%.*}]: " NAME
-    NAME="${NAME:-${EXE_NAME%.*}}"
-fi
-
-# OptiScaler Setup Prompt
-read -e -p "Enable OptiScaler integration? [y/N]: " ENABLE_OPTISCALER_INPUT
-case "${ENABLE_OPTISCALER_INPUT,,}" in
-    y|yes)
-        USE_OPTISCALER="1"
-        OPTISCALER_CONFIG="Upscalers.Dx12Upscaler=fsr31;FrameGen.Enabled=true;FrameGen.FGInput=DLSSG;FrameGen.FGOutput=XeFG;FrameGen.FTInput=2;FSR.Fsr4Update=false"
-
-        echo "Select OptiScaler hook DLL (PROTON_OPTISCALER_NAME):"
-        echo "  1) dxgi.dll (Default - recommended for most games)"
-        echo "  2) d3d12.dll"
-        echo "  3) dbghelp.dll"
-        read -e -p "Choice [1-3, default: 1]: " DLL_CHOICE
-        case "$DLL_CHOICE" in
-            2) OPTISCALER_NAME="d3d12.dll" ;;
-            3) OPTISCALER_NAME="dbghelp.dll" ;;
-            *) OPTISCALER_NAME="dxgi.dll" ;;
-        esac
-        ;;
-    *)
-        USE_OPTISCALER="0"
-        OPTISCALER_CONFIG=""
-        OPTISCALER_NAME="dxgi.dll"
-        ;;
-esac
-
-# GameScope Setup Prompt
-read -e -p "Gamescope launcher in ~/.local/bin? [y/N]: " ENABLE_GAMESCOPE_INPUT
-case "${ENABLE_GAMESCOPE_INPUT,,}" in
-    y|yes)
-        GENERATE_GAMESCOPE="1"
-        GS_CONNECTOR="DP-2"
-        GS_HDR_ITM="0"
-        ;;
-    *)
-        GENERATE_GAMESCOPE="0"
-        ;;
-esac
-
+REL_EXE="$(realpath --relative-to="$GAME_ROOT" "$EXE")"
 SLUG="$(echo "$NAME" | tr '[:upper:]' '[:lower:]' | tr ' ' '-' | tr -cd 'a-z0-9_-')"
 [ -z "$SLUG" ] && SLUG="game_$(date +%s)"
 
-RUN_SCRIPT="$GAME_DIR/run.sh"
-APPS_DIR="$HOME/.local/share/applications"
-ICON_DIR="$HOME/.local/share/icons/hicolor/256x256/apps"
+mkdir -p "$GAME_ROOT/.wine" "$APPS_DIR" "$ICON_DIR" "$BIN_DIR"
+
+RUN_SCRIPT="$GAME_ROOT/run.sh"
 ICON_FILE="$ICON_DIR/${SLUG}.png"
-BIN_DIR="$HOME/.local/bin"
-GS_SCRIPT_NAME="${NAME// /-}.sh"
-GS_SCRIPT="$BIN_DIR/$GS_SCRIPT_NAME"
-
-# Safe directory creation
-mkdir -p "$GAME_DIR/.wine" "$APPS_DIR" "$ICON_DIR" "$BIN_DIR"
-
-# 2. Extract Icon
 ICON_ENTRY="Icon=wine"
+extract_icon "$EXE" "$ICON_FILE" && ICON_ENTRY="Icon=${ICON_FILE}"
 
-if command -v wrestool >/dev/null 2>&1 && command -v icotool >/dev/null 2>&1 && [ -f "$EXE" ]; then
-    TMP_DIR="$(mktemp -d)"
-
-    wrestool -x -t 14 "$EXE" -o "$TMP_DIR" 2>/dev/null || true
-
-    shopt -s nullglob
-    ICO_FILES=("$TMP_DIR"/*.ico)
-
-    if [ ${#ICO_FILES[@]} -eq 0 ]; then
-        wrestool -x "$EXE" -o "$TMP_DIR" 2>/dev/null || true
-        ICO_FILES=("$TMP_DIR"/*.ico)
-    fi
-
-    if [ ${#ICO_FILES[@]} -gt 0 ]; then
-        icotool -x -o "$TMP_DIR" "${ICO_FILES[@]}" 2>/dev/null || true
-        PNG_FILES=("$TMP_DIR"/*.png)
-
-        if [ ${#PNG_FILES[@]} -gt 0 ]; then
-            LARGEST_PNG="$(ls -S "$TMP_DIR"/*.png 2>/dev/null | head -n 1)"
-            if [ -n "$LARGEST_PNG" ] && [ -f "$LARGEST_PNG" ]; then
-                cp "$LARGEST_PNG" "$ICON_FILE"
-                cp "$LARGEST_PNG" "$GAME_DIR/icon.png" 2>/dev/null || true
-                touch "$HOME/.local/share/icons/hicolor" 2>/dev/null || true
-                gtk-update-icon-cache -f -t "$HOME/.local/share/icons/hicolor" 2>/dev/null || true
-                ICON_ENTRY="Icon=${ICON_FILE}"
-                echo "[✓] Icon successfully extracted: $ICON_FILE"
-            fi
-        fi
-    fi
-    shopt -u nullglob
-    rm -rf "$TMP_DIR"
-fi
-
-if [ "$ICON_ENTRY" = "Icon=wine" ]; then
-    echo "[!] No icon found in executable. Defaulting desktop entry to generic 'wine' icon."
-fi
-
-# 3. Generate Native run.sh in Game Directory (Niri & Wayland Native)
-cat << 'EOF' > "$RUN_SCRIPT"
+cat << EOF > "$RUN_SCRIPT"
 #!/usr/bin/env bash
-# Directory & Identity (Portable)
-DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
-cd "$DIR" || exit 1
+set -eo pipefail
 
-EOF
+DIR="\$(cd -- "\$(dirname -- "\${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 
-cat << EOF >> "$RUN_SCRIPT"
-export GAME_NAME="${NAME}"
-export GAME_EXE="\${DIR}/${EXE_NAME}"
-export WINEPREFIX="\${DIR}/.wine"
-export GAMEID=""
-export STORE=""
+# ==============================================================================
+# CONFIGURATION & USER SETTINGS
+# ==============================================================================
 
-# Proton & Environment Settings
+# Core Identity & Paths
 export PROTONPATH="/usr/share/steam/compatibilitytools.d/proton-cachyos-native"
+export GAME_NAME="${NAME}"
+export GAME_EXE="\${DIR}/${REL_EXE}"
+export WINEPREFIX="\${DIR}/.wine"
+DLL_OVERRIDES=""
+GAME_ARGS=()
+
+# OptiScaler Integration (Change 0 to 1 to enable)
+export PROTON_USE_OPTISCALER="0"
+export PROTON_OPTISCALER_NAME="dxgi.dll"
+export PROTON_OPTISCALER_CONFIG="Upscalers.Dx12Upscaler=fsr31;FrameGen.Enabled=true;FrameGen.FGInput=DLSSG;FrameGen.FGOutput=XeFG;FrameGen.FTInput=2;FSR.Fsr4Update=false"
+
+# Proton & Upscaling Settings
 export PROTON_VERB="run"
 export SteamOS=1
 export PROTON_ENABLE_WAYLAND="1"
-
-# Graphics & Performance (Mesa / RADV Optimizations)
-export DXVK_FRAME_RATE="160"
-export PROTON_USE_OPTISCALER="${USE_OPTISCALER}"
-export PROTON_OPTISCALER_NAME="${OPTISCALER_NAME}"
-export PROTON_OPTISCALER_CONFIG="${OPTISCALER_CONFIG}"
+export PROTON_USE_NTSYNC="1"
+export PROTON_NO_WM_DECORATION="1"
 export PROTON_FSR4_INDICATOR="0"
 export PROTON_FSR4_UPGRADE="1"
 export PROTON_XESS_UPGRADE="0"
 export PROTON_DLSS_UPGRADE="0"
+export PROTON_NO_STEAMINPUT="1"
+export PROTON_PREFER_SDL="1"
+
+# Graphics & Performance (Mesa / RADV)
 export AMD_VULKAN_ICD="RADV"
 export RADV_PERFTEST="gpl,sam"
 export MESA_SHADER_CACHE_MAX_SIZE="12G"
 export PROTON_LOCAL_SHADER_CACHE="1"
 export RADV_TEX_ANISO="16"
 export RADV_ANTI_LAG="1"
-export PROTON_USE_NTSYNC="1"
 export WINE_DISABLE_VULKAN_OPWR="1"
-export PROTON_NO_WM_DECORATION="1"
-export XDG_CURRENT_DESKTOP="niri"
-
-# Input, Overlays & Network
-export PROTON_NO_STEAMINPUT="1"
-export PROTON_PREFER_SDL="1"
 export DXVK_HUD="0"
 export MANGOHUD="1"
 export all_proxy=""
 
-# LACT & Niri Display Settings
+# Niri Compositor Controls
+export XDG_CURRENT_DESKTOP="niri"
+export NIRI_VRR="1"
+export NIRI_OUT="Samsung Electric Company LS32CG51x H9JWA00258"
+
+# Gamescope Configuration
+export USE_GAMESCOPE="\${USE_GAMESCOPE:-0}"
+export GAMESCOPE_MODE="\${GAMESCOPE_MODE:-nested}" # nested | drm
+export GS_RES="2560x1440"
+export GS_REFRESH="165"
+export GS_WINDOW_MODE="fullscreen" # fullscreen | borderless
+export GS_VRR="1"
+export GS_CONNECTOR="DP-2"
+export GS_HDR="1"
+export GS_HDR_ITM="0"
+export GS_HDR_SDR_NITS="203"
+export GS_HDR_TARGET_NITS="300"
+
+# LACT GPU Overclocking
 export LACT_ENABLE="0"
-export LACT_GAME_PROFILE="OC"
-export LACT_DEFAULT_PROFILE="Default"
-export NIRI_VRR_ENABLE="1"
-export NIRI_VRR_OUTPUT="Samsung Electric Company LS32CG51x H9JWA00258"
-export NIRI_VRR_OFF_MODE="off"
+export LACT_PROFILE="OC"
+export LACT_RESET_PROFILE="Default"
 
-# Helper Functions
-set_lact() {
-    [ "\$LACT_ENABLE" = "1" ] && command -v lact &>/dev/null && lact cli profile set "\$1" &>/dev/null
-}
+# ==============================================================================
+# LOGIC & EXECUTION (DO NOT MODIFY BELOW)
+# ==============================================================================
 
-set_vrr() {
-    if [ "\$NIRI_VRR_ENABLE" = "1" ] && command -v niri &>/dev/null && niri msg outputs &>/dev/null; then
-        local out="\$NIRI_VRR_OUTPUT"
-        [ -z "\$out" ] && out="\$(niri msg focused-output 2>/dev/null | awk '/Output/ {print \$NF}' | tr -d '()')"
-        [ -n "\$out" ] && niri msg output "\$out" vrr "\$1" &>/dev/null
+# Parse DLL_OVERRIDES
+if [ -n "\$DLL_OVERRIDES" ]; then
+    IFS=',' read -ra _list <<< "\$DLL_OVERRIDES"
+    for d in "\${_list[@]}"; do
+        d="\$(echo "\$d" | xargs)"
+        [ -z "\$d" ] && continue
+        [[ "\$d" != *"="* ]] && d="\${d%.dll}=n,b"
+        export WINEDLLOVERRIDES="\${WINEDLLOVERRIDES:+\$WINEDLLOVERRIDES;}\$d"
+    done
+fi
+
+# Compositor / Mode Negotiation
+if [ "\$USE_GAMESCOPE" = "1" ]; then
+    export PROTON_ENABLE_WAYLAND="0"
+    export ENABLE_GAMESCOPE_WSI="1"
+    export XDG_CURRENT_DESKTOP="gamescope"
+    export MANGOHUD="0"
+
+    if [ "\$GAMESCOPE_MODE" = "drm" ]; then
+        export DXVK_FRAME_RATE="160"
+        if [ "\$GS_HDR" = "1" ]; then
+            export PROTON_ENABLE_HDR="1"
+            export DXVK_HDR="1"
+            export DXVK_CONFIG="dxgi.enableHDR=True"
+        fi
     fi
+fi
+
+# LACT & Niri Helpers
+set_lact() { [ "\$LACT_ENABLE" = "1" ] && command -v lact >/dev/null && lact cli profile set "\$1" >/dev/null 2>&1 || true; }
+set_vrr() {
+    [ "\$NIRI_VRR" = "1" ] && command -v niri >/dev/null || return 0
+    local out="\${NIRI_OUT:-\$(niri msg focused-output 2>/dev/null | awk '/Output/ {print \$NF}' | tr -d '()')}"
+    [ -n "\$out" ] && niri msg output "\$out" vrr "\$1" >/dev/null 2>&1 || true
 }
 
-# Build Launch Command
+# Assemble Command
 CMD=()
-command -v game-performance &>/dev/null && CMD+=("game-performance")
-CMD+=("umu-run" "\$GAME_EXE" "\$@")
+command -v game-performance >/dev/null 2>&1 && CMD+=("game-performance")
 
-# Execution & Session Cleanup
-if [ "\$LACT_ENABLE" = "1" ] || [ "\$NIRI_VRR_ENABLE" = "1" ]; then
-    trap 'set_lact "\$LACT_DEFAULT_PROFILE"; set_vrr "\${NIRI_VRR_OFF_MODE:-off}"' EXIT INT TERM
-    set_lact "\$LACT_GAME_PROFILE"
+if [ "\$USE_GAMESCOPE" = "1" ]; then
+    GS_ARGS=("gamescope" "-W" "\${GS_RES%x*}" "-H" "\${GS_RES#*x}" "-w" "\${GS_RES%x*}" "-h" "\${GS_RES#*x}" "-r" "\$GS_REFRESH")
+    [ "\${GS_WINDOW_MODE,,}" = "fullscreen" ] && GS_ARGS+=("-f")
+    [ "\${GS_WINDOW_MODE,,}" = "borderless" ] && GS_ARGS+=("-b")
+    [ "\$GS_VRR" = "1" ] && GS_ARGS+=("--adaptive-sync")
+
+    if [ "\$GAMESCOPE_MODE" = "drm" ]; then
+        [ -n "\$GS_CONNECTOR" ] && GS_ARGS+=("--prefer-output" "\$GS_CONNECTOR")
+        if [ "\$GS_HDR" = "1" ]; then
+            GS_ARGS+=("--hdr-enabled" "--hdr-sdr-content-nits" "\$GS_HDR_SDR_NITS")
+            [ "\$GS_HDR_ITM" = "1" ] && GS_ARGS+=("--hdr-itm-enable" "--hdr-itm-target-nits" "\$GS_HDR_TARGET_NITS")
+        fi
+    fi
+
+    GS_ARGS+=("--mangoapp")
+    CMD+=("\${GS_ARGS[@]}" "--")
+fi
+
+CMD+=("umu-run" "\$GAME_EXE")
+
+# Switch to binary directory before execution
+cd "\$(dirname "\$GAME_EXE")"
+
+# Execution & Teardown
+if [ "\$LACT_ENABLE" = "1" ] || [ "\$NIRI_VRR" = "1" ]; then
+    trap 'set_lact "\$LACT_RESET_PROFILE"; set_vrr "off"' EXIT INT TERM
+    set_lact "\$LACT_PROFILE"
     set_vrr "on"
-    "\${CMD[@]}"
-    exit \$?
+    "\${CMD[@]}" "\${GAME_ARGS[@]}" "\$@"
 else
-    exec "\${CMD[@]}"
+    exec "\${CMD[@]}" "\${GAME_ARGS[@]}" "\$@"
 fi
 EOF
 
 chmod +x "$RUN_SCRIPT"
 
-# 4. Generate Standalone Gamescope Script in ~/.local/bin (If Enabled)
-if [ "$GENERATE_GAMESCOPE" = "1" ]; then
-cat << 'EOF' > "$GS_SCRIPT"
+if [ "$GENERATE_TTY_GS" = "1" ]; then
+    GS_SCRIPT="$BIN_DIR/${NAME// /-}.sh"
+    cat << EOF > "$GS_SCRIPT"
 #!/usr/bin/env bash
-# Standalone Gamescope Launcher (DRM / TTY Mode with HDR & VRR)
-EOF
-
-cat << EOF >> "$GS_SCRIPT"
-export GAME_DIR="${GAME_DIR}"
-cd "\$GAME_DIR" || exit 1
-
-export GAME_NAME="${NAME}"
-export GAME_EXE="\${GAME_DIR}/${EXE_NAME}"
-export WINEPREFIX="\${GAME_DIR}/.wine"
-export GAMEID=""
-export STORE=""
-
-# Proton & Environment Settings
-export PROTONPATH="/usr/share/steam/compatibilitytools.d/proton-cachyos-native"
-export PROTON_VERB="run"
-export SteamOS=1
-export PROTON_ENABLE_WAYLAND="0" # Required for Gamescope WSI & HDR negotiation
-
-# Graphics & Performance (Mesa / RADV Optimizations)
-export DXVK_FRAME_RATE="160"
-export PROTON_USE_OPTISCALER="${USE_OPTISCALER}"
-export PROTON_OPTISCALER_NAME="${OPTISCALER_NAME}"
-export PROTON_OPTISCALER_CONFIG="${OPTISCALER_CONFIG}"
-export PROTON_FSR4_INDICATOR="0"
-export PROTON_FSR4_UPGRADE="0"
-export PROTON_XESS_UPGRADE="0"
-export PROTON_DLSS_UPGRADE="0"
-export AMD_VULKAN_ICD="RADV"
-export RADV_PERFTEST="gpl,sam"
-export MESA_SHADER_CACHE_MAX_SIZE="12G"
-export PROTON_LOCAL_SHADER_CACHE="1"
-export RADV_TEX_ANISO="16"
-export RADV_ANTI_LAG="1"
-export PROTON_USE_NTSYNC="1"
-export WINE_DISABLE_VULKAN_OPWR="1"
-export PROTON_NO_WM_DECORATION="1"
-export XDG_CURRENT_DESKTOP="gamescope"
-
-# Input, Overlays & Network
-export PROTON_NO_STEAMINPUT="1"
-export PROTON_PREFER_SDL="1"
-export DXVK_HUD="0"
-export MANGOHUD="1"
-export all_proxy=""
-
-# --- Gamescope Display Settings ---
-export GAMESCOPE_OUTPUT_CONNECTOR="${GS_CONNECTOR}"
-export GAMESCOPE_OUTPUT_RES="2560x1440"
-export GAMESCOPE_GAME_RES="2560x1440"
-export GAMESCOPE_REFRESH_RATE="165"
-export GAMESCOPE_WINDOW_MODE="Fullscreen"
-export GAMESCOPE_VRR="1"
-
-# --- HDR Calibration Settings ---
-export GAMESCOPE_HDR="1"
-export GAMESCOPE_HDR_ITM="${GS_HDR_ITM}"
-export GAMESCOPE_HDR_SDR_NITS="203"
-export GAMESCOPE_HDR_TARGET_NITS="300"
-
-# Expose HDR Support to DXVK & Proton
-if [ "\$GAMESCOPE_HDR" = "1" ]; then
-    export ENABLE_GAMESCOPE_WSI="1"
-    export PROTON_ENABLE_HDR="1"
-    export DXVK_HDR="1"
-    export DXVK_CONFIG="dxgi.enableHDR=True"
-fi
-
-# LACT Settings (Optional GPU OC profile in TTY)
-export LACT_ENABLE="0"
-export LACT_GAME_PROFILE="OC"
-export LACT_DEFAULT_PROFILE="Default"
-
-set_lact() {
-    [ "\$LACT_ENABLE" = "1" ] && command -v lact &>/dev/null && lact cli profile set "\$1" &>/dev/null
-}
-
-# Construct Gamescope Command
-GS_ARGS=("gamescope")
-[ -n "\$GAMESCOPE_OUTPUT_CONNECTOR" ] && GS_ARGS+=("--prefer-output" "\$GAMESCOPE_OUTPUT_CONNECTOR")
-[ -n "\$GAMESCOPE_OUTPUT_RES" ]       && GS_ARGS+=("-W" "\${GAMESCOPE_OUTPUT_RES%x*}" "-H" "\${GAMESCOPE_OUTPUT_RES#*x}")
-[ -n "\$GAMESCOPE_GAME_RES" ]         && GS_ARGS+=("-w" "\${GAMESCOPE_GAME_RES%x*}" "-h" "\${GAMESCOPE_GAME_RES#*x}")
-[ -n "\$GAMESCOPE_REFRESH_RATE" ]     && GS_ARGS+=("-r" "\$GAMESCOPE_REFRESH_RATE")
-[ "\${GAMESCOPE_WINDOW_MODE,,}" = "fullscreen" ] && GS_ARGS+=("-f")
-[ "\${GAMESCOPE_WINDOW_MODE,,}" = "borderless" ] && GS_ARGS+=("-b")
-[ "\$GAMESCOPE_VRR" = "1" ]           && GS_ARGS+=("--adaptive-sync")
-
-if [ "\$GAMESCOPE_HDR" = "1" ]; then
-    GS_ARGS+=("--hdr-enabled" "--hdr-sdr-content-nits" "\$GAMESCOPE_HDR_SDR_NITS")
-    if [ "\$GAMESCOPE_HDR_ITM" = "1" ]; then
-        GS_ARGS+=("--hdr-itm-enable" "--hdr-itm-target-nits" "\$GAMESCOPE_HDR_TARGET_NITS")
-    fi
-fi
-
-[ "\$MANGOHUD" = "1" ] && GS_ARGS+=("--mangoapp")
-
-CMD=()
-command -v game-performance &>/dev/null && CMD+=("game-performance")
-CMD+=("\${GS_ARGS[@]}" "--" "umu-run" "\$GAME_EXE" "\$@")
-
-# Execution
-if [ "\$LACT_ENABLE" = "1" ]; then
-    trap 'set_lact "\$LACT_DEFAULT_PROFILE"' EXIT INT TERM
-    set_lact "\$LACT_GAME_PROFILE"
-    "\${CMD[@]}"
-    exit \$?
-else
-    exec "\${CMD[@]}"
-fi
+exec env USE_GAMESCOPE=1 GAMESCOPE_MODE=drm "$RUN_SCRIPT" "\$@"
 EOF
     chmod +x "$GS_SCRIPT"
 fi
 
-# 5. Generate Desktop File
 cat << EOF > "$APPS_DIR/${SLUG}.desktop"
 [Desktop Entry]
-Version=1.0
 Type=Application
 Name=${NAME}
-Comment=Launch ${NAME} via UMU
 Exec="${RUN_SCRIPT}"
 ${ICON_ENTRY}
 Terminal=false
 Categories=Game;
-StartupNotify=true
-Path=${GAME_DIR}
+Path=${GAME_ROOT}
 EOF
 
 chmod +x "$APPS_DIR/${SLUG}.desktop"
+command -v update-desktop-database >/dev/null 2>&1 && update-desktop-database "$APPS_DIR" >/dev/null 2>&1 || true
 
-if command -v update-desktop-database >/dev/null 2>&1; then
-    update-desktop-database "$APPS_DIR" >/dev/null 2>&1 || true
-fi
-
-echo "=================================================="
-echo "[✓] Configured: $NAME"
-echo "    Game Directory:     $GAME_DIR"
-echo "    Shared Prefix:      $GAME_DIR/.wine"
-echo "    Desktop Launcher:   $RUN_SCRIPT"
-echo "    Desktop Entry:      $APPS_DIR/${SLUG}.desktop"
-if [ "$GENERATE_GAMESCOPE" = "1" ]; then
-echo "    TTY Gamescope:      $GS_SCRIPT"
-fi
-echo "    OptiScaler:         $([ "$USE_OPTISCALER" = "1" ] && echo "Enabled ($OPTISCALER_NAME)" || echo "Disabled")"
-echo "=================================================="
+echo "[✓] Configured '$NAME' in '$GAME_ROOT'"

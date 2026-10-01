@@ -8,8 +8,8 @@ binds {
     ALT+V                               hotkey-overlay-title="Toggle Clipboard History" { spawn-sh "noctalia msg panel-toggle clipboard"; }
     Mod+V                               hotkey-overlay-title="Record Active Window" { spawn-sh "noctalia msg plugin noctalia/screen_recorder:service all toggle focused"; }
     Mod+C                         hotkey-overlay-title="Toggle Calculator" { spawn-sh "noctalia msg panel-toggle yuuto/calculator:panel"; }
-    Mod+N                           hotkey-overlay-title="Toggle Notes" { spawn-sh "noctalia msg panel-toggle ahmedhossamdev/sticky-notes:panel"; }
-    Mod+Z                           hotkey-overlay-title="Toggle To-Do" { spawn-sh "noctalia msg panel-toggle nightwatch75/todo:panel"; }
+    Mod+N                           hotkey-overlay-title="Toggle Notes" { spawn-sh "noctalia msg panel-toggle fel/quill:panel"; }
+    // Mod+Z                           hotkey-overlay-title="Toggle To-Do" { spawn-sh "noctalia msg panel-toggle nightwatch75/todo:panel"; }
     // Mod+A                           hotkey-overlay-title="Toggle Agentik" { spawn-sh "noctalia msg panel-toggle notfinaldev/agentik:session-panel"; }
     Mod+P               hotkey-overlay-title="Toggle Processes" { spawn-sh "noctalia msg panel-toggle tordex/processes:panel"; }
     Mod+M                         hotkey-overlay-title="Toggle Mihomo TUN" { spawn-sh "noctalia msg plugin reza/mihomo-tun:tun-toggle all toggle"; }

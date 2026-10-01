@@ -4,3 +4,5 @@ README.md
 etc/
 usr/
 archive/
+private_dot_local/bin/executable_ggum.py
+private_dot_local/bin/executable_ghpkg-gtk.py

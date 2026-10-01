@@ -1,14 +1,14 @@
 config_version = 14
 
 [bar.default]
-center = [ "clock", "date", "weather", "media", "monitor" ]
-end = [ "mihomo-tun", "calculator", "todo", "notes", "clipboard", "notifications", "keyboard_layout", "session" ]
+center = [ "clock", "date", "date_2", "weather", "media", "monitor" ]
+end = [ "mihomo-tun", "calculator", "status", "clipboard", "notifications", "keyboard_layout", "session" ]
 margin_edge = 0
 margin_ends = 0
 position = "bottom"
 radius = 10
 shadow = false
-start = [ "tray", "workspaces", "taskbar", "recorder", "bar" ]
+start = [ "tray", "workspaces", "taskbar", "recorder" ]
 
 [calendar]
 enabled = true
@@ -40,6 +40,7 @@ hidden_tabs = [ "power" ]
 
 [desktop_widgets]
 enabled = false
+widget_order = []
 
 [idle]
 behavior_order = [ "lock", "screen-off", "lock-and-suspend" ]
@@ -148,6 +149,18 @@ chat_position = "bottom_left"
 [plugin_settings."ashur-d/wallpaper-widget"]
 wallpaper_dir = "/home/reza/Pictures/Wallpapers"
 
+[plugin_settings."borderliner/jalali_calendar"]
+show_hijri = false
+
+[plugin_settings."fel/quill"]
+ai_capture = false
+git_history = true
+notes_dir = "~/Documents/Notes"
+panel_layer = "overlay"
+panel_open_near_click = true
+panel_placement = "floating"
+panel_position = "center"
+
 [plugin_settings."nightwatch75/todo"]
 panel_layer = "overlay"
 panel_placement = "floating"
@@ -182,14 +195,14 @@ panel_position = "center"
 
 [plugins]
 enabled = [
-    "ahmedhossamdev/sticky-notes",
     "apex077/eyecare",
     "noctalia/screen_recorder",
     "nomadcxx/gamer-mode",
     "reza/mihomo-tun",
     "yuuto/calculator",
-    "nightwatch75/todo",
-    "tordex/processes"
+    "tordex/processes",
+    "fel/quill",
+    "borderliner/jalali_calendar"
 ]
 
     [[plugins.source]]
@@ -263,10 +276,6 @@ directory = "~/Pictures/Wallpapers"
 
 [weather]
 enabled = true
-refresh_minutes = 240
-
-[widget.bar]
-type = "baizhu/paged-todo:bar"
 
 [widget.calculator]
 type = "yuuto/calculator:bar"
@@ -274,6 +283,11 @@ type = "yuuto/calculator:bar"
 [widget.date]
 format = "{:%a, %b %d}"
 type = "clock"
+
+[widget.date_2]
+format = "{day} {month}"
+show_glyph = false
+type = "borderliner/jalali_calendar:date"
 
 [widget.media]
 album_art_only = true
@@ -287,14 +301,11 @@ highlight_gamer_mode = false
 show_vram = true
 type = "nomadcxx/gamer-mode:monitor"
 
-[widget.notes]
-type = "ahmedhossamdev/sticky-notes:bar"
-
 [widget.recorder]
 type = "noctalia/screen_recorder:recorder"
 
-[widget.todo]
-type = "nightwatch75/todo:todo"
+[widget.status]
+type = "fel/quill:status"
 
 [widget.weather]
 show_condition = false
