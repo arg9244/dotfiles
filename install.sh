@@ -55,7 +55,7 @@ export PATH="$ORIGINAL_HOME/.local/bin:$PATH"
 PACMAN=(
     labwc kanshi xdg-desktop-portal-wlr xdg-desktop-portal-gtk
     noctalia noctalia-greeter umbriel gnome-keyring xwayland-satellite
-    kitty bottom chezmoi bun adw-gtk-theme nwg-look paru github-cli zed
+    foot bottom chezmoi bun adw-gtk-theme nwg-look paru github-cli zed
     nautilus gvfs-mtp icoutils baobab peazip gnome-disk-utility amdgpu_top
     mpv mpv-mpris playerctl yt-dlp amberol python-mutagen loupe brasero
     proton-cachyos-native mangohud umu-launcher icoextract lact ddcutil

@@ -98,7 +98,7 @@ offset_y = 2
 "Alt+Tab"         = { action = "spawn:noctalia msg window-switcher hold", repeat = false }
 
 # ─── Applications ───
-"Mod+Return"      = { action = "spawn:kitty", repeat = false }
+"Mod+Return"      = { action = "spawn:foot", repeat = false }
 "Mod+B"           = { action = "spawn:firefox", repeat = false }
 "Mod+X"           = { action = "spawn:zeditor", repeat = false }
 "Mod+E"           = { action = "spawn:nautilus", repeat = false }
