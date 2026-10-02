@@ -53,11 +53,12 @@ export PATH="$ORIGINAL_HOME/.local/bin:$PATH"
 # ══════════════════════════════════════════════════════════════════════════════
 
 PACMAN=(
-    niri noctalia noctalia-greeter gnome-keyring xdg-desktop-portal-gnome
+    labwc kanshi xdg-desktop-portal-wlr xdg-desktop-portal-gtk
+    noctalia noctalia-greeter gnome-keyring xorg-xwayland
     kitty bottom chezmoi bun adw-gtk-theme nwg-look paru github-cli zed
     nautilus gvfs-mtp icoutils baobab peazip gnome-disk-utility amdgpu_top
     mpv mpv-mpris playerctl yt-dlp amberol python-mutagen loupe brasero
-    proton-cachyos-native mangohud umu-launcher winetricks icoextract lact
+    proton-cachyos-native mangohud umu-launcher icoextract lact
     firefox-wayland-cachy-hg qbittorrent python-pillow ayugram-desktop
 )
 

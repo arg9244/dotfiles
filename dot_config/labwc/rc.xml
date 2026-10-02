@@ -162,4 +162,19 @@
     </windowRule>
   </windowRules>
 
+  <!-- ─── Window Resize Usability ─── -->
+    <resize>
+      <!-- Invisible grab area in pixels around borders (default is only 8).
+           Increasing this to 16-20px makes edge detection effortless. -->
+      <minimumArea>20</minimumArea>
+
+      <!-- Size of the corner zones for diagonal resizing.
+           Default is half titlebar height (which is 0 or tiny without CSD).
+           Setting this to 24-30px gives you large, easy-to-hit corner regions. -->
+      <cornerRange>26</cornerRange>
+
+      <!-- Keeps window content rendering smoothly during resizing -->
+      <drawContents>yes</drawContents>
+    </resize>
+
 </labwc_config>

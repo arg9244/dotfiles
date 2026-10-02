@@ -4,7 +4,6 @@ set -euo pipefail
 GAME_ROOT="$(realpath "$PWD")"
 APPS_DIR="$HOME/.local/share/applications"
 ICON_DIR="$HOME/.local/share/icons/hicolor/256x256/apps"
-BIN_DIR="$HOME/.local/bin"
 
 sanitize_path() {
     local p="${1#"${1%%[![:space:]]*}"}"
@@ -44,15 +43,11 @@ EXE_BASENAME="$(basename "$EXE")"
 [ -z "$NAME" ] && read -e -p "Game name [${EXE_BASENAME%.*}]: " NAME
 NAME="${NAME:-${EXE_BASENAME%.*}}"
 
-read -e -p "Create TTY Gamescope launcher in ~/.local/bin? [y/N]: " GS_INPUT
-GENERATE_TTY_GS="0"
-[[ "${GS_INPUT,,}" =~ ^(y|yes)$ ]] && GENERATE_TTY_GS="1"
-
 REL_EXE="$(realpath --relative-to="$GAME_ROOT" "$EXE")"
 SLUG="$(echo "$NAME" | tr '[:upper:]' '[:lower:]' | tr ' ' '-' | tr -cd 'a-z0-9_-')"
 [ -z "$SLUG" ] && SLUG="game_$(date +%s)"
 
-mkdir -p "$GAME_ROOT/.wine" "$APPS_DIR" "$ICON_DIR" "$BIN_DIR"
+mkdir -p "$GAME_ROOT/.wine" "$APPS_DIR" "$ICON_DIR"
 
 RUN_SCRIPT="$GAME_ROOT/run.sh"
 ICON_FILE="$ICON_DIR/${SLUG}.png"
@@ -74,10 +69,11 @@ export PROTONPATH="/usr/share/steam/compatibilitytools.d/proton-cachyos-native"
 export GAME_NAME="${NAME}"
 export GAME_EXE="\${DIR}/${REL_EXE}"
 export WINEPREFIX="\${DIR}/.wine"
+export STEAM_COMPAT_MOUNTS="/media/C"
 DLL_OVERRIDES=""
 GAME_ARGS=()
 
-# OptiScaler Integration (Change 0 to 1 to enable)
+# OptiScaler Integration (Set to 1 to enable)
 export PROTON_USE_OPTISCALER="0"
 export PROTON_OPTISCALER_NAME="dxgi.dll"
 export PROTON_OPTISCALER_CONFIG="Upscalers.Dx12Upscaler=fsr31;FrameGen.Enabled=true;FrameGen.FGInput=DLSSG;FrameGen.FGOutput=XeFG;FrameGen.FTInput=2;FSR.Fsr4Update=false"
@@ -85,7 +81,6 @@ export PROTON_OPTISCALER_CONFIG="Upscalers.Dx12Upscaler=fsr31;FrameGen.Enabled=t
 # Proton & Upscaling Settings
 export PROTON_VERB="run"
 export SteamOS=1
-export PROTON_ENABLE_WAYLAND="1"
 export PROTON_USE_NTSYNC="1"
 export PROTON_NO_WM_DECORATION="1"
 export PROTON_FSR4_INDICATOR="0"
@@ -97,44 +92,33 @@ export PROTON_PREFER_SDL="1"
 
 # Graphics & Performance (Mesa / RADV)
 export AMD_VULKAN_ICD="RADV"
-export RADV_PERFTEST="gpl,sam"
+export RADV_PERFTEST="sam"
 export MESA_SHADER_CACHE_MAX_SIZE="12G"
 export PROTON_LOCAL_SHADER_CACHE="1"
 export RADV_TEX_ANISO="16"
 export RADV_ANTI_LAG="1"
 export WINE_DISABLE_VULKAN_OPWR="1"
 export DXVK_HUD="0"
-export MANGOHUD="1"
 export all_proxy=""
 
-# Niri Compositor Controls
-export XDG_CURRENT_DESKTOP="niri"
-export NIRI_VRR="1"
-export NIRI_OUT="Samsung Electric Company LS32CG51x H9JWA00258"
-
 # Gamescope Configuration
-export USE_GAMESCOPE="\${USE_GAMESCOPE:-0}"
-export GAMESCOPE_MODE="\${GAMESCOPE_MODE:-nested}" # nested | drm
+export USE_GAMESCOPE="1"
 export GS_RES="2560x1440"
 export GS_REFRESH="165"
 export GS_WINDOW_MODE="fullscreen" # fullscreen | borderless
 export GS_VRR="1"
-export GS_CONNECTOR="DP-2"
+
+# HDR Configuration
 export GS_HDR="1"
-export GS_HDR_ITM="0"
-export GS_HDR_SDR_NITS="203"
-export GS_HDR_TARGET_NITS="300"
-
-# LACT GPU Overclocking
-export LACT_ENABLE="0"
-export LACT_PROFILE="OC"
-export LACT_RESET_PROFILE="Default"
+export GS_HDR_ITM="0"              # Inverse Tone Mapping (Auto-HDR for SDR games)
+export GS_HDR_SDR_NITS="203"       # Standard SDR paper-white reference
+export GS_HDR_TARGET_NITS="350"    # Tune to your monitor's peak HDR nits
 
 # ==============================================================================
-# LOGIC & EXECUTION (DO NOT MODIFY BELOW)
+# EXECUTION PIPELINE
 # ==============================================================================
 
-# Parse DLL_OVERRIDES
+# Parse DLL overrides if set
 if [ -n "\$DLL_OVERRIDES" ]; then
     IFS=',' read -ra _list <<< "\$DLL_OVERRIDES"
     for d in "\${_list[@]}"; do
@@ -145,79 +129,55 @@ if [ -n "\$DLL_OVERRIDES" ]; then
     done
 fi
 
-# Compositor / Mode Negotiation
-if [ "\$USE_GAMESCOPE" = "1" ]; then
-    export PROTON_ENABLE_WAYLAND="0"
-    export ENABLE_GAMESCOPE_WSI="1"
-    export XDG_CURRENT_DESKTOP="gamescope"
-    export MANGOHUD="0"
-
-    if [ "\$GAMESCOPE_MODE" = "drm" ]; then
-        export DXVK_FRAME_RATE="160"
-        if [ "\$GS_HDR" = "1" ]; then
-            export PROTON_ENABLE_HDR="1"
-            export DXVK_HDR="1"
-            export DXVK_CONFIG="dxgi.enableHDR=True"
-        fi
-    fi
-fi
-
-# LACT & Niri Helpers
-set_lact() { [ "\$LACT_ENABLE" = "1" ] && command -v lact >/dev/null && lact cli profile set "\$1" >/dev/null 2>&1 || true; }
-set_vrr() {
-    [ "\$NIRI_VRR" = "1" ] && command -v niri >/dev/null || return 0
-    local out="\${NIRI_OUT:-\$(niri msg focused-output 2>/dev/null | awk '/Output/ {print \$NF}' | tr -d '()')}"
-    [ -n "\$out" ] && niri msg output "\$out" vrr "\$1" >/dev/null 2>&1 || true
-}
-
-# Assemble Command
+# Assemble Execution Command
 CMD=()
 command -v game-performance >/dev/null 2>&1 && CMD+=("game-performance")
 
 if [ "\$USE_GAMESCOPE" = "1" ]; then
-    GS_ARGS=("gamescope" "-W" "\${GS_RES%x*}" "-H" "\${GS_RES#*x}" "-w" "\${GS_RES%x*}" "-h" "\${GS_RES#*x}" "-r" "\$GS_REFRESH")
+    export PROTON_ENABLE_WAYLAND="0"
+    export ENABLE_GAMESCOPE_WSI="1"
+    export XDG_CURRENT_DESKTOP="gamescope"
+    export MANGOHUD="0" # Gamescope uses mangoapp instead of host mangohud
+
+    GS_ARGS=(
+        "gamescope"
+        "-W" "\${GS_RES%x*}" "-H" "\${GS_RES#*x}"
+        "-w" "\${GS_RES%x*}" "-h" "\${GS_RES#*x}"
+        "-r" "\$GS_REFRESH"
+    )
+
     [ "\${GS_WINDOW_MODE,,}" = "fullscreen" ] && GS_ARGS+=("-f")
     [ "\${GS_WINDOW_MODE,,}" = "borderless" ] && GS_ARGS+=("-b")
     [ "\$GS_VRR" = "1" ] && GS_ARGS+=("--adaptive-sync")
 
-    if [ "\$GAMESCOPE_MODE" = "drm" ]; then
-        [ -n "\$GS_CONNECTOR" ] && GS_ARGS+=("--prefer-output" "\$GS_CONNECTOR")
-        if [ "\$GS_HDR" = "1" ]; then
-            GS_ARGS+=("--hdr-enabled" "--hdr-sdr-content-nits" "\$GS_HDR_SDR_NITS")
-            [ "\$GS_HDR_ITM" = "1" ] && GS_ARGS+=("--hdr-itm-enable" "--hdr-itm-target-nits" "\$GS_HDR_TARGET_NITS")
-        fi
+    if [ "\$GS_HDR" = "1" ]; then
+        export PROTON_ENABLE_HDR="1"
+        export DXVK_HDR="1"
+        export DXVK_CONFIG="dxgi.enableHDR=True"
+        GS_ARGS+=("--hdr-enabled" "--hdr-sdr-content-nits" "\$GS_HDR_SDR_NITS")
+        [ "\$GS_HDR_ITM" = "1" ] && GS_ARGS+=("--hdr-itm-enable" "--hdr-itm-target-nits" "\$GS_HDR_TARGET_NITS")
     fi
 
-    GS_ARGS+=("--mangoapp")
+    # Pass mangoapp overlay into gamescope session
+    command -v mangoapp >/dev/null 2>&1 && GS_ARGS+=("--mangoapp")
+
     CMD+=("\${GS_ARGS[@]}" "--")
+else
+    # Fallback when running without gamescope
+    export PROTON_ENABLE_WAYLAND="1"
+    export MANGOHUD="1"
 fi
 
 CMD+=("umu-run" "\$GAME_EXE")
 
-# Switch to binary directory before execution
+# Switch to game binary directory
 cd "\$(dirname "\$GAME_EXE")"
 
-# Execution & Teardown
-if [ "\$LACT_ENABLE" = "1" ] || [ "\$NIRI_VRR" = "1" ]; then
-    trap 'set_lact "\$LACT_RESET_PROFILE"; set_vrr "off"' EXIT INT TERM
-    set_lact "\$LACT_PROFILE"
-    set_vrr "on"
-    "\${CMD[@]}" "\${GAME_ARGS[@]}" "\$@"
-else
-    exec "\${CMD[@]}" "\${GAME_ARGS[@]}" "\$@"
-fi
+# Execute
+exec "\${CMD[@]}" "\${GAME_ARGS[@]}" "\$@"
 EOF
 
 chmod +x "$RUN_SCRIPT"
-
-if [ "$GENERATE_TTY_GS" = "1" ]; then
-    GS_SCRIPT="$BIN_DIR/${NAME// /-}.sh"
-    cat << EOF > "$GS_SCRIPT"
-#!/usr/bin/env bash
-exec env USE_GAMESCOPE=1 GAMESCOPE_MODE=drm "$RUN_SCRIPT" "\$@"
-EOF
-    chmod +x "$GS_SCRIPT"
-fi
 
 cat << EOF > "$APPS_DIR/${SLUG}.desktop"
 [Desktop Entry]
