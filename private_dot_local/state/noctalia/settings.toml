@@ -291,7 +291,7 @@ community_palette = "Gruvbox Material Hard"
 source = "community"
 
     [theme.templates]
-    builtin_ids = [ "gtk3", "gtk4", "kcolorscheme", "kitty", "qt", "umbriel" ]
+    builtin_ids = [ "foot", "gtk3", "gtk4", "kcolorscheme", "kitty", "qt", "umbriel" ]
     enable_builtin_templates = true
 
 [wallpaper]

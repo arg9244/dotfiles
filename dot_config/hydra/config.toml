@@ -84,7 +84,7 @@ show_categories = false
 show_toolbar_labels = true
 ui_scale_pct = 110
 global_speed_limit = 1536000
-speed_limiter_on = true
+speed_limiter_on = false
 column_widths = []
 window_size = [
     1155.0,
