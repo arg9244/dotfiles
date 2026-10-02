@@ -80,15 +80,19 @@ export PROTON_OPTISCALER_CONFIG="Upscalers.Dx12Upscaler=fsr31;FrameGen.Enabled=t
 
 # Proton & Upscaling Settings
 export PROTON_VERB="run"
-export SteamOS=1
 export PROTON_USE_NTSYNC="1"
-export PROTON_NO_WM_DECORATION="1"
 export PROTON_FSR4_INDICATOR="0"
 export PROTON_FSR4_UPGRADE="1"
 export PROTON_XESS_UPGRADE="0"
 export PROTON_DLSS_UPGRADE="0"
 export PROTON_NO_STEAMINPUT="1"
 export PROTON_PREFER_SDL="1"
+
+# Direct Native HDR (Vulkan WSI)
+export PROTON_ENABLE_HDR="1"
+export DXVK_HDR="1"
+export DXVK_CONFIG="dxgi.enableHDR=True"
+export ENABLE_HDR_WSI="1"
 
 # Graphics & Performance (Mesa / RADV)
 export AMD_VULKAN_ICD="RADV"
@@ -99,20 +103,14 @@ export RADV_TEX_ANISO="16"
 export RADV_ANTI_LAG="1"
 export WINE_DISABLE_VULKAN_OPWR="1"
 export DXVK_HUD="0"
+export MANGOHUD="1"
 export all_proxy=""
 
-# Gamescope Configuration
-export USE_GAMESCOPE="1"
-export GS_RES="2560x1440"
-export GS_REFRESH="165"
-export GS_WINDOW_MODE="fullscreen" # fullscreen | borderless
-export GS_VRR="1"
-
-# HDR Configuration
-export GS_HDR="1"
-export GS_HDR_ITM="0"              # Inverse Tone Mapping (Auto-HDR for SDR games)
-export GS_HDR_SDR_NITS="203"       # Standard SDR paper-white reference
-export GS_HDR_TARGET_NITS="350"    # Tune to your monitor's peak HDR nits
+# Gamescope Settings (Samsung Odyssey G5: 2560x1440 @ 165Hz)
+export USE_GAMESCOPE="0"
+export GAMESCOPE_DISPLAY="2560x1440@165 -f" # <w>x<h>[@fps] [-f (fullscreen) | -b (borderless)]
+export GAMESCOPE_HDR="0"                    # 1 = Enable HDR (calibrated to 300 nits)
+export GAMESCOPE_AUTO_HDR="0"               # 1 = Convert SDR games to HDR
 
 # ==============================================================================
 # EXECUTION PIPELINE
@@ -129,45 +127,47 @@ if [ -n "\$DLL_OVERRIDES" ]; then
     done
 fi
 
-# Assemble Execution Command
+# Assemble Base Execution Command
 CMD=()
 command -v game-performance >/dev/null 2>&1 && CMD+=("game-performance")
 
+# Gamescope Setup
 if [ "\$USE_GAMESCOPE" = "1" ]; then
-    export PROTON_ENABLE_WAYLAND="0"
-    export ENABLE_GAMESCOPE_WSI="1"
-    export XDG_CURRENT_DESKTOP="gamescope"
-    export MANGOHUD="0" # Gamescope uses mangoapp instead of host mangohud
+    if ! command -v gamescope >/dev/null 2>&1; then
+        echo "[!] gamescope not found in PATH, launching directly." >&2
+    else
+        GS_CMD=("gamescope" "--adaptive-sync")
 
-    GS_ARGS=(
-        "gamescope"
-        "-W" "\${GS_RES%x*}" "-H" "\${GS_RES#*x}"
-        "-w" "\${GS_RES%x*}" "-h" "\${GS_RES#*x}"
-        "-r" "\$GS_REFRESH"
-    )
+        # Parse resolution, refresh rate, and display mode
+        if [ -n "\$GAMESCOPE_DISPLAY" ]; then
+            read -r _res_fps _mode <<< "\$GAMESCOPE_DISPLAY"
+            if [[ "\$_res_fps" =~ ^([0-9]+)x([0-9]+)(@([0-9]+))? ]]; then
+                _w="\${BASH_REMATCH[1]}"
+                _h="\${BASH_REMATCH[2]}"
+                _r="\${BASH_REMATCH[4]}"
+                GS_CMD+=("-w" "\$_w" "-h" "\$_h" "-W" "\$_w" "-H" "\$_h")
+                [ -n "\$_r" ] && GS_CMD+=("-r" "\$_r")
+            fi
+            case "\$_mode" in
+                -b|borderless) GS_CMD+=("-b") ;;
+                *)             GS_CMD+=("-f") ;;
+            esac
+        fi
 
-    [ "\${GS_WINDOW_MODE,,}" = "fullscreen" ] && GS_ARGS+=("-f")
-    [ "\${GS_WINDOW_MODE,,}" = "borderless" ] && GS_ARGS+=("-b")
-    [ "\$GS_VRR" = "1" ] && GS_ARGS+=("--adaptive-sync")
+        # HDR calibrated for Samsung G5 panel (300 nits)
+        if [ "\$GAMESCOPE_HDR" = "1" ]; then
+            GS_CMD+=("--hdr-enabled" "--hdr-sdr-content-nits" "300")
+            if [ "\$GAMESCOPE_AUTO_HDR" = "1" ]; then
+                GS_CMD+=("--hdr-itm-enabled" "--hdr-itm-target-nits" "300" "--hdr-itm-sdr-nits" "100")
+            fi
+        fi
 
-    if [ "\$GS_HDR" = "1" ]; then
-        export PROTON_ENABLE_HDR="1"
-        export DXVK_HDR="1"
-        export DXVK_CONFIG="dxgi.enableHDR=True"
-        GS_ARGS+=("--hdr-enabled" "--hdr-sdr-content-nits" "\$GS_HDR_SDR_NITS")
-        [ "\$GS_HDR_ITM" = "1" ] && GS_ARGS+=("--hdr-itm-enable" "--hdr-itm-target-nits" "\$GS_HDR_TARGET_NITS")
+        GS_CMD+=("--")
+        CMD+=("\${GS_CMD[@]}")
     fi
-
-    # Pass mangoapp overlay into gamescope session
-    command -v mangoapp >/dev/null 2>&1 && GS_ARGS+=("--mangoapp")
-
-    CMD+=("\${GS_ARGS[@]}" "--")
-else
-    # Fallback when running without gamescope
-    export PROTON_ENABLE_WAYLAND="1"
-    export MANGOHUD="1"
 fi
 
+# Append game runner
 CMD+=("umu-run" "\$GAME_EXE")
 
 # Switch to game binary directory

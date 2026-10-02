@@ -16,9 +16,7 @@
 
     <!-- Tearing: Allowed only when active window is fullscreen (recommended for gaming) -->
     <allowTearing>fullscreen</allowTearing>
-
-    <!-- HDR: Disabled by default (see notes below regarding fullscreen HDR in labwc) -->
-    <hdr>no</hdr>
+    <hdr>yes</hdr>
     <autoEnableOutputs>yes</autoEnableOutputs>
   </core>
 
@@ -153,28 +151,16 @@
       <mousebind button="W-Right" action="Drag"><action name="Resize" /></mousebind>
     </context>
   </mouse>
-
-  <!-- Window Rules -->
-  <windowRules>
-    <windowRule identifier="dev.noctalia.Noctalia.Settings">
-      <action name="ResizeTo" width="1080" height="920" />
-      <action name="MoveTo" x="center" y="center" />
-    </windowRule>
-  </windowRules>
-
   <!-- ─── Window Resize Usability ─── -->
     <resize>
       <!-- Invisible grab area in pixels around borders (default is only 8).
            Increasing this to 16-20px makes edge detection effortless. -->
       <minimumArea>20</minimumArea>
-
       <!-- Size of the corner zones for diagonal resizing.
            Default is half titlebar height (which is 0 or tiny without CSD).
            Setting this to 24-30px gives you large, easy-to-hit corner regions. -->
       <cornerRange>26</cornerRange>
-
       <!-- Keeps window content rendering smoothly during resizing -->
       <drawContents>yes</drawContents>
     </resize>
-
 </labwc_config>

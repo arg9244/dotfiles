@@ -84,11 +84,11 @@ show_categories = false
 show_toolbar_labels = true
 ui_scale_pct = 110
 global_speed_limit = 1536000
-speed_limiter_on = false
+speed_limiter_on = true
 column_widths = []
 window_size = [
     1155.0,
-    660.0,
+    1046.0,
 ]
 
 [[settings.sounds]]
@@ -136,7 +136,7 @@ limit = 819200
 
 [[settings.columns]]
 id = "Name"
-width = 452.9711
+width = 563.6245
 visible = true
 
 [[settings.columns]]

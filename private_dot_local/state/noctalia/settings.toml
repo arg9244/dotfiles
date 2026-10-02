@@ -45,6 +45,9 @@ hidden_tabs = [ "power" ]
 enabled = false
 widget_order = []
 
+[dock]
+shadow = false
+
 [idle]
 behavior_order = [ "lock", "screen-off", "lock-and-suspend" ]
 
@@ -133,11 +136,11 @@ widget_order = [ "lockscreen-login-box@WL-1", "lockscreen-login-box@HDMI-A-1", "
     [lockscreen_widgets.widget."lockscreen-login-box@WL-1"]
     box_height = 196.0
     box_width = 810.0
-    cx = 640.0
-    cy = 626.7994384765625
+    cx = 1280.0
+    cy = 1036.397216796875
     output = "WL-1"
-    placement_height = 720.0
-    placement_width = 1280.0
+    placement_height = 1387.0
+    placement_width = 2560.0
     rotation = 0.0
     type = "login_box"
 
@@ -170,12 +173,6 @@ panel_layer = "overlay"
 panel_placement = "floating"
 panel_position = "center"
 show_count = false
-
-[plugin_settings."alexander/mimir"]
-api_endpoint = "http://localhost:20128/v1"
-api_key = "sk-d6b1a7b109aba2f8-u1qxbn-6eaa3eae"
-chat_layer = "overlay"
-chat_position = "bottom_left"
 
 [plugin_settings."ashur-d/wallpaper-widget"]
 wallpaper_dir = "/home/reza/Pictures/Wallpapers"
@@ -256,8 +253,12 @@ avatar_path = "/home/reza/Pictures/Avatar.png"
 clipboard_auto_paste = "off"
 clipboard_keep_from_closed_apps = false
 polkit_agent = true
+popup_shadows = false
 screen_time_enabled = true
 show_location = false
+
+    [shell.animation]
+    enabled = false
 
     [shell.launcher]
     fetch_exchange_rates = false
@@ -271,7 +272,7 @@ show_location = false
     shadow = false
 
     [shell.screen_corners]
-    enabled = true
+    enabled = false
     size = 30
 
     [shell.screenshot]
@@ -280,13 +281,17 @@ show_location = false
     directory = "~/Pictures/Screenshots"
     remember_last_region = true
 
+    [shell.window_switcher]
+    current_workspace_only = true
+    show_all_outputs = false
+
 [theme]
-builtin = "Gruvbox"
+builtin = "Kanagawa"
 community_palette = "Gruvbox Material Hard"
 source = "community"
 
     [theme.templates]
-    builtin_ids = [ "gtk3", "gtk4", "kcolorscheme", "kitty", "qt" ]
+    builtin_ids = [ "gtk3", "gtk4", "kcolorscheme", "kitty", "qt", "umbriel" ]
     enable_builtin_templates = true
 
 [wallpaper]
