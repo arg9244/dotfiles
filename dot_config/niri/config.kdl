@@ -7,3 +7,5 @@ include "./cfg/layout.kdl"
 include "./cfg/rules.kdl"
 include "./cfg/misc.kdl"
 
+// Managed by the Noctalia cursor plugin - edits here are overwritten.
+include "cursor.kdl"

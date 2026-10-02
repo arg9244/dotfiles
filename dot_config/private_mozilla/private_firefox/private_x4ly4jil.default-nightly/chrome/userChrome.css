@@ -51,13 +51,6 @@
   text-align: center !important;
 }
 
-/* Tab Close Button Always Visible - Always show the close button on tabs, not just on hover. */
-/* Always show tab close button */
-.tabbrowser-tab .tab-close-button {
-  display: block !important;
-  opacity: 1 !important;
-}
-
 /* Dark Theme Enforcement - Force dark theme on all browser UI elements. */
 /* Dark theme enforcement */
 :root {
