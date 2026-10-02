@@ -1,0 +1,13 @@
+#!/bin/sh
+
+# Set Wayland display environment for user services
+dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=labwc &
+
+# Keyring daemon
+gnome-keyring-daemon --start --components=secrets &
+
+# Display layout and refresh rate manager
+kanshi &
+
+# Noctalia Shell
+noctalia &

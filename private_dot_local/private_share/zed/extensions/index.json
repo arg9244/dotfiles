@@ -1,5 +1,81 @@
 {
   "extensions": {
+    "emmet": {
+      "manifest": {
+        "id": "emmet",
+        "name": "Emmet",
+        "version": "0.0.14",
+        "schema_version": 1,
+        "description": "Emmet support",
+        "repository": "https://github.com/zed-extensions/emmet",
+        "authors": [
+          "Piotr Osiewicz <piotr@zed.dev>"
+        ],
+        "lib": {
+          "kind": "Rust",
+          "version": "0.7.0"
+        },
+        "themes": [],
+        "icon_themes": [],
+        "languages": [],
+        "grammars": {},
+        "language_servers": {
+          "emmet-language-server": {
+            "language": null,
+            "languages": [
+              "Angular",
+              "Blade",
+              "CSS",
+              "Django",
+              "ERB",
+              "Elixir",
+              "HEEx",
+              "HTML",
+              "HTML+ERB",
+              "JavaScript",
+              "Jinja2",
+              "LESS",
+              "Liquid",
+              "Nunjucks",
+              "PHP",
+              "SCSS",
+              "Statamic Antlers",
+              "TSX",
+              "Twig",
+              "Vue.js"
+            ],
+            "language_ids": {
+              "SCSS": "scss",
+              "Blade": "blade",
+              "HTML+ERB": "eruby",
+              "HTML": "html",
+              "Nunjucks": "html",
+              "ERB": "eruby",
+              "CSS": "css",
+              "LESS": "less",
+              "PHP": "php",
+              "HEEx": "heex",
+              "TSX": "typescriptreact",
+              "Django": "html",
+              "Jinja2": "html",
+              "Twig": "twig",
+              "Statamic Antlers": "html",
+              "JavaScript": "javascriptreact",
+              "Elixir": "elixir",
+              "Liquid": "html",
+              "Vue.js": "vue",
+              "Angular": "angular"
+            },
+            "code_action_kinds": null
+          }
+        },
+        "context_servers": {},
+        "slash_commands": {},
+        "snippets": null,
+        "capabilities": []
+      },
+      "dev": false
+    },
     "html": {
       "manifest": {
         "id": "html",
@@ -150,6 +226,41 @@
         "capabilities": []
       },
       "dev": false
+    },
+    "xml": {
+      "manifest": {
+        "id": "xml",
+        "name": "XML",
+        "version": "0.1.1",
+        "schema_version": 1,
+        "description": "XML syntax support.",
+        "repository": "https://github.com/sweetppro/zed-xml",
+        "authors": [
+          "sweetppro"
+        ],
+        "lib": {
+          "kind": null,
+          "version": null
+        },
+        "themes": [],
+        "icon_themes": [],
+        "languages": [
+          "languages/xml"
+        ],
+        "grammars": {
+          "xml": {
+            "repository": "https://github.com/tree-sitter-grammars/tree-sitter-xml",
+            "rev": "5000ae8f22d11fbe93939b05c1e37cf21117162d",
+            "path": "xml"
+          }
+        },
+        "language_servers": {},
+        "context_servers": {},
+        "slash_commands": {},
+        "snippets": null,
+        "capabilities": []
+      },
+      "dev": false
     }
   },
   "themes": {},
@@ -201,6 +312,20 @@
       "hidden": false,
       "grammar": "toml",
       "query_files": 639
+    },
+    "XML": {
+      "extension": "xml",
+      "path": "languages/xml",
+      "matcher": {
+        "path_suffixes": [
+          "xml"
+        ],
+        "first_line_pattern": "^<.*xml",
+        "modeline_aliases": []
+      },
+      "hidden": false,
+      "grammar": "xml",
+      "query_files": 13
     },
     "ini": {
       "extension": "ini",

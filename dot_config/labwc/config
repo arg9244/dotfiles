@@ -1,0 +1,4 @@
+profile {
+    output "Samsung Electric Company LS32CG51x H9JWA00258" mode 2560x1440@164.999Hz position 0,0 scale 1.0
+    output "HDMI-A-1" mode 1920x1080@60.000Hz position 2560,0 scale 1.0
+}

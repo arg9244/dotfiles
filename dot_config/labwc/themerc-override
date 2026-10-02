@@ -1,0 +1,82 @@
+# ─── Window Borders ──────────────────────────────────────────────────────────
+border.width: 0
+window.active.border.color: #fabd2f
+window.inactive.border.color: #3c3836
+
+# Indicator color when keybinds are toggled
+window.active.indicator.toggled-keybind.color: #fb4934
+
+# ─── Window Titlebar & Labels (Visible when decorations are toggled) ──────────
+window.titlebar.padding.width: 5
+window.titlebar.padding.height: 0
+
+window.active.title.bg: Solid
+window.active.title.bg.color: #282828
+window.inactive.title.bg: Solid
+window.inactive.title.bg.color: #1d2021
+
+window.active.label.text.color: #fbf1c7
+window.inactive.label.text.color: #928374
+window.label.text.justify: center
+
+# ─── Window Titlebar Buttons ──────────────────────────────────────────────────
+window.button.width: 25
+window.button.height: 10
+window.button.spacing: 3
+window.button.hover.bg.color: #50494580
+window.button.hover.bg.corner-radius: 5
+
+window.active.button.unpressed.image.color: #ebdbb2
+window.inactive.button.unpressed.image.color: #7c6f64
+window.active.button.pressed.image.color: #fabd2f
+
+# Distinct close button accent
+window.active.button.close.unpressed.image.color: #fb4934
+window.inactive.button.close.unpressed.image.color: #928374
+
+# ─── Window Shadows ───────────────────────────────────────────────────────────
+window.active.shadow.size: 40
+window.inactive.shadow.size: 20
+window.active.shadow.color: #00000070
+window.inactive.shadow.color: #00000035
+
+# ─── Context Menus ────────────────────────────────────────────────────────────
+menu.border.width: 1
+menu.border.color: #504945
+menu.overlap.x: 0
+menu.overlap.y: 0
+
+menu.title.bg.color: #1d2021
+menu.title.text.color: #fabd2f
+menu.title.text.justify: center
+
+menu.items.bg.color: #1d2021
+menu.items.text.color: #ebdbb2
+menu.items.active.bg.color: #3c3836
+menu.items.active.text.color: #fbf1c7
+menu.items.padding.x: 10
+menu.items.padding.y: 5
+
+menu.separator.width: 1
+menu.separator.padding.width: 6
+menu.separator.padding.height: 4
+menu.separator.color: #3c3836
+
+# ─── OSD & Window Switcher ────────────────────────────────────────────────────
+osd.bg.color: #1d2021
+osd.border.width: 0
+osd.border.color: #fabd2f
+osd.label.text.color: #fbf1c7
+
+# Outlines for Alt-Tab / Window switcher thumbnail OSD
+osd.window-switcher.preview.border.width: 1
+osd.window-switcher.preview.border.color: #fabd2f
+
+# ─── Window Snapping Overlays ─────────────────────────────────────────────────
+snapping.overlay.region.border.width: 2
+snapping.overlay.region.border.color: #fabd2f
+snapping.overlay.region.bg.color: #fabd2f33
+
+snapping.overlay.edge.border.width: 2
+snapping.overlay.edge.border.color: #fabd2f
+snapping.overlay.edge.bg.color: #fabd2f33

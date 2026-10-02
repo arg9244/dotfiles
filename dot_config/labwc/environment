@@ -1,0 +1,17 @@
+# XKB Keyboard configuration (Layout & Persian toggle from your niri config)
+XKB_DEFAULT_LAYOUT=us,ir
+XKB_DEFAULT_VARIANT=,pes
+XKB_DEFAULT_OPTIONS=grp:lalt_lshift_toggle
+
+# Toolkits and Wayland flags
+ELECTRON_OZONE_PLATFORM_HINT=auto
+QT_QPA_PLATFORM=wayland
+QT_QPA_PLATFORMTHEME=qt6ct
+QT_STYLE_OVERRIDE=
+QT_WAYLAND_DISABLE_WINDOWDECORATION=1
+XDG_CURRENT_DESKTOP=labwc
+XDG_SESSION_TYPE=wayland
+GTK_CSD=0
+
+# Optional: Vulkan renderer for experimental HDR in labwc
+WLR_RENDERER=vulkan

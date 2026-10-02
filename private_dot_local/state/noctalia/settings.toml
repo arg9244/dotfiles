@@ -1,5 +1,8 @@
 config_version = 14
 
+[audio]
+enable_sounds = false
+
 [bar.default]
 center = [ "clock", "date", "date_2", "weather", "media", "monitor" ]
 end = [ "mihomo-tun", "calculator", "status", "clipboard", "notifications", "keyboard_layout", "session" ]
@@ -64,8 +67,9 @@ behavior_order = [ "lock", "screen-off", "lock-and-suspend" ]
 auto_locate = true
 
 [lockscreen_widgets]
+enabled = false
 schema_version = 2
-widget_order = [ "lockscreen-login-box@HDMI-A-1", "lockscreen-login-box@DP-2" ]
+widget_order = [ "lockscreen-login-box@WL-1", "lockscreen-login-box@HDMI-A-1", "lockscreen-login-box@DP-2" ]
 
     [lockscreen_widgets.grid]
     cell_size = 16
@@ -111,6 +115,33 @@ widget_order = [ "lockscreen-login-box@HDMI-A-1", "lockscreen-login-box@DP-2" ]
     type = "login_box"
 
         [lockscreen_widgets.widget."lockscreen-login-box@HDMI-A-1".settings]
+        background_color = "surface_variant"
+        background_opacity = 0.88
+        background_radius = 12.0
+        center_password_text = false
+        input_opacity = 1.0
+        input_radius = 6.0
+        layout = "regular"
+        show_caps_lock = true
+        show_keyboard_layout = true
+        show_login_button = true
+        show_media = true
+        show_session_buttons = true
+        show_unlock_hint = true
+        show_weather = true
+
+    [lockscreen_widgets.widget."lockscreen-login-box@WL-1"]
+    box_height = 196.0
+    box_width = 810.0
+    cx = 1280.0
+    cy = 1224.0
+    output = "WL-1"
+    placement_height = 1406.0
+    placement_width = 2560.0
+    rotation = 0.0
+    type = "login_box"
+
+        [lockscreen_widgets.widget."lockscreen-login-box@WL-1".settings]
         background_color = "surface_variant"
         background_opacity = 0.88
         background_radius = 12.0
@@ -250,29 +281,28 @@ show_location = false
     remember_last_region = true
 
 [theme]
-builtin = "Kanagawa"
-community_palette = "Gruvbox Material"
+builtin = "Gruvbox"
+community_palette = "Gruvbox Material Hard"
 source = "community"
-wallpaper_scheme = "m3-content"
 
     [theme.templates]
-    builtin_ids = [ "gtk3", "gtk4", "kcolorscheme", "kitty", "niri", "qt" ]
+    builtin_ids = [ "gtk3", "gtk4", "kcolorscheme", "kitty", "qt" ]
     enable_builtin_templates = true
 
 [wallpaper]
 directory = "~/Pictures/Wallpapers"
 
     [wallpaper.default]
-    path = "/home/reza/Pictures/Wallpapers/wallhaven-jevz8y.png"
+    path = "/home/reza/Pictures/Wallpapers/wallhaven-6lyv5x.png"
 
     [wallpaper.last]
-    path = "/home/reza/Pictures/Wallpapers/wallhaven-jevz8y.png"
+    path = "/home/reza/Pictures/Wallpapers/wallhaven-6lyv5x.png"
 
     [wallpaper.monitors.DP-2]
-    path = "/home/reza/Pictures/Wallpapers/wallhaven-jevz8y.png"
+    path = "/home/reza/Pictures/Wallpapers/wallhaven-6lyv5x.png"
 
     [wallpaper.monitors.HDMI-A-1]
-    path = "/home/reza/Pictures/Wallpapers/wallhaven-jevz8y.png"
+    path = "/home/reza/Pictures/Wallpapers/wallhaven-6lyv5x.png"
 
 [weather]
 enabled = true

@@ -43,6 +43,7 @@ x-scheme-handler/sable=sable-handler.desktop
 x-scheme-handler/moe.sable.app=sable-handler.desktop
 x-scheme-handler/xmpp=fluux-messenger-handler.desktop
 x-scheme-handler/fancy=mumble-tauri-handler.desktop
+application/xml=dev.zed.Zed.desktop
 
 [Added Associations]
 text/x-shellscript=dev.zed.Zed.desktop;org.xfce.mousepad.desktop;org.gnome.TextEditor.desktop;
@@ -80,3 +81,4 @@ x-scheme-handler/sparkle=sparkle.desktop;
 image/png=org.gnome.Loupe.desktop;
 application/vnd.rar=peazip-extract.desktop;
 application/metalink4+xml=dev.zed.Zed.desktop;
+application/xml=dev.zed.Zed.desktop;

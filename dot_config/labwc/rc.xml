@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<labwc_config>
+  <theme>
+    <!-- Ensure the folder name in ~/.themes/ or /usr/share/themes/ matches this name -->
+    <name>gruvbox-dark-hard</name>
+  </theme>
+
+  <core>
+    <!-- Equivalent to Niri's gaps 0 and prefer-no-csd -->
+    <gap>0</gap>
+    <decoration>none</decoration>
+
+    <!-- Gaming & Display Configuration -->
+    <!-- VRR: Off by default on desktop, enabled automatically for fullscreen apps -->
+    <adaptiveSync>fullscreen</adaptiveSync>
+
+    <!-- Tearing: Allowed only when active window is fullscreen (recommended for gaming) -->
+    <allowTearing>fullscreen</allowTearing>
+
+    <!-- HDR: Disabled by default (see notes below regarding fullscreen HDR in labwc) -->
+    <hdr>no</hdr>
+    <autoEnableOutputs>yes</autoEnableOutputs>
+  </core>
+
+  <!-- Snapping setup to give you clean half & quadrant tiling -->
+  <snapping>
+    <range inner="10" outer="10" />
+    <topMaximize>yes</topMaximize>
+  </snapping>
+
+  <!-- Workspaces 1-9 -->
+  <desktops>
+    <number>9</number>
+    <names>
+      <name>1</name><name>2</name><name>3</name>
+      <name>4</name><name>5</name><name>6</name>
+      <name>7</name><name>8</name><name>9</name>
+    </names>
+    <popupTime>0</popupTime>
+  </desktops>
+
+  <!-- Window Switcher OSD -->
+  <windowSwitcher preview="no" outlines="yes">
+    <osd style="thumbnail" />
+  </windowSwitcher>
+
+  <!-- Input Devices (Touchpad Tap + Natural Scroll) -->
+  <libinput>
+    <device category="touchpad">
+      <tap>yes</tap>
+      <naturalScroll>yes</naturalScroll>
+    </device>
+  </libinput>
+
+  <keyboard>
+    <default />
+    <numlock>yes</numlock>
+
+    <!-- ─── Noctalia Shell & Plugins ─── -->
+    <keybind key="W-z"><action name="ToggleDecorations" /></keybind>
+    <keybind key="W-space"><action name="Execute" command="noctalia msg panel-toggle launcher" /></keybind>
+    <keybind key="W-s"><action name="Execute" command="noctalia msg panel-toggle control-center" /></keybind>
+    <keybind key="A-v"><action name="Execute" command="noctalia msg panel-toggle clipboard" /></keybind>
+    <keybind key="W-v"><action name="Execute" command="noctalia msg plugin noctalia/screen_recorder:service all toggle focused" /></keybind>
+    <keybind key="W-c"><action name="Execute" command="noctalia msg panel-toggle yuuto/calculator:panel" /></keybind>
+    <keybind key="W-n"><action name="Execute" command="noctalia msg panel-toggle fel/quill:panel" /></keybind>
+    <keybind key="W-p"><action name="Execute" command="noctalia msg panel-toggle tordex/processes:panel" /></keybind>
+    <keybind key="W-m"><action name="Execute" command="noctalia msg plugin reza/mihomo-tun:tun-toggle all toggle" /></keybind>
+
+    <!-- ─── Applications ─── -->
+    <keybind key="W-Return"><action name="Execute" command="kitty" /></keybind>
+    <keybind key="W-b"><action name="Execute" command="firefox" /></keybind>
+    <keybind key="W-x"><action name="Execute" command="zeditor" /></keybind>
+    <keybind key="W-e"><action name="Execute" command="nautilus" /></keybind>
+
+    <!-- ─── Media Controls ─── -->
+    <keybind key="XF86AudioRaiseVolume"><action name="Execute" command="noctalia msg volume-up" /></keybind>
+    <keybind key="XF86AudioLowerVolume"><action name="Execute" command="noctalia msg volume-down" /></keybind>
+    <keybind key="XF86AudioMute"><action name="Execute" command="noctalia msg volume-mute" /></keybind>
+    <keybind key="XF86AudioMicMute"><action name="Execute" command="noctalia msg mic-mute" /></keybind>
+    <keybind key="XF86AudioNext"><action name="Execute" command="noctalia msg media next" /></keybind>
+    <keybind key="XF86AudioPrev"><action name="Execute" command="noctalia msg media previous" /></keybind>
+    <keybind key="XF86AudioPlay"><action name="Execute" command="noctalia msg media toggle" /></keybind>
+    <keybind key="XF86AudioPause"><action name="Execute" command="noctalia msg media toggle" /></keybind>
+
+    <!-- ─── Brightness Controls ─── -->
+    <keybind key="XF86MonBrightnessUp"><action name="Execute" command="noctalia msg brightness-up" /></keybind>
+    <keybind key="XF86MonBrightnessDown"><action name="Execute" command="noctalia msg brightness-down" /></keybind>
+
+    <!-- ─── Screenshots (Pure Noctalia — Zero Extra Tools) ─── -->
+    <keybind key="W-S-s"><action name="Execute" command="noctalia msg screenshot-region" /></keybind>
+    <keybind key="Print"><action name="Execute" command="noctalia msg screenshot-fullscreen" /></keybind>
+    <keybind key="S-Print"><action name="Execute" command="noctalia msg screenshot-window" /></keybind>
+
+    <!-- ─── Window Actions ─── -->
+    <keybind key="W-q"><action name="Close" /></keybind>
+    <keybind key="W-f"><action name="ToggleMaximize" /></keybind>
+    <keybind key="W-S-f"><action name="ToggleFullscreen" /></keybind>
+    <keybind key="W-t"><action name="UnSnap" /></keybind>
+    <keybind key="W-Tab"><action name="NextWindow" /></keybind>
+
+    <!-- Edge Snapping (Tiling replacement) -->
+    <keybind key="W-Left"><action name="SnapToEdge" direction="left" combine="yes" /></keybind>
+    <keybind key="W-Right"><action name="SnapToEdge" direction="right" combine="yes" /></keybind>
+    <keybind key="W-Up"><action name="SnapToEdge" direction="up" combine="yes" /></keybind>
+    <keybind key="W-Down"><action name="SnapToEdge" direction="down" combine="yes" /></keybind>
+
+    <!-- Directional Window Shifting -->
+    <keybind key="W-C-Left"><action name="MoveToEdge" direction="left" /></keybind>
+    <keybind key="W-C-Right"><action name="MoveToEdge" direction="right" /></keybind>
+    <keybind key="W-C-Up"><action name="MoveToEdge" direction="up" /></keybind>
+    <keybind key="W-C-Down"><action name="MoveToEdge" direction="down" /></keybind>
+
+    <!-- Multi-Monitor Navigation -->
+    <keybind key="W-S-Left"><action name="FocusOutput" direction="left" /></keybind>
+    <keybind key="W-S-Right"><action name="FocusOutput" direction="right" /></keybind>
+    <keybind key="W-C-S-Left"><action name="MoveToOutput" direction="left" /></keybind>
+    <keybind key="W-C-S-Right"><action name="MoveToOutput" direction="right" /></keybind>
+
+    <!-- ─── Workspaces (1 - 9) ─── -->
+    <keybind key="W-1"><action name="GoToDesktop" to="1" /></keybind>
+    <keybind key="W-2"><action name="GoToDesktop" to="2" /></keybind>
+    <keybind key="W-3"><action name="GoToDesktop" to="3" /></keybind>
+    <keybind key="W-4"><action name="GoToDesktop" to="4" /></keybind>
+    <keybind key="W-5"><action name="GoToDesktop" to="5" /></keybind>
+    <keybind key="W-6"><action name="GoToDesktop" to="6" /></keybind>
+    <keybind key="W-7"><action name="GoToDesktop" to="7" /></keybind>
+    <keybind key="W-8"><action name="GoToDesktop" to="8" /></keybind>
+    <keybind key="W-9"><action name="GoToDesktop" to="9" /></keybind>
+
+    <!-- Move Window to Workspace -->
+    <keybind key="W-C-1"><action name="SendToDesktop" to="1" follow="no" /></keybind>
+    <keybind key="W-C-2"><action name="SendToDesktop" to="2" follow="no" /></keybind>
+    <keybind key="W-C-3"><action name="SendToDesktop" to="3" follow="no" /></keybind>
+    <keybind key="W-C-4"><action name="SendToDesktop" to="4" follow="no" /></keybind>
+    <keybind key="W-C-5"><action name="SendToDesktop" to="5" follow="no" /></keybind>
+    <keybind key="W-C-6"><action name="SendToDesktop" to="6" follow="no" /></keybind>
+    <keybind key="W-C-7"><action name="SendToDesktop" to="7" follow="no" /></keybind>
+    <keybind key="W-C-8"><action name="SendToDesktop" to="8" follow="no" /></keybind>
+    <keybind key="W-C-9"><action name="SendToDesktop" to="9" follow="no" /></keybind>
+
+    <keybind key="W-o"><action name="GoToDesktop" to="last" /></keybind>
+
+    <!-- ─── Session ─── -->
+    <keybind key="C-A-Delete"><action name="Exit" /></keybind>
+  </keyboard>
+
+  <!-- Mouse Drag / Resize with Super Key -->
+  <mouse>
+    <default />
+    <context name="Frame">
+      <mousebind button="W-Left" action="Drag"><action name="Move" /></mousebind>
+      <mousebind button="W-Right" action="Drag"><action name="Resize" /></mousebind>
+    </context>
+  </mouse>
+
+  <!-- Window Rules -->
+  <windowRules>
+    <windowRule identifier="dev.noctalia.Noctalia.Settings">
+      <action name="ResizeTo" width="1080" height="920" />
+      <action name="MoveTo" x="center" y="center" />
+    </windowRule>
+  </windowRules>
+
+</labwc_config>
