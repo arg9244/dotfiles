@@ -82,13 +82,13 @@ logins = []
 theme_mode = "System"
 show_categories = false
 show_toolbar_labels = true
-ui_scale_pct = 110
+ui_scale_pct = 90
 global_speed_limit = 1536000
 speed_limiter_on = false
 column_widths = []
 window_size = [
-    1155.0,
-    1046.0,
+    960.00006,
+    1027.0,
 ]
 
 [[settings.sounds]]
@@ -136,7 +136,7 @@ limit = 819200
 
 [[settings.columns]]
 id = "Name"
-width = 563.6245
+width = 668.7328
 visible = true
 
 [[settings.columns]]
@@ -146,7 +146,7 @@ visible = true
 
 [[settings.columns]]
 id = "Size"
-width = 81.40674
+width = 65.61487
 visible = true
 
 [[settings.columns]]

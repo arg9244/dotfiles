@@ -5,7 +5,7 @@ enable_sounds = false
 
 [bar.default]
 center = [ "clock", "date", "date_2", "weather", "media", "monitor" ]
-end = [ "mihomo-tun", "calculator", "status", "clipboard", "notifications", "keyboard_layout", "session" ]
+end = [ "mihomo-tun", "calculator", "bar", "status", "clipboard", "notifications", "keyboard_layout", "session" ]
 margin_edge = 0
 margin_ends = 0
 position = "bottom"
@@ -223,14 +223,14 @@ panel_position = "center"
 
 [plugins]
 enabled = [
-    "apex077/eyecare",
     "noctalia/screen_recorder",
     "nomadcxx/gamer-mode",
     "reza/mihomo-tun",
     "yuuto/calculator",
     "tordex/processes",
     "fel/quill",
-    "borderliner/jalali_calendar"
+    "borderliner/jalali_calendar",
+    "dunarand/bookmarks"
 ]
 
     [[plugins.source]]
@@ -261,13 +261,16 @@ show_location = false
     enabled = false
 
     [shell.launcher]
+    app_grid = true
     fetch_exchange_rates = false
+    show_app_actions = true
 
         [shell.launcher.providers.calculator]
         global = false
 
     [shell.panel]
     borders = false
+    launcher_placement = "attached"
     open_near_click_clipboard = true
     shadow = false
 
@@ -311,6 +314,10 @@ directory = "~/Pictures/Wallpapers"
 
 [weather]
 enabled = true
+
+[widget.bar]
+text = ""
+type = "dunarand/bookmarks:bar"
 
 [widget.calculator]
 type = "yuuto/calculator:bar"

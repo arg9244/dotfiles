@@ -178,10 +178,6 @@ user_pref("network.dnsCacheExpirationGracePeriod", 3600);
 // SECTION 3: MEDIA BUFFERING & STREAMING
 // =============================================================================
 
-// Block autoplay of both audio and video to save bandwidth (5 = block audio & video)
-user_pref("media.autoplay.default", 5);
-user_pref("media.autoplay.blocking_policy", 2);
-
 // Allocate 4 GB for file-backed media cache to hold extended video buffers
 user_pref("media.cache_size", 4194304);
 

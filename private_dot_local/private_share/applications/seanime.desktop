@@ -1,9 +1,0 @@
-[Desktop Entry]
-Type=Application
-Name=Seanime
-Comment=The Anime and Manga media server
-Icon=/home/reza/.config/Seanime/seanime-logo.png
-Exec=/home/reza/Apps/Seanime/seanime
-Terminal=false
-Categories=AudioVideo;
-StartupNotify=true
