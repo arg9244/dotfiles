@@ -504,17 +504,27 @@ class CommandBuilder:
                 args.extend(["-crf", "0"])
 
     @staticmethod
-    def _apply_preset(args: list, settings: dict, hw_backend: str):
+    def _apply_preset(args: list, settings: dict, hw_backend: str, v_codec: str):
         preset = settings.get("Preset", "").split()[0]
-        if preset and preset not in ("none", "default"):
-            if "NVENC" in hw_backend:
-                args.extend(["-preset", preset])
-            elif "AMF" in hw_backend:
-                args.extend(["-quality", preset])
-            elif "VAAPI" in hw_backend:
-                args.extend(["-compression_level", "1" if preset == "fast" else "7"])
-            else:
-                args.extend(["-preset", preset])
+        if not preset or preset in ("none", "default"):
+            return
+        if "NVENC" in hw_backend:
+            args.extend(["-preset", preset])
+        elif "AMF" in hw_backend:
+            args.extend(["-quality", preset])
+        elif "VAAPI" in hw_backend:
+            args.extend(["-compression_level", "1" if preset == "fast" else "7"])
+        elif "libsvtav1" in v_codec:
+            # SVT-AV1 uses numeric 0-12 presets, not x264-style names.
+            _x264_to_svt = {
+                "ultrafast": 0, "superfast": 1, "veryfast": 3,
+                "faster": 4, "fast": 5, "medium": 6,
+                "slow": 7, "slower": 8, "veryslow": 9,
+            }
+            svt_preset = _x264_to_svt.get(preset, 6)
+            args.extend(["-preset", str(svt_preset)])
+        else:
+            args.extend(["-preset", preset])
 
     @classmethod
     def build_chunk_encode(cls, settings: dict, src_file: str, out_chunk: str, target_w: int, target_h: int, target_fps: str) -> list:
@@ -544,7 +554,7 @@ class CommandBuilder:
 
         args.extend(["-r", target_fps, "-c:v", v_codec])
         cls._apply_rate_control(args, settings, hw, v_codec)
-        cls._apply_preset(args, settings, hw)
+        cls._apply_preset(args, settings, hw, v_codec)
 
         # Audio: Honor user's choice instead of forcing AAC
         a_codec = settings.get("AudioCodec", "copy")
@@ -614,7 +624,7 @@ class CommandBuilder:
                 args.extend(["-c:v", "copy"])
             else:
                 args.extend(["-c:v", v_codec])
-                cls._apply_preset(args, settings, hw)
+                cls._apply_preset(args, settings, hw, v_codec)
                 cls._apply_rate_control(args, settings, hw, v_codec)
 
                 vf = []

@@ -16,8 +16,8 @@
 
     <!-- Tearing: Allowed only when active window is fullscreen (recommended for gaming) -->
     <allowTearing>fullscreen</allowTearing>
-    <hdr>yes</hdr>
-    <autoEnableOutputs>yes</autoEnableOutputs>
+    <hdr>no</hdr>
+    <autoEnableOutputs>no</autoEnableOutputs>
   </core>
 
   <!-- Snapping setup to give you clean half & quadrant tiling -->

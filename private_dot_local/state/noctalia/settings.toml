@@ -195,8 +195,11 @@ panel_placement = "floating"
 panel_position = "center"
 
 [plugin_settings."noctalia/screen_recorder"]
+directory = "/media/C/Videos/Recordings"
+frame_rate_mode = "cfr"
 hide_inactive = true
-video_bitrate_mode = "vbr"
+video_codec = "hevc"
+video_quality = "medium"
 
 [plugin_settings."nomadcxx/gamer-mode"]
 poll_interval = "5"
@@ -301,16 +304,16 @@ source = "community"
 directory = "~/Pictures/Wallpapers"
 
     [wallpaper.default]
-    path = "/home/reza/Pictures/Wallpapers/wallhaven-6lyv5x.png"
+    path = "/home/reza/Pictures/Wallpapers/wallhaven-jevz8y.png"
 
     [wallpaper.last]
-    path = "/home/reza/Pictures/Wallpapers/wallhaven-6lyv5x.png"
+    path = "/home/reza/Pictures/Wallpapers/wallhaven-jevz8y.png"
 
     [wallpaper.monitors.DP-2]
-    path = "/home/reza/Pictures/Wallpapers/wallhaven-6lyv5x.png"
+    path = "/home/reza/Pictures/Wallpapers/wallhaven-jevz8y.png"
 
     [wallpaper.monitors.HDMI-A-1]
-    path = "/home/reza/Pictures/Wallpapers/wallhaven-6lyv5x.png"
+    path = "/home/reza/Pictures/Wallpapers/wallhaven-jevz8y.png"
 
 [weather]
 enabled = true

@@ -57,7 +57,7 @@ PACMAN=(
     noctalia noctalia-greeter umbriel gnome-keyring xwayland-satellite
     kitty bottom chezmoi bun adw-gtk-theme nwg-look paru github-cli zed
     nautilus gvfs-mtp icoutils baobab peazip gnome-disk-utility amdgpu_top
-    mpv mpv-mpris playerctl yt-dlp amberol python-mutagen loupe brasero
+    mpv mpv-mpris playerctl yt-dlp amberol python-mutagen loupe
     proton-cachyos-native mangohud umu-launcher icoextract lact ddcutil
     firefox-wayland-cachy-hg qbittorrent python-pillow ayugram-desktop
 )
