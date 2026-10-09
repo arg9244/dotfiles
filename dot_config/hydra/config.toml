@@ -1,16 +1,16 @@
 [shortcuts]
-add_url = "cmd+n"
-clipboard_add = "cmd+shift+v"
-close_window = "cmd+w"
-options = "cmd+,"
-quit = "cmd+q"
-remove_selected = "cmd+alt+r"
-resume_last = "cmd+r"
-scheduler = "cmd+e"
-select_all = "cmd+a"
-start_main_queue = "cmd+shift+r"
-stop_last = "cmd+s"
-stop_main_queue = "cmd+shift+s"
+add_url = "ctrl+n"
+clipboard_add = "ctrl+shift+v"
+close_window = "ctrl+w"
+options = "ctrl+,"
+quit = "ctrl+q"
+remove_selected = "ctrl+alt+r"
+resume_last = "ctrl+r"
+scheduler = "ctrl+e"
+select_all = "ctrl+a"
+start_main_queue = "ctrl+shift+r"
+stop_last = "ctrl+s"
+stop_main_queue = "ctrl+shift+s"
 
 [settings]
 launch_on_startup = false
@@ -47,6 +47,7 @@ capture_browsers = [
 auto_types = "3GP 7Z AAC ACE AIF APK ARJ ASF AVI BIN BZ2 DMG EXE GZ GZIP IMG ISO LZH M4A M4V MKV MOV MP3 MP4 MPA MPE MPEG MPG MSI MSU OGG OGV PDF PKG PPS PPT QT RA RAR RM RMVB SEA SIT SITX TAR TIF TIFF WAV WMA WMV Z ZIP SAFETENSORS GGUF GGML ONNX PT PTH CKPT PB TFLITE H5 HDF5 KERAS NPY NPZ PKL MLMODEL MLPACKAGE CAFFEMODEL PARQUET PQ ARROW FEATHER AVRO ORC TFRECORD JSONL NDJSON APPIMAGE"
 ai_formats_seeded = true
 portable_capture = false
+allowed_extensions = []
 dont_start_sites = "*.update.microsoft.com download.windowsupdate.com"
 remember_last_dir = true
 server_file_date = false
@@ -60,7 +61,7 @@ show_hide_buttons = true
 show_conn_details = true
 show_complete_dialog = false
 remove_completed = false
-user_agent = "Mozilla/5.0"
+user_agent = "Mozilla/5.0 (Windows NT 6.1; Trident/7.0; rv:11.0) like Gecko"
 virus_scanner = ""
 virus_args = ""
 cookies_from_browser = ""
@@ -74,7 +75,7 @@ warn_before_stop = true
 proxy_mode = "None"
 proxy_script = ""
 proxy_host = "127.0.0.1"
-proxy_port = "1819"
+proxy_port = "2080"
 proxy_user = ""
 proxy_pass = ""
 proxy_type = "Socks5"
@@ -136,7 +137,7 @@ limit = 819200
 
 [[settings.columns]]
 id = "Name"
-width = 668.7328
+width = 617.5002
 visible = true
 
 [[settings.columns]]
@@ -151,7 +152,7 @@ visible = true
 
 [[settings.columns]]
 id = "Status"
-width = 66.45285
+width = 113.81827
 visible = true
 
 [[settings.columns]]
@@ -177,7 +178,7 @@ visible = false
 [[categories]]
 name = "General"
 exts = []
-dir = "/home/reza/Downloads"
+dir = "/media/C/Downloads"
 builtin = true
 
 [[categories]]

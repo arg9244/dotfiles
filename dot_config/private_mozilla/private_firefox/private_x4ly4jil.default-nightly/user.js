@@ -593,7 +593,7 @@ user_pref("widget.non-native-theme.use-theme-accent", false);
 user_pref("layout.css.font-visibility.standard", 1);
 user_pref("layout.css.font-visibility.trackingprotection", 1);
 user_pref("browser.display.use_document_fonts", 1);
-user_pref("browser.toolbars.bookmarks.visibility", "newtab");
+user_pref("browser.toolbars.bookmarks.visibility", "always");
 
 
 // =============================================================================

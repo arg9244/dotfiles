@@ -1,0 +1,492 @@
+@namespace htmlNs url("http://www.w3.org/1999/xhtml");
+/* Auto hide findbar when unfocused */
+@media not -moz-pref("uc.flex.disable-findbar-autohide") {
+    /*
+    @keyframes findbar-hide-when-unfocused {
+        0% {
+            opacity: 1;
+            height: auto;
+        }
+        99% {
+            opacity: 1;
+            height: auto;
+        }
+        100% {
+        }
+    }
+    */
+    findbar:not(:focus-within) {
+        /*
+        animation:
+            findbar-scale-out 0.1s,
+            findbar-hide-when-unfocused 0.1s;
+        */
+        animation: findbar-slide-out 0.3s;
+        height: 0;
+        opacity: 0;
+        pointer-events: none;
+        overflow: hidden;
+    }
+}
+
+/* Move findbar close button to the left */
+.findbar-closebutton {
+    order: -1;
+    z-index: 10;
+}
+
+findbar checkbox {
+    height: 24px;
+    padding-inline: 6px;
+    margin-block: auto !important;
+    border-radius: var(--uc-findbar-inner-border-radius);
+    color: var(--button-color);
+    background-color: var(--button-bgcolor);
+}
+
+/* !TEMPORARY: Restore Find in Page checkboxes hidden by Firefox v147 during Mozilla's redesign.
+   Remove this rule in the future once they are officially restored. */
+.split-view-panel .findbar-container > checkbox {
+    display: flex !important;
+}
+
+/*
+@keyframes findbar-scale-in {
+    0% {
+        transform: scaleY(0);
+    }
+    100% {
+        transform: scaleY(1);
+    }
+}
+@keyframes findbar-scale-out {
+    0% {
+        transform: scaleY(1);
+        visibility: visible;
+    }
+    99% {
+        transform: scaleY(0);
+        visibility: visible;
+    }
+    100% {
+        transform: scaleY(0);
+    }
+}
+*/
+
+@keyframes findbar-slide-in {
+    0%,
+    30% {
+        translate: 100%;
+        opacity: 0;
+    }
+    100% {
+        translate: 0;
+        opacity: 1;
+    }
+}
+
+@keyframes findbar-slide-out {
+    100% {
+        translate: 100%;
+        opacity: 0;
+    }
+    0% {
+        translate: 0;
+        opacity: 1;
+        height: auto;
+    }
+}
+
+/* Modified from https://github.com/nuclearcodecat/shimmer/blob/main/userChrome.css */
+/* https://github.com/nuclearcodecat/shimmer/blob/main/LICENSE */
+/* 1804d7c */
+/* === findbar === */
+findbar {
+    --button-bgcolor: var(--uc-urlbar-bg, var(--button-background-color));
+    --uc-findbar-outline-color: rgb(from var(--uc-findbar-outline) r g b / calc(alpha * 0.7));
+    --uc-findbar-outline-width: 1px;
+    position: absolute;
+    /* Keep absolute positioning relative to the full browser container instead of Firefox's findbar grid area. */
+    grid-area: unset !important;
+    border-radius: var(--uc-findbar-outer-border-radius);
+    top: calc(var(--uc-findbar-y-position) + var(--uc-findbar-y-offset));
+    right: min(var(--uc-findbar-x-position), calc(100% - var(--uc-findbar-width)));
+    width: var(--uc-findbar-width);
+    height: 36px;
+    min-height: initial !important;
+    display: flex;
+    align-items: center;
+    transform-origin: top center;
+    animation: findbar-slide-in 0.3s;
+    background-color: var(--uc-findbar-bgcolor, var(--toolbar-background-color)) !important;
+    background-image:
+        linear-gradient(
+            var(--uc-findbar-bgcolor, var(--toolbar-background-color)),
+            var(--uc-findbar-bgcolor, var(--toolbar-background-color))
+        ),
+        var(--lwt-additional-images) !important;
+    border-top: none !important;
+    overflow-x: visible;
+    filter: drop-shadow(0 18px 30px rgba(12, 12, 16, 0.2));
+    z-index: 100;
+}
+
+/* Uses a pseudo-element for the four-sided border to avoid turning the findbar 
+ * into a backdrop root, which would otherwise break the backdrop-filter blur 
+ * on .found-matches. The border automatically inherits the findbar's rounded 
+ * corners, switching to a square bottom-left corner when .found-matches is present. 
+ * Additionally, .found-matches overlays and covers the findbar's bottom border 
+ * to keep the elements visually connected. */
+findbar::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    padding: var(--uc-findbar-outline-width);
+    pointer-events: none;
+    border-radius: inherit;
+    background-color: var(--uc-findbar-outline-color);
+    mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+    mask-composite: exclude;
+}
+
+.findbar-container {
+    height: 100% !important;
+}
+
+findbar [anonid="findbar-textbox-wrapper"] {
+    margin-block: auto;
+}
+
+.findbar-container {
+    margin-inline-start: 0 !important;
+    padding-inline-start: 0 !important;
+}
+
+/* change text to icons for smaller findbar */
+.findbar-container checkbox::after {
+    height: 20px;
+    font-size: 14px;
+    background-size: cover;
+    display: flex;
+    align-items: center;
+    -moz-context-properties: fill;
+    fill: currentColor;
+    color: inherit;
+}
+.findbar-container checkbox:not([checked])::after {
+    @media -moz-pref("uc.flex.style-sidebar-stripe-color-apply-to-all-icons") {
+        fill: var(--toolbarbutton-icon-fill);
+        color: var(--toolbarbutton-icon-fill);
+    }
+}
+.findbar-highlight::after {
+    content: "";
+    background: url(../icons/findbar/hl.svg) no-repeat;
+    background-position-x: 1px;
+    background-position-y: -2px;
+    width: 24px;
+}
+.findbar-case-sensitive::after {
+    content: "Aa";
+    justify-content: center;
+    width: 24px;
+    font-weight: 600;
+}
+.findbar-match-diacritics::after {
+    content: "ąâ";
+    justify-content: center;
+    width: 24px;
+    font-weight: 600;
+}
+.findbar-entire-word::after {
+    content: "";
+    background: url(../icons/findbar/word.svg) no-repeat;
+    background-position-y: -2px;
+    width: 24px;
+}
+
+/* hide all text for findbar checkboxes */
+.findbar-container checkbox > .checkbox-label-box {
+    display: none !important;
+}
+
+.findbar-textbox {
+    border-radius: var(--uc-findbar-inner-border-radius) !important;
+    /*
+    padding: 5px 8px !important;
+    */
+    padding-inline-start: var(--space-medium) !important;
+    width: var(--uc-findbar-textbox-width) !important;
+    height: 26px;
+    min-height: 26px !important;
+}
+
+.findbar-find-previous {
+    height: 26px;
+}
+
+.findbar-find-next {
+    border-top-right-radius: var(--uc-findbar-inner-border-radius) !important;
+    border-bottom-right-radius: var(--uc-findbar-inner-border-radius) !important;
+    height: 26px;
+}
+
+.findbar-find-previous,
+.findbar-find-next {
+    padding: var(--space-xsmall) var(--space-small) !important;
+}
+
+.findbar-closebutton:hover {
+    background: var(--toolbarbutton-background-color-hover) !important;
+}
+.findbar-closebutton {
+    /* Override v154 border styles */
+    border: none !important;
+    background-color: var(--button-background-color, var(--toolbar-background-color)) !important;
+    /* wasn't square for some reason */
+    width: auto !important;
+    padding: 4px !important;
+    margin-inline-start: 3px !important;
+    @media -moz-pref("uc.flex.style-toolbar-items-border-radius", 1) {
+        border-radius: 4px !important;
+    }
+    @media -moz-pref("uc.flex.style-toolbar-items-border-radius", 2) {
+        border-radius: var(--border-radius-circle) !important;
+    }
+    .toolbarbutton-icon {
+        width: 12px;
+        height: 12px;
+    }
+}
+
+/* move matched amount below main findbar */
+.found-matches {
+    --uc-found-matches-arc-width: 22px;
+    --uc-found-matches-arc-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 22 23' preserveAspectRatio='none'%3E%3Cpath fill='black' d='M0 0H22V1C17 1 9 23 0 23V0Z'/%3E%3C/svg%3E");
+    --uc-found-matches-arc-outline-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 22 23' preserveAspectRatio='none'%3E%3Cpath fill='black' d='M22 1C17 1 9 23 0 23L0 22C8.333 22 16.333 0 22 0Z'/%3E%3C/svg%3E");
+    @media -moz-pref("uc.flex.style-toolbar-items-border-radius", 2),
+        -moz-pref("browser.nova.enabled") and (not -moz-pref("uc.flex.style-toolbar-items-border-radius", 1)) {
+        /* A wider, flatter arc follows Nova's 18px findbar corner more closely. */
+        --uc-found-matches-arc-width: 28px;
+        --uc-found-matches-arc-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 23' preserveAspectRatio='none'%3E%3Cpath fill='black' d='M0 0H28V1C22 1 13 23 0 23V0Z'/%3E%3C/svg%3E");
+        --uc-found-matches-arc-outline-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 23' preserveAspectRatio='none'%3E%3Cpath fill='black' d='M28 1C22 1 13 23 0 23L0 22C12.333 22 21.333 0 28 0Z'/%3E%3C/svg%3E");
+    }
+    @media -moz-pref("uc.flex.revert-to-original-flat-corner-style", 2) {
+        /* This mode overrides the Nova arc as well as its standard shape. */
+        --uc-found-matches-arc-width: 22px;
+        --uc-found-matches-arc-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 22 23' preserveAspectRatio='none'%3E%3Cpath fill='black' d='M0 0H22V1C18 1 5 23 0 23V0Z'/%3E%3C/svg%3E");
+        --uc-found-matches-arc-outline-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 22 23' preserveAspectRatio='none'%3E%3Cpath fill='black' d='M22 1C18 1 5 23 0 23L0 22C4.333 22 17.333 0 22 0Z'/%3E%3C/svg%3E");
+    }
+    height: 23px;
+    box-sizing: border-box;
+    line-height: 22px;
+    min-width: calc(var(--uc-findbar-textbox-width) + var(--uc-found-matches-arc-width) / 2);
+    position: absolute;
+    padding: var(--uc-findbar-outline-width) 28px 0 10px;
+    /* Overlap findbar by the outline width so this background covers findbar::after's bottom outline. */
+    top: calc(36px - var(--uc-findbar-outline-width));
+    background-color: var(--uc-findbar-bgcolor, var(--toolbar-background-color));
+    left: 0px;
+    border-bottom-left-radius: var(--uc-findbar-outer-border-radius);
+    z-index: 9;
+    /* Combines a rounded rectangular body and the right arc to create the .found-matches shape.
+     * The outline is defined separately by .found-matches::after. */
+    mask-image:
+        /* 1: The rectangular body uses border-radius for the bottom-left corner. */
+        linear-gradient(#000 0 0),
+        /* 2: This SVG mask completes the top overlap and the right arc. */ var(--uc-found-matches-arc-mask);
+    mask-position:
+        left top,
+        right top;
+    mask-size:
+        calc(100% - var(--uc-found-matches-arc-width)) 100%,
+        var(--uc-found-matches-arc-width) 100%;
+    mask-repeat: no-repeat;
+    mask-composite: add;
+}
+.found-matches::after {
+    content: "";
+    position: absolute;
+    inset: calc(-1 * var(--uc-findbar-outline-width)) 0 0;
+    z-index: 10;
+    pointer-events: none;
+    box-sizing: border-box;
+    padding: var(--uc-findbar-outline-width);
+    border-radius: inherit;
+    background-color: var(--uc-findbar-outline-color);
+    /* Uses the same content-box difference as findbar::after for the left and bottom borders,
+     * then adds a filled SVG band for the right curved border. */
+    mask-image:
+        /* 1: This filled band defines both edges of the right curved border. */
+        var(--uc-found-matches-arc-outline-mask),
+        /* 2 and 3: Excluding the content box from the full box leaves a 1px rounded border. */
+            linear-gradient(#000 0 0),
+        linear-gradient(#000 0 0);
+    mask-position:
+        right bottom,
+        left top,
+        left top;
+    mask-size:
+        var(--uc-found-matches-arc-width) calc(100% - var(--uc-findbar-outline-width)),
+        100% 100%,
+        100% 100%;
+    mask-origin: border-box, content-box, border-box;
+    mask-clip: border-box, content-box, border-box;
+    mask-repeat: no-repeat;
+    mask-composite: add, exclude;
+}
+findbar:has(> .findbar-container > .found-matches:not([hidden])) {
+    border-bottom-left-radius: 0px;
+}
+.findbar-find-status {
+    display: none;
+}
+.found-matches::before {
+    position: relative;
+    inset-block-start: -1px;
+    inset-inline-start: 3px;
+    @media -moz-pref("uc.flex.style-toolbar-items-border-radius", 2),
+        -moz-pref("browser.nova.enabled") and (not -moz-pref("uc.flex.style-toolbar-items-border-radius", 1)) {
+        inset-inline-start: 8px;
+    }
+    z-index: 8;
+}
+.findbar-textbox {
+    z-index: 10;
+}
+
+/* Modified from https://github.com/ravindUwU/firefox-refined-findbar/blob/main/src/refined-findbar.scss */
+/* aecb463 */
+
+/* !v143 */
+findbar:where([hidden="true"], [hidden=""]) {
+    animation: findbar-slide-out 0.3s;
+}
+findbar checkbox,
+findbar [anonid="findbar-textbox-wrapper"] toolbarbutton,
+findbar [anonid="findbar-textbox-wrapper"] htmlNs|input {
+    border: 1px solid ThreeDShadow;
+    @media -moz-pref("uc.flex.style-sidebar-stripe-color-apply-to-all-icons") {
+        border-color: var(--uc-findbar-outline) !important;
+    }
+}
+/*
+findbar {
+    gap: 8px;
+    padding: 6px;
+    padding-inline-start: 8px;
+    padding-inline-end: 8px;
+}
+*/
+findbar {
+    gap: 6px;
+    padding-block: 4px !important;
+    padding-inline: 6px;
+}
+findbar > * {
+    margin-inline-start: 0 !important;
+    margin-inline-end: 0 !important;
+}
+findbar .findbar-container {
+    gap: 8px;
+}
+findbar .findbar-container > * {
+    margin-inline-start: 0 !important;
+    margin-inline-end: 0 !important;
+}
+/* Previous & next buttons. Hidden if the findbar is opened in quick find mode. */
+/*
+findbar [anonid="findbar-textbox-wrapper"] {
+    
+}
+*/
+findbar [anonid="findbar-textbox-wrapper"] htmlNs|input:not(.minimal) {
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+}
+findbar [anonid="findbar-textbox-wrapper"] toolbarbutton {
+    color: var(--button-color);
+    background-color: var(--button-background-color, var(--button-bgcolor));
+    border-width: 1px !important;
+    margin-inline: 0 !important;
+}
+findbar [anonid="findbar-textbox-wrapper"] toolbarbutton {
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+    border-left-width: 0 !important;
+}
+findbar [anonid="findbar-textbox-wrapper"] toolbarbutton:not(:last-of-type) {
+    border-radius: 0 !important;
+    /*
+    border-right-width: 0 !important;
+    */
+}
+/*
+findbar checkbox {
+    padding: 3px 6px;
+    border-radius: var(--toolbarbutton-border-radius);
+    color: var(--button-color);
+    background-color: var(--button-background-color, var(--button-bgcolor));
+}
+*/
+findbar checkbox:hover {
+    background-color: var(--button-background-color-hover, var(--button-hover-bgcolor));
+}
+findbar checkbox:active {
+    background-color: var(--button-background-color-active, var(--button-active-bgcolor));
+}
+findbar checkbox[checked] {
+    color: var(--button-text-color-primary, var(--button-primary-color));
+    background-color: var(--color-accent-primary, var(--button-primary-bgcolor));
+}
+findbar checkbox[checked]:hover {
+    background-color: var(--color-accent-primary-hover, var(--button-primary-hover-bgcolor));
+}
+findbar checkbox[checked]:active {
+    background-color: var(--color-accent-primary-active, var(--button-primary-active-bgcolor));
+}
+findbar checkbox:focus-visible {
+    outline: var(--focus-outline);
+    outline-offset: var(--focus-outline-inset);
+}
+findbar checkbox .checkbox-check {
+    display: none;
+}
+findbar checkbox:not(checkbox[anonid="find-entire-word"]) {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+findbar checkbox:not(checkbox[anonid="highlight"]) {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-left-width: 0;
+    margin-inline-start: -8px !important;
+}
+findbar description.findbar-label:empty {
+    display: none;
+}
+findbar [anonid="findbar-textbox-wrapper"] {
+    order: 0;
+}
+findbar checkbox[anonid="highlight"] {
+    order: 1;
+}
+findbar checkbox[anonid="find-case-sensitive"] {
+    order: 2;
+}
+findbar checkbox[anonid="find-match-diacritics"] {
+    order: 3;
+}
+findbar checkbox[anonid="find-entire-word"] {
+    order: 4;
+}
+findbar label.findbar-label {
+    order: 5;
+}
+findbar description.findbar-label {
+    order: 6;
+}

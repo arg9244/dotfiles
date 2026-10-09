@@ -85,8 +85,8 @@ offset_y = 2
 [keybinds]
 
 # ─── Noctalia Shell & Plugins ───
-"Mod"             = { action = "spawn:noctalia msg panel-toggle launcher", repeat = false }
-"Mod+Space"       = { action = "spawn:noctalia msg panel-toggle control-center", repeat = false }
+"Mod+Space"             = { action = "spawn:noctalia msg panel-toggle launcher", repeat = false }
+"Mod+S"       = { action = "spawn:noctalia msg panel-toggle control-center", repeat = false }
 "Alt+V"           = { action = "spawn:noctalia msg panel-toggle clipboard", repeat = false }
 "Mod+V"           = { action = "spawn:noctalia msg plugin noctalia/screen_recorder:service all toggle focused", repeat = false }
 "Mod+C"           = { action = "spawn:noctalia msg panel-toggle yuuto/calculator:panel", repeat = false }
@@ -205,4 +205,4 @@ offset_y = 2
 "Mod+Shift+P"     = "dpms-off"
 
 [include.optional]
-files = ["noctalia.toml"]
+files = []

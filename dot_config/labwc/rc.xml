@@ -2,7 +2,6 @@
 <labwc_config>
   <theme>
     <!-- Ensure the folder name in ~/.themes/ or /usr/share/themes/ matches this name -->
-    <name>gruvbox-dark-hard</name>
   </theme>
 
   <core>
@@ -17,7 +16,7 @@
     <!-- Tearing: Allowed only when active window is fullscreen (recommended for gaming) -->
     <allowTearing>fullscreen</allowTearing>
     <hdr>no</hdr>
-    <autoEnableOutputs>no</autoEnableOutputs>
+    <autoEnableOutputs>yes</autoEnableOutputs>
   </core>
 
   <!-- Snapping setup to give you clean half & quadrant tiling -->
@@ -25,6 +24,12 @@
     <range inner="10" outer="10" />
     <topMaximize>yes</topMaximize>
   </snapping>
+
+  <!-- Focus behavior -->
+    <focus>
+      <followMouse>yes</followMouse>
+      <followMouseRequiresMovement>no</followMouseRequiresMovement>
+    </focus>
 
   <!-- Workspaces 1-9 -->
   <desktops>

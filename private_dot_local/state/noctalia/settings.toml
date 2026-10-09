@@ -23,6 +23,9 @@ refresh_minutes = 240
 [control_center]
 hidden_tabs = [ "power" ]
 
+    [control_center.calendar]
+    show_events_card = false
+
     [[control_center.shortcuts]]
     type = "caffeine"
 
@@ -198,8 +201,11 @@ panel_position = "center"
 directory = "/media/C/Videos/Recordings"
 frame_rate_mode = "cfr"
 hide_inactive = true
+resolution = "1920x1080"
+video_bitrate_mode = "vbr"
 video_codec = "hevc"
-video_quality = "medium"
+video_qp = 32
+video_quality = "high"
 
 [plugin_settings."nomadcxx/gamer-mode"]
 poll_interval = "5"
@@ -273,7 +279,6 @@ show_location = false
 
     [shell.panel]
     borders = false
-    launcher_placement = "attached"
     open_near_click_clipboard = true
     shadow = false
 
@@ -297,7 +302,7 @@ community_palette = "Gruvbox Material Hard"
 source = "community"
 
     [theme.templates]
-    builtin_ids = [ "foot", "gtk3", "gtk4", "kcolorscheme", "kitty", "qt", "umbriel" ]
+    builtin_ids = [ "gtk3", "gtk4", "kcolorscheme", "kitty", "qt" ]
     enable_builtin_templates = true
 
 [wallpaper]
