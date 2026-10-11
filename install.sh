@@ -53,18 +53,18 @@ export PATH="$ORIGINAL_HOME/.local/bin:$PATH"
 # ══════════════════════════════════════════════════════════════════════════════
 
 PACMAN=(
-    labwc kanshi xdg-desktop-portal-wlr xdg-desktop-portal-gtk
-    noctalia noctalia-greeter umbriel gnome-keyring xwayland-satellite
-    kitty bottom chezmoi adw-gtk-theme nwg-look paru github-cli zed
-    nautilus gvfs-mtp icoutils baobab peazip gnome-disk-utility
-    mpv mpv-mpris playerctl yt-dlp amberol python-mutagen loupe foliate
-    proton-cachyos-native mangohud umu-launcher icoextract lact ddcutil
-    firefox-wayland-cachy-hg qbittorrent python-pillow ayugram-desktop
+    xdg-desktop-portal-wlr xdg-desktop-portal-gtk xwayland-satellite
+    noctalia noctalia-greeter umbriel gnome-keyring ddcutil labwc kanshi
+    kitty bottom chezmoi paru github-cli zed adw-gtk-theme nwg-look
+    nautilus gvfs-mtp gnome-disk-utility baobab peazip icoutils icoextract
+    mpv mpv-mpris playerctl amberol loupe foliate yt-dlp python-mutagen
+    proton-cachyos-native wine umu-launcher mangohud lact
+    firefox-wayland-cachy-hg qbittorrent ayugram-desktop
 )
 
 AUR=(
-    qt6ct-kde nautilus-open-any-terminal mihomo-bin
-    hydra-download-manager-bin moonbit rar oh-my-pi-bin
+    qt6ct-kde nautilus-open-any-terminal oh-my-pi-bin
+    hydra-download-manager-bin mihomo-bin
 )
 
 DOTFILES_REPO="https://github.com/arg9244/dotfiles"
