@@ -1,0 +1,12 @@
+#navigator-toolbox {
+  z-index: unset !important;
+}
+#PlacesToolbar {
+  z-index: 10 !important;
+}
+#PlacesToolbarItems {
+  position: fixed !important;
+  top: var(--globle-height);
+  left: 0;
+  width: 100vw !important;
+}
