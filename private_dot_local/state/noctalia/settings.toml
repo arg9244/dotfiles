@@ -307,7 +307,6 @@ source = "community"
 
     [theme.templates]
     builtin_ids = [ "gtk3", "gtk4", "kcolorscheme", "kitty", "qt" ]
-    community_ids = [ "discord" ]
     enable_builtin_templates = true
 
 [wallpaper]
