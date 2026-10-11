@@ -1,6 +1,3 @@
-providers:
-  webSearchOrder:
-    []
 modelRoles:
   default: kilo/kilo-auto/free
 symbolPreset: nerd
@@ -33,7 +30,6 @@ github:
   enabled: true
 autoResume: true
 tts:
-  localModel: kokoro
   localVoice: bf_emma
 speech:
   enabled: false

@@ -1,41 +1,141 @@
-﻿/*                FlexFox v7.1.0               */
-/*     ____ _              ____                */
-/*    |  __| |  ___ __  __|  __| ___ __  __    */
-/*    | |_ | | / _ \\ \/ /| |_  / _ \\ \/ /    */
-/*    |  _|| ||  __/ >  < |  _|| (_) |>  <     */
-/*    |_|  |_| \___|/_/\_\|_|   \___//_/\_\    */
-/*                                             */
-/*    Maximize your view, shape it your way.   */
-/*     https://github.com/yuuqilin/FlexFox     */
-/*                                             */
-@import url(./components/uc-variables.css) not
-    (-moz-pref("uc.flex.disable-flexfox") or -moz-pref("uc.flex.~dev-skip-loading-uc-variables.css"));
-@import url(./components/uc-icons.css) not
-    (-moz-pref("uc.flex.disable-flexfox") or -moz-pref("uc.flex.~dev-skip-loading-uc-icons.css"));
-@import url(./components/uc-menu-icons.css) not
-    (-moz-pref("uc.flex.disable-flexfox") or -moz-pref("uc.flex.~dev-skip-loading-uc-menu-icons.css"));
-@import url(./components/uc-uni-extensions.css) not
-    (-moz-pref("uc.flex.disable-flexfox") or -moz-pref("uc.flex.~dev-skip-loading-uc-uni-extensions.css"));
-@import url(./components/uc-misc.css) not
-    (-moz-pref("uc.flex.disable-flexfox") or -moz-pref("uc.flex.~dev-skip-loading-uc-misc.css"));
-@import url(./components/uc-tabs-bar.css) not
-    (-moz-pref("uc.flex.disable-flexfox") or -moz-pref("uc.flex.~dev-skip-loading-uc-tabs-bar.css"));
-@import url(./components/uc-urlbar.css) not
-    (-moz-pref("uc.flex.disable-flexfox") or -moz-pref("uc.flex.~dev-skip-loading-uc-urlbar.css"));
-@import url(./components/uc-navbar.css) not
-    (-moz-pref("uc.flex.disable-flexfox") or -moz-pref("uc.flex.~dev-skip-loading-uc-navbar.css"));
-@import url(./components/uc-fullscreen.css) not
-    (-moz-pref("uc.flex.disable-flexfox") or -moz-pref("uc.flex.~dev-skip-loading-uc-fullscreen.css"));
-@import url(./components/uc-bookmarks.css) not
-    (-moz-pref("uc.flex.disable-flexfox") or -moz-pref("uc.flex.~dev-skip-loading-uc-bookmarks.css"));
-@import url(./components/uc-sidebar.css) not
-    (-moz-pref("uc.flex.disable-flexfox") or -moz-pref("uc.flex.~dev-skip-loading-uc-sidebar.css"));
-@import url(./components/uc-findbar.css) not
-    (-moz-pref("uc.flex.disable-flexfox") or -moz-pref("uc.flex.~dev-skip-loading-uc-findbar.css"));
-@import url(./components/uc-window-controls.css) not
-    (-moz-pref("uc.flex.disable-flexfox") or -moz-pref("uc.flex.~dev-skip-loading-uc-window-controls.css"));
-@import url(./components/uc-verticalfox.css) not
-    (-moz-pref("uc.flex.disable-flexfox") or -moz-pref("uc.flex.~dev-skip-loading-uc-verticalfox.css"));
-@import url(./components/uc-browser.css) not
-    (-moz-pref("uc.flex.disable-flexfox") or -moz-pref("uc.flex.~dev-skip-loading-uc-browser.css"));
-@import url(./components/uc-user-settings.css);
+/* this style maintained by https://github.com/MapoMagpie/firefox-compact-ui */
+:root {
+  --globle-height: 28px !important;
+  /* Address bar minimum width */
+  --url-container-width: 250px !important;
+  /* Address bar maximum width */
+  --url-container-max-width: 600px !important;
+  --url-container-max-height: 28px !important;
+  --urlbar-min-height: 28px !important;
+  --border-radius-medium: 5px !important;
+  --border-radius-xlarge: 5px !important;
+  /* Unselected tab (non-current tab) width */
+  --tab-max-width-c: 120px !important;
+  /* Selected tab (current tab) width */
+  --tab-max-width-s: 210px !important;
+  --tab-min-height: 28px !important;
+  --tab-max-height: 28px !important;
+  --tab-block-margin: 0px !important;
+  --tab-margin-block: 0px !important;
+}
+
+/* hidden some elements */
+hbox.titlebar-spacer,
+#toolbar-menubar[inactive],
+/* urlbar search selector */ .searchmode-switcher.chromeclass-toolbar-additional, 
+/* right part of urlbar buttons */ /* #page-action-buttons, */
+/* urlbar button */ #contextual-feature-recommendation,
+/* urlbar button #userContext-icons, */
+/* urlbar button */ #reader-mode-button,
+/* urlbar button */ #picture-in-picture-button,
+/* urlbar button */ #translations-button,
+/* urlbar button */ #shopping-sidebar-button,
+/* urlbar button */ /* #urlbar-zoom-button, */
+/* urlbar button */ /* #pageActionButton, */
+/* urlbar button bookmark */ #star-button-box,
+
+/* tab    button close      */ .tab-close-button,
+/* tabbar button new tab    */ #tabs-newtab-button,
+/* navigator button back    */ #navigator-toolbox #nav-bar #nav-bar-customization-target #back-button,
+/* navigator button forword */ #navigator-toolbox #nav-bar #nav-bar-customization-target #forward-button,
+/* Address bar security icon #urlbar-container:not(:hover) #tracking-protection-icon-container, */
+/* Address bar search icon #urlbar-container:not(:hover) */ #identity-box
+{
+  display: none !important;
+}
+
+/*
+Core: merge the entire navigation toolbar into a single bar.
+       Set it as a flexbox and reverse the positions of the address bar and tab bar.
+*/
+#navigator-toolbox {
+  display: flex !important;
+  justify-content: start !important;
+  flex-direction: row-reverse !important;
+  flex-wrap: wrap !important;
+}
+
+#navigator-toolbox > #titlebar {
+  -moz-appearance: unset !important;
+  margin-left: 1px !important;
+  flex: 1 !important;
+  height: var(--globle-height) !important;
+}
+
+/* Unselected tab (non-current tab) width */
+.tabbrowser-tab:is([fadein]) {
+  max-width: var(--tab-max-width-c) !important;
+}
+/* Selected tab (current tab) width */
+.tabbrowser-tab:is([fadein]):is([selected]) {
+  max-width: var(--tab-max-width-s) !important;
+}
+
+.tab-background {
+  height: var(--globle-height) !important;
+  border-radius: 5px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+.tab-content {
+  padding: 0 5px !important;
+  height: var(--globle-height) !important;
+}
+
+#pinned-tabs-container[orient="horizontal"] {
+  margin-inline-end: 0px !important;
+}
+
+/* Address bar: remove some margins */
+#nav-bar,
+#nav-bar-customization-target,
+#urlbar-container {
+  margin: 0px !important;
+  padding: 0px !important;
+  height: var(--globle-height) !important;
+}
+
+/* Address bar expand animation */
+#urlbar-container {
+  width: var(--url-container-width) !important;
+  transition: width 400ms !important;
+}
+
+#urlbar-container:hover:has(#urlbar[open]) {
+  width: var(--url-container-max-width) !important;
+  transition: width 400ms !important;
+}
+
+/* Address bar (including the popup urlbarView) background, so when the address bar is not focused its height is limited to 2px less than the global height */
+#urlbar-container > .urlbar > .urlbar-background {
+    display: none !important;
+}
+
+/* urlbarView is the popup shown on focus, displaying shortcuts, search suggestions, history, etc. */
+/* Hide urlbarView unless the mouse is hovering over the address bar */
+#urlbar-container:not(:hover) > #urlbar[open] > .urlbarView {
+   display: none !important;
+}
+
+#browser {
+  padding-block-start: 0px !important;
+}
+
+/* Show more bookmarks button */
+#PersonalToolbar {
+  max-width: 30px;
+  height: 28px;
+  padding-inline: 0 !important;
+}
+
+/* change "Show more bookmarks button icon "*/
+#PlacesChevron {
+  list-style-image: url("chrome://browser/skin/bookmark.svg") !important;
+}
+
+/* limit bookmark item width */
+menuitem.bookmark-item {
+  min-width: 20em !important;
+  max-width: 20em !important;
+}
+

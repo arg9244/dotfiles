@@ -564,7 +564,6 @@ user_pref("browser.helperApps.deleteTempFileOnExit", true);
 // SECTION 13: TAB MANAGEMENT, NAVIGATION & UI ERGONOMICS
 // =============================================================================
 
-user_pref("browser.tabs.loadBookmarksInTabs", true);
 user_pref("browser.tabs.closeWindowWithLastTab", false);
 user_pref("browser.tabs.warnOnClose", false);
 user_pref("browser.tabs.remote.warmup.enabled", true);
