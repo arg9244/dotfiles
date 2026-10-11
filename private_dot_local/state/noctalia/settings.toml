@@ -5,7 +5,7 @@ enable_sounds = false
 
 [bar.default]
 center = [ "clock", "date", "date_2", "weather", "media", "monitor" ]
-end = [ "mihomo-tun", "calculator", "bar", "status", "clipboard", "notifications", "keyboard_layout", "session" ]
+end = [ "mihomo-tun", "calculator", "bar", "status", "shelf", "clipboard", "notifications", "keyboard_layout", "session" ]
 margin_edge = 0
 margin_ends = 0
 position = "bottom"
@@ -192,6 +192,9 @@ panel_open_near_click = true
 panel_placement = "floating"
 panel_position = "center"
 
+[plugin_settings."mahmoudomiesh/network-monitor"]
+include_udp = true
+
 [plugin_settings."nightwatch75/todo"]
 panel_layer = "overlay"
 panel_placement = "floating"
@@ -239,7 +242,8 @@ enabled = [
     "tordex/processes",
     "fel/quill",
     "borderliner/jalali_calendar",
-    "dunarand/bookmarks"
+    "dunarand/bookmarks",
+    "alok-debnath/shelf"
 ]
 
     [[plugins.source]]
@@ -303,6 +307,7 @@ source = "community"
 
     [theme.templates]
     builtin_ids = [ "gtk3", "gtk4", "kcolorscheme", "kitty", "qt" ]
+    community_ids = [ "discord" ]
     enable_builtin_templates = true
 
 [wallpaper]
@@ -353,6 +358,9 @@ type = "nomadcxx/gamer-mode:monitor"
 
 [widget.recorder]
 type = "noctalia/screen_recorder:recorder"
+
+[widget.shelf]
+type = "alok-debnath/shelf:shelf"
 
 [widget.status]
 type = "fel/quill:status"
