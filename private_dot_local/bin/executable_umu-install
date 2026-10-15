@@ -76,15 +76,13 @@ GAME_ARGS=()
 # OptiScaler Integration (Set to 1 to enable)
 export PROTON_USE_OPTISCALER="0"
 export PROTON_OPTISCALER_NAME="dxgi.dll"
-export PROTON_OPTISCALER_CONFIG="Upscalers.Dx12Upscaler=fsr31;FrameGen.Enabled=true;FrameGen.FGInput=DLSSG;FrameGen.FGOutput=XeFG;FrameGen.FTInput=2;FSR.Fsr4Update=false"
+export PROTON_OPTISCALER_CONFIG="Upscalers.Dx12Upscaler=fsr31;FrameGen.Enabled=true;FrameGen.FGInput=DLSSG;FrameGen.FGOutput=XeFG;FrameGen.FTInput=2;FSR.Fsr4Update=false;XeFG.UIComposition=true"
 
 # Proton & Upscaling Settings
 export PROTON_VERB="run"
 export PROTON_USE_NTSYNC="1"
-export PROTON_FSR4_INDICATOR="0"
 export PROTON_FSR4_UPGRADE="1"
-export PROTON_XESS_UPGRADE="0"
-export PROTON_DLSS_UPGRADE="0"
+export PROTON_FSR4_INDICATOR="0"
 export PROTON_NO_STEAMINPUT="1"
 export PROTON_PREFER_SDL="1"
 

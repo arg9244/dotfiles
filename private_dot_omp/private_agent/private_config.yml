@@ -1,5 +1,5 @@
 modelRoles:
-  default: kilo/kilo-auto/free
+  default: strata/qwen3.8-flash-next-coder-iq1_m
 symbolPreset: nerd
 theme:
   dark: titanium

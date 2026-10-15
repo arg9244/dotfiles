@@ -5,3 +5,17 @@ providers:
     apiKey: "key"
     discovery:
       type: openai-models-list
+
+  strata:
+    baseUrl: "http://127.0.0.1:8080/v1"
+    api: openai-completions
+    apiKey: "strata" # Strata doesn't enforce keys, but omp expects a non-empty string
+    discovery:
+      type: openai-models-list
+    models:
+      - id: "qwen3.8-flash-next-coder-iq1_m"
+        name: "Qwen 3.8 Flash Next Coder (Local IQ1_M)"
+        contextWindow: 65536
+        maxTokens: 8192
+        reasoning: false
+        input: ["text"]

@@ -58,7 +58,7 @@ PACMAN=(
     kitty bottom chezmoi paru github-cli zed adw-gtk-theme nwg-look
     nautilus gvfs-mtp gnome-disk-utility baobab peazip icoutils icoextract
     mpv mpv-mpris playerctl amberol loupe foliate yt-dlp python-mutagen
-    proton-cachyos-native wine umu-launcher mangohud lact
+    proton-cachyos-native wine umu-launcher mangojuice lact amdgpu_top
     firefox-wayland-cachy-hg qbittorrent ayugram-desktop
 )
 

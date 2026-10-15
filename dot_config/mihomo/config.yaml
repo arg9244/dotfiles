@@ -1,0 +1,133 @@
+mixed-port: 7890
+allow-lan: true
+mode: rule
+log-level: info
+
+# --- Web UI & Controller Settings ---
+external-controller: 127.0.0.1:9090
+external-ui: ui
+external-ui-url: "https://github.com/MetaCubeX/metacubexd/archive/refs/heads/gh-pages.zip"
+
+# --- 1. Remote Node Subscription ---
+proxy-providers:
+  0xRadikal:
+    type: http
+    url: "https://raw.githubusercontent.com/0xRadikal/Free-v2ray-Configs/main/verified/clash.yaml"
+    path: ./providers/0xRadikal.yaml
+    interval: 21600 # Auto-update every 6 hours (21600s)
+    health-check:
+      enable: true
+      url: https://www.gstatic.com/generate_204
+      interval: 3600 # Health check every 1 hour (3600s)
+
+# --- 2. Rule Providers (Iran Ruleset - Auto-updated Daily) ---
+rule-providers:
+  private:
+    type: http
+    format: text
+    behavior: ipcidr
+    url: "https://raw.githubusercontent.com/Chocolate4U/Iran-clash-rules/release/private.txt"
+    path: ./ruleset/private.txt
+    interval: 86400 # 24 hours
+
+  apps:
+    type: http
+    format: text
+    behavior: classical
+    url: "https://raw.githubusercontent.com/Chocolate4U/Iran-clash-rules/release/apps.txt"
+    path: ./ruleset/apps.txt
+    interval: 86400
+
+  ads:
+    type: http
+    format: text
+    behavior: domain
+    url: "https://raw.githubusercontent.com/Chocolate4U/Iran-clash-rules/release/ads.txt"
+    path: ./ruleset/ads.txt
+    interval: 86400
+
+  malware:
+    type: http
+    format: text
+    behavior: domain
+    url: "https://raw.githubusercontent.com/Chocolate4U/Iran-clash-rules/release/malware.txt"
+    path: ./ruleset/malware.txt
+    interval: 86400
+
+  phishing:
+    type: http
+    format: text
+    behavior: domain
+    url: "https://raw.githubusercontent.com/Chocolate4U/Iran-clash-rules/release/phishing.txt"
+    path: ./ruleset/phishing.txt
+    interval: 86400
+
+  cryptominers:
+    type: http
+    format: text
+    behavior: domain
+    url: "https://raw.githubusercontent.com/Chocolate4U/Iran-clash-rules/release/cryptominers.txt"
+    path: ./ruleset/cryptominers.txt
+    interval: 86400
+
+  ir:
+    type: http
+    format: text
+    behavior: domain
+    url: "https://raw.githubusercontent.com/Chocolate4U/Iran-clash-rules/release/ir.txt"
+    path: ./ruleset/ir.txt
+    interval: 86400
+
+  ircidr:
+    type: http
+    format: text
+    behavior: ipcidr
+    url: "https://raw.githubusercontent.com/Chocolate4U/Iran-clash-rules/release/ircidr.txt"
+    path: ./ruleset/ircidr.txt
+    interval: 86400
+
+  irasn:
+    type: http
+    format: text
+    behavior: classical
+    url: "https://raw.githubusercontent.com/Chocolate4U/Iran-clash-rules/release/irasn.txt"
+    path: ./ruleset/irasn.txt
+    interval: 86400
+
+# --- 3. Proxy Groups ---
+proxy-groups:
+  - name: "AUTO"
+    type: url-test
+    use:
+      - 0xRadikal
+    url: https://www.gstatic.com/generate_204
+    interval: 3600 # Test & switch every 1 hour (3600s)
+
+  - name: "PROXY"
+    type: select
+    use:
+      - 0xRadikal
+    proxies:
+      - AUTO
+
+# --- 4. Routing Rules ---
+rules:
+  # Local LAN Traffic -> Direct
+  - RULE-SET,private,DIRECT,no-resolve
+
+  # Iranian Apps -> Direct
+  - RULE-SET,apps,DIRECT
+
+  # Security & Adblocking -> Blocked
+  - RULE-SET,ads,REJECT
+  - RULE-SET,malware,REJECT
+  - RULE-SET,phishing,REJECT
+  - RULE-SET,cryptominers,REJECT
+
+  # Domestic Iranian Domains & IPs -> Direct (Bypass VPN)
+  - RULE-SET,ir,DIRECT
+  - RULE-SET,ircidr,DIRECT
+  - RULE-SET,irasn,DIRECT
+
+  # Everything else -> Route through Proxy
+  - MATCH,PROXY

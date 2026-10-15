@@ -4,7 +4,7 @@ config_version = 14
 enable_sounds = false
 
 [bar.default]
-center = [ "clock", "date", "date_2", "weather", "media", "monitor" ]
+center = [ "clock", "date", "date_2", "weather", "media", "monitor", "bar_2" ]
 end = [ "mihomo-tun", "calculator", "bar", "status", "shelf", "clipboard", "notifications", "keyboard_layout", "session" ]
 margin_edge = 0
 margin_ends = 0
@@ -330,6 +330,9 @@ enabled = true
 [widget.bar]
 text = ""
 type = "dunarand/bookmarks:bar"
+
+[widget.bar_2]
+type = "nomadcxx/moonbit:bar"
 
 [widget.calculator]
 type = "yuuto/calculator:bar"
