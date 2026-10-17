@@ -14,7 +14,7 @@ dir = '$SEANIME_DATA_DIR/extensions'
 dir = '$SEANIME_DATA_DIR/logs'
 
 [manga]
-downloaddir = '$SEANIME_DATA_DIR/manga'
+downloaddir = '/media/C/Manga'
 localdir = '$SEANIME_DATA_DIR/manga-local'
 
 [offline]

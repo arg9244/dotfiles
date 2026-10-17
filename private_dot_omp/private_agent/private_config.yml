@@ -1,5 +1,5 @@
 modelRoles:
-  default: strata/qwen3.8-flash-next-coder-iq1_m
+  default: opencode-zen/glm-5.3-flash-free
 symbolPreset: nerd
 theme:
   dark: titanium

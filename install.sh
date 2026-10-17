@@ -64,7 +64,7 @@ PACMAN=(
 
 AUR=(
     qt6ct-kde nautilus-open-any-terminal oh-my-pi-bin
-    hydra-download-manager-bin mihomo-bin
+    hydra-download-manager-bin mihomo-bin mcomix-rs-bin
 )
 
 DOTFILES_REPO="https://github.com/arg9244/dotfiles"

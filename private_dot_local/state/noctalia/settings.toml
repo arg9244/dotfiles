@@ -1,10 +1,10 @@
-config_version = 14
+config_version = 15
 
 [audio]
 enable_sounds = false
 
 [bar.default]
-center = [ "clock", "date", "date_2", "weather", "media", "monitor", "bar_2" ]
+center = [ "clock", "date", "date_2", "weather", "media", "monitor", "indicator" ]
 end = [ "mihomo-tun", "calculator", "bar", "status", "shelf", "clipboard", "notifications", "keyboard_layout", "session" ]
 margin_edge = 0
 margin_ends = 0
@@ -237,13 +237,12 @@ panel_position = "center"
 enabled = [
     "noctalia/screen_recorder",
     "nomadcxx/gamer-mode",
-    "reza/mihomo-tun",
     "yuuto/calculator",
     "tordex/processes",
     "fel/quill",
     "borderliner/jalali_calendar",
     "dunarand/bookmarks",
-    "alok-debnath/shelf"
+    "reza/mihomo-tun"
 ]
 
     [[plugins.source]]
@@ -331,9 +330,6 @@ enabled = true
 text = ""
 type = "dunarand/bookmarks:bar"
 
-[widget.bar_2]
-type = "nomadcxx/moonbit:bar"
-
 [widget.calculator]
 type = "yuuto/calculator:bar"
 
@@ -345,6 +341,9 @@ type = "clock"
 format = "{day} {month}"
 show_glyph = false
 type = "borderliner/jalali_calendar:date"
+
+[widget.indicator]
+type = "detluck/performance-plus:indicator"
 
 [widget.media]
 album_art_only = true
