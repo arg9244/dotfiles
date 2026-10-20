@@ -1,5 +1,5 @@
 modelRoles:
-  default: opencode-zen/glm-5.3-flash-free
+  default: kilo/kilo-auto/free
 symbolPreset: nerd
 theme:
   dark: titanium
