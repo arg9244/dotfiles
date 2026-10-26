@@ -83,6 +83,8 @@ export PROTON_VERB="run"
 export PROTON_USE_NTSYNC="1"
 export PROTON_FSR4_UPGRADE="1"
 export PROTON_FSR4_INDICATOR="0"
+export PROTON_PREFER_SDL="0"
+export PROTON_ENABLE_WAYLAND="0"
 
 # Direct Native HDR (Vulkan WSI)
 export PROTON_ENABLE_HDR="1"

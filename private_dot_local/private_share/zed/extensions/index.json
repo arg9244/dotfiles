@@ -195,7 +195,7 @@
       "manifest": {
         "id": "toml",
         "name": "TOML",
-        "version": "1.0.3",
+        "version": "1.1.0",
         "schema_version": 1,
         "description": "TOML support.",
         "repository": "https://github.com/zed-extensions/toml",
@@ -204,8 +204,8 @@
           "Ammar Arif <evergreenkary@gmail.com>"
         ],
         "lib": {
-          "kind": null,
-          "version": null
+          "kind": "Rust",
+          "version": "0.7.0"
         },
         "themes": [],
         "icon_themes": [],
@@ -219,7 +219,16 @@
             "path": null
           }
         },
-        "language_servers": {},
+        "language_servers": {
+          "taplo": {
+            "language": null,
+            "languages": [
+              "TOML"
+            ],
+            "language_ids": {},
+            "code_action_kinds": null
+          }
+        },
         "context_servers": {},
         "slash_commands": {},
         "snippets": null,

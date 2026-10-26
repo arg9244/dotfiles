@@ -1,7 +1,7 @@
 [Default Applications]
 text/x-shellscript=org.gnome.TextEditor.desktop
-x-scheme-handler/tg=userapp-AyuGram Desktop-5JXKV3.desktop
-x-scheme-handler/tonsite=userapp-AyuGram Desktop-5HNMV3.desktop
+x-scheme-handler/tg=userapp-AyuGram Desktop-S37NX3.desktop
+x-scheme-handler/tonsite=userapp-AyuGram Desktop-G05MX3.desktop
 application/yaml=dev.zed.Zed.desktop
 application/json=org.gnome.TextEditor.desktop
 application/x-desktop=dev.zed.Zed.desktop
@@ -50,11 +50,12 @@ application/zip=peazip.desktop
 application/vnd.comicbook+zip=mcomix-rs.desktop
 application/x-7z-compressed=peazip.desktop
 x-scheme-handler/unsloth=unsloth-studio-handler.desktop
+x-scheme-handler/omniget=omniget-handler.desktop
 
 [Added Associations]
 text/x-shellscript=dev.zed.Zed.desktop;org.xfce.mousepad.desktop;org.gnome.TextEditor.desktop;
-x-scheme-handler/tg=userapp-AyuGram Desktop-GT4IU3.desktop;it.belloworld.mercurygram._6bf14d4d739dd3121d948fb1f3a86543.desktop;userapp-AyuGram Desktop-5JXKV3.desktop;
-x-scheme-handler/tonsite=userapp-AyuGram Desktop-J4IIU3.desktop;it.belloworld.mercurygram._6bf14d4d739dd3121d948fb1f3a86543.desktop;userapp-AyuGram Desktop-5HNMV3.desktop;
+x-scheme-handler/tg=userapp-AyuGram Desktop-GT4IU3.desktop;it.belloworld.mercurygram._6bf14d4d739dd3121d948fb1f3a86543.desktop;userapp-AyuGram Desktop-5JXKV3.desktop;userapp-AyuGram Desktop-S37NX3.desktop;
+x-scheme-handler/tonsite=userapp-AyuGram Desktop-J4IIU3.desktop;it.belloworld.mercurygram._6bf14d4d739dd3121d948fb1f3a86543.desktop;userapp-AyuGram Desktop-5HNMV3.desktop;userapp-AyuGram Desktop-G05MX3.desktop;
 application/yaml=dev.zed.Zed.desktop;kitty-open.desktop;
 application/json=dev.zed.Zed.desktop;kitty-open.desktop;org.gnome.TextEditor.desktop;
 application/x-desktop=dev.zed.Zed.desktop;
